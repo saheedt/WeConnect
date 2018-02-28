@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>WeConnect</title>
     <!--Import Custom css-->
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css" />
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <!-- <link rel="import" href="register.html"> -->
 </head>
 <body>
     <main>
@@ -23,6 +24,7 @@
             </section>
             <section id="landing-section-b">
               <div id="landing-login-wrapper">
+                <center><h3>sign in</h3></center>
                 <div class="row">
                   <form class="col s12">
                     <div class="row">
@@ -36,11 +38,12 @@
                       </div>
                     </div>
                     <button id="login-btn" class="teal col s12">Sign in</button>
-                    <center><a href="#" id="landing-reg-btn">Sign up</a></center> <!-- href="/register.html" -->
+                    <center><a href="#" id="landing-reg-btn">Sign up</a></center>
                   </form>
                 </div>
               </div>
             </section>
+            <section id="registerInclude" w3-include-html="register.html"></section>
         </div>
     </main>
     <!--Import custom js file-->
@@ -50,6 +53,6 @@
     <!--Import materialize.js-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 </body>
 </html>
