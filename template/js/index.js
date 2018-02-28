@@ -1,26 +1,23 @@
 window.addEventListener('load', () => {
     const supportsImports =  () => ('import' in document.createElement('link'));
     const landingRegBtn = document.getElementById('landing-reg-btn');
+    //fuction for importing register.html into landing page.
     const includeRegister = () => {
         const element = document.getElementById('registerInclude');
         const file = element.getAttribute("w3-include-html");
         let xhttp;
-    
         if (file) {
-            /*make an HTTP request using the attribute value as the file name:*/
             xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
               if (this.readyState == 4) {
                 if (this.status == 200) {element.innerHTML = this.responseText;}
                 if (this.status == 404) {element.innerHTML = "Page not found.";}
-                /*remove the attribute, and call this function once more:*/
                 element.removeAttribute("w3-include-html");
                 includeRegister();
               }
             }      
             xhttp.open("GET", file, true);
             xhttp.send();
-            /*exit the function:*/
             return;
           }
     }
