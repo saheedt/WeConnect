@@ -1,7 +1,9 @@
 window.addEventListener('load', () => {
     const supportsImports =  () => ('import' in document.createElement('link'));
     const landingRegBtn = document.getElementById('landing-reg-btn');
+
     //fuction for importing register.html into landing page.
+    /** login/register */
     const includeRegister = () => {
         const element = document.getElementById('registerInclude');
         const file = element.getAttribute("w3-include-html");
@@ -21,23 +23,27 @@ window.addEventListener('load', () => {
             return;
           }
     }
-    landingRegBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // if (supportsImports()) {
-        //     const link = document.querySelector('link[rel="import"]'),
-        //         imp = link.import,
-        //         element = imp.querySelector('.generic-modal');
-        //     document.body.appendChild(element.cloneNode(true));
-        // }
-        const regModal = document.getElementById('register-modal')
-        if ( regModal ){
-            if ( regModal.style.display == "none" ){
-                regModal.style.display = "block";
+    if (landingRegBtn) {
+        landingRegBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // if (supportsImports()) {
+            //     const link = document.querySelector('link[rel="import"]'),
+            //         imp = link.import,
+            //         element = imp.querySelector('.generic-modal');
+            //     document.body.appendChild(element.cloneNode(true));
+            // }
+            const regModal = document.getElementById('register-modal')
+            if ( regModal ){
+                if ( regModal.style.display == "none" ){
+                    regModal.style.display = "block";
+                }
+                return;
             }
-            return;
-        }
-        includeRegister();
-    })
+            includeRegister();
+        })
+    }
+
+    /** general */
     window.onclick = (e) => {
         const regModal = document.getElementById('register-modal');
         if (e.target === regModal ) {
