@@ -12,22 +12,52 @@
 </head>
 <body>
     <main>
-      <nav class="navbar-fixed teal">
+      <!-- <nav class="navbar-fixed teal">
         <div class="nav-wrapper">
+                <div id="listings-search-holder" class="" >
+                        <input id="listings-search-input" placeholder="Search business" class="validate"/>
+                        <button id="listings-search-btn" class="white"><i class="material-icons">search</i></button>
+                      </div>
             <ul class="right">
                 <li><a href="#"><i class="material-icons right">add</i>Add business details</a></li>
                 <li><a href="#">    </a></li>
             </ul>
         </div>
-      </nav>        
-        <section id="listings-search-container">
-           <div id="listings-search-holder" class="flex" >
-              <input id="listings-search-input" placeholder="Search business" class="validate"/>
+      </nav>         -->
+      <header id="listings-header">
+        <div id="listings-search-holder" class="flex">
+          <div id="listings-filter-switch" class="flex" ><!-- filter switch -->
+            <div class="switch">
+              Filter:
+              <label>
+                by category
+                <input id="listings-switch-input"type="checkbox">
+                <span class="lever"></span>
+                by location
+              </label>
+            </div>                    
+          </div><!-- filter switch end -->
+          <div style="width: 35%; height: 65%;" >
+            <div style="width: 100%; height: 100%">
+              <input id="listings-category-input" placeholder="Filter by category" />
+              <input id="listings-location-input" placeholder="Filter by location" />
+            </div>
+          </div>
+          <div style="width: 5%; height: 65%;" >
               <button id="listings-search-btn" class="white"><i class="material-icons">search</i></button>
-           </div>
+          </div>
+        </div>
+      </header>
+        <section id="listings-search-container">
+           
         </section>
         <section id="listings">
-
+          <ul class="collection max630">
+            <li class="collection-item">Alvin</li>
+            <li class="collection-item">Alvin</li>
+            <li class="collection-item">Alvin</li>
+            <li class="collection-item">Alvin</li>
+          </ul>
         </section>
     </main>
     <!--Import custom js file-->

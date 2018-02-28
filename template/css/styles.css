@@ -14,6 +14,9 @@ main{
 .flex{
   display: flex
 }
+.max630{
+  max-width: 630px;
+}
 .generic-container{
   width: 100vw;
   height: 100vh;
@@ -132,15 +135,55 @@ main{
   width: 100%;
   height: 100%;
 }
-#listings-search-input{
-  width: 50%;
-  max-width: 350px;
+#listings-category-input{
+  /* width: 50%;
+  max-width: 350px; */
+  width: 100%;
+  height: 100%;
   margin: 0px;
+  border: 0;
+  background-color: #fff;
+}
+#listings-category-input:focus{
+  border: 0;
+}
+#listings-location-input{
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 0;
+  display: none;
+  background-color: #fff;
+}
+#listings-location-input:focus{
+  border: 0;
 }
 #listings-search-btn{
-  height: 3rem;
+  /* height: 3rem; */
+  height: 100%;
   border:0px;
 }
 #listings-search-btn i{
   line-height: unset;
+}
+#listings .collection{
+  margin-left: auto;
+  margin-right: auto;
+}
+#listings-header{
+  background-color: #7fc6c8;
+  height: 6rem;
+  width: 100vw;
+}
+#listings-filter-switch{
+  width: 25%;
+  height: 65%;
+  justify-content: center;
+  align-items: center;
+}
+.switch{
+  color: #fff
+}
+.switch label{
+  color: #fff
 }
