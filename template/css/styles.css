@@ -21,8 +21,16 @@ main{
 .padding-10{
   padding: 10px;
 }
+.padding-left-right-10{
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .padding-20{
   padding: 20px;
+}
+.padding-left-right-20{
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .padding-30{
   padding: 30px;
@@ -36,6 +44,9 @@ main{
 .fill{
   height: 100%;
   width: 100%;
+}
+.no-margin{
+  margin: 0;
 }
   /* landing */
 #landing-section-a{
@@ -70,9 +81,13 @@ main{
   width: 80%;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
   transition: box-shadow .25s, -webkit-box-shadow .25s;
+  max-width: 430px;
 }
 #login-btn{
   border: 0px;
   height: 3rem;
+  margin-bottom: 20px;
+}
+.landing-info-wrapper{
   margin-bottom: 20px;
 }
