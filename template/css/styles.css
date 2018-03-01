@@ -123,11 +123,6 @@ main{
   margin-bottom: 20px;
   color: #fff;
 }
-#listings-search-container{
-  width: 100vw;
-  height: 5rem;
-  /* background-color: #888; */
-}
 #listings-search-holder{
   flex-direction: row;
   justify-content: center;

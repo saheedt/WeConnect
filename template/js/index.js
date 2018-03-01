@@ -1,9 +1,12 @@
+
 window.addEventListener('load', () => {
     const supportsImports =  () => ('import' in document.createElement('link'));
     const landingRegBtn = document.getElementById('landing-reg-btn');
     const listingsSwitchInput = document.getElementById('listings-switch-input');
     const listingsCategoryInput = document.querySelector('#listings-category-input');
     const listingsLocationInput = document.querySelector('#listings-location-input');
+
+    const listingsList = document.querySelector('#listings-list');
 
     //fuction for importing register.html into landing page.
     /** login/register */
@@ -67,6 +70,25 @@ window.addEventListener('load', () => {
             }
             
         })
+    }
+
+    if ( listingsList ) {
+        console.log(DB);
+        let list = [];
+        for ( let biz of DB) {
+            let li = document.createElement("li");
+            li.className = "collection-item"
+            li.innerHTML = `
+        <li class="collection-item">
+            <h5><a href="#"><span class="title">${biz.businessName}</span></a></h5>
+            <p>${biz.address}</p>
+            <p>${biz.description}</p>
+        </li>`;
+        list.push(li);
+        }
+        for ( let ele of list) {
+        listingsList.appendChild(ele);
+        }
     }
     
     /** general */
