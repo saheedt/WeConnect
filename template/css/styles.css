@@ -14,6 +14,12 @@ main{
 .flex{
   display: flex
 }
+.vertical-after-header{
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1rem
+}
 .max630{
   max-width: 630px;
 }
@@ -38,14 +44,17 @@ main{
   padding-left: 20px;
   padding-right: 20px;
 }
-.padding-30{
-  padding: 30px;
+.holder-60-shadow{
+  width: 60vw;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  max-width: 630px;
+  margin-bottom: 1rem;
 }
-.padding-40{
-  padding: 40px;
-}
-.padding-50{
-  padding: 50px;
+.holder-60{
+  width: 60vw;
+  max-width: 630px;
+  margin-bottom: 1rem;
 }
 .fill{
   height: 100%;
@@ -234,20 +243,21 @@ main{
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
   transition: box-shadow .25s, -webkit-box-shadow .25s;
 }
-#add-business-header{
+.wc-header{
   background-color: #7fc6c8;
   height: 4rem;
   width: 100vw;
   position: fixed;
   z-index: 2;
+  top: 0px;
 }
-#add-business-back-btn-holder{
+.wc-header-back-btn-holder{
   width: 10%;
   height: 100%;
   justify-content: center;
   align-items: center;
 }
-#add-business-back-btn-holder a{
+.wc-header-back-btn-holder a{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -256,12 +266,59 @@ main{
   background-color: transparent;
   border: 0;
 }
-#add-business-back-btn-holder a > i{
+.wc-header-back-btn-holder a > i{
   color: #FFF
 }
 /* #add-business-back-btn-holder button > a{
   color: #FFF
 } */
-#add-business-back-btn-holder a:visited{
+.wc-header-back-btn-holderr a:visited{
   color: #FFF
+}
+
+/* business profile */
+
+#business-profile{
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
+  flex-direction: column
+}
+#business-profile hr {
+  width: 100%
+}
+#business-name-emph{
+  width: 100%;
+  text-align: center;
+  /* font-size: 23px; */
+}
+#business-profile-details{
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.profile-grouping{
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 5rem;
+  width: 100%;
+  border-top: 0.5px solid grey;
+}
+.profile-grouping .title{
+  height: 100%;
+  width: 30%;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid grey;
+}
+.profile-grouping .detail{
+  height: 100%;
+  width: 70%;
+  justify-content: center;
+  align-items: center;
+}
+#profile-reviews-holder{
+  background-color: green;
+  height: 5rem
 }
