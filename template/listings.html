@@ -11,22 +11,11 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 </head>
 <body>
-    <main>
-      <!-- <nav class="navbar-fixed teal">
-        <div class="nav-wrapper">
-                <div id="listings-search-holder" class="" >
-                        <input id="listings-search-input" placeholder="Search business" class="validate"/>
-                        <button id="listings-search-btn" class="white"><i class="material-icons">search</i></button>
-                      </div>
-            <ul class="right">
-                <li><a href="#"><i class="material-icons right">add</i>Add business details</a></li>
-                <li><a href="#">    </a></li>
-            </ul>
-        </div>
-      </nav>         -->
-      <header id="listings-header">
+
+    <main> 
+       <header id="listings-header">
         <div id="listings-search-holder" class="flex">
-          <div id="listings-filter-switch" class="flex" ><!-- filter switch -->
+          <div id="listings-filter-switch" class="flex" > <!--filter switch -->
             <div class="switch">
               Filter:
               <label>
@@ -36,24 +25,24 @@
                 by location
               </label>
             </div>                    
-          </div><!-- filter switch end -->
-          <div style="width: 35%; height: 65%;" ><!-- filter search field -->
+          </div> <!--filter switch end-->
+          <div id="listings-input-holder"> <!--filter search field-->
             <div style="width: 100%; height: 100%">
               <input id="listings-category-input" placeholder="Filter by category" />
               <input id="listings-location-input" placeholder="Filter by location" />
             </div>
-          </div><!-- filter search field end -->
-          <div style="width: 5%; height: 65%;" ><!-- filter search button -->
+          </div> <!--filter search field end-->
+          <div id="listings-search-btn-holder"> <!--filter button-->
               <button id="listings-search-btn" class="white"><i class="material-icons">search</i></button>
-          </div><!-- filter search button end -->
+          </div> <!--filter search button end -->
+
+        </div>
+        <div id="listings-add-holder">
+          <a href="#">Add Business</a>
         </div>
       </header>
         <section id="listings">
           <ul id="listings-list" class="collection max630">
-            
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
           </ul>
         </section>
     </main>

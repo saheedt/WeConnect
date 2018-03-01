@@ -79,11 +79,14 @@ window.addEventListener('load', () => {
             let li = document.createElement("li");
             li.className = "collection-item"
             li.innerHTML = `
-        <li class="collection-item">
-            <h5><a href="#"><span class="title">${biz.businessName}</span></a></h5>
-            <p>${biz.address}</p>
-            <p>${biz.description}</p>
-        </li>`;
+        <!-- <li class="collection-item avatar"> -->
+        <!-- <i class="material-icons circle">business_center</i> -->
+            <h4><a href="#"><span class="title">${biz.businessName}</span></a></h4>
+        <!-- <i class="material-icons circle">place</i> -->
+            <p>${biz.address}</p> <!--<br /><br /> -->
+            <!-- <i class="material-icons circle">description</i> -->
+            <p>${biz.description}</p> <!--<br />-->
+       <!--</li>-->`;
         list.push(li);
         }
         for ( let ele of list) {

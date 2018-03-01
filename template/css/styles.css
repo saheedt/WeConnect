@@ -127,8 +127,9 @@ main{
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
   height: 100%;
+  float: left;
 }
 #listings-category-input{
   /* width: 50%;
@@ -164,6 +165,8 @@ main{
 #listings .collection{
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0px;
+  border: 0px;
 }
 #listings-header{
   background-color: #7fc6c8;
@@ -172,9 +175,37 @@ main{
 }
 #listings-filter-switch{
   width: 25%;
-  height: 65%;
+  height: 55%;
   justify-content: center;
   align-items: center;
+}
+#listings-input-holder{
+  width: 35%;
+  height: 55%;
+}
+#listings-search-btn-holder{
+  width: 5%;
+  height: 55%;
+}
+#listings-add-holder{
+  width: 20%;
+  height:100%;
+  float:left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#listings-add-holder a{
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#listings-add-holder a:visited{
+  color: white;
 }
 .switch{
   color: #fff
@@ -182,3 +213,5 @@ main{
 .switch label{
   color: #fff
 }
+
+/**overridd*/
