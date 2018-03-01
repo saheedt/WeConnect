@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WeConnect</title>
+    <!--Import Custom css-->
+    <link rel="stylesheet" href="css/styles.css" />
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+</head>
+<body>
+    <main>
+      <header id="add-business-header">
+        <div id="add-business-back-btn-holder" class="flex">
+          <a href="listings.html"><i class="material-icons">arrow_back</i></a>
+        </div>
+      </header>
+      <section id="add-business-container" class="flex">
+        <div id="add-business-holder" class="flex padding-20">
+          <div class="row">
+            <form class="col s12 m12 l12">
+                <div class="row">
+                <div class="input-field col s12 m12 l12">
+                    <input id="business-name" type="text" class="validate">
+                    <label for="business-name">Business name</label>
+                </div>
+                <div class="input-field col s12 m12 l12 ">
+                    <input id="address" type="text" class="validate">
+                    <label for="address">Address</label>
+                </div>
+                <div class="input-field col s12 m12 l12">
+                    <input id="description" type="text" class="validate">
+                    <label for="description">Short description</label>
+                </div>
+                <div class="input-field col s12 m12 l12">
+                    <input id="phone-number" type="number" class="validate">
+                    <label for="phone-number">Phone number</label>
+                </div>
+                </div>
+                <button id="login-btn" class="teal col s12">Register Business</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--Import jquery-->
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <!--Import materialize.js-->
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+</body>
+</html>

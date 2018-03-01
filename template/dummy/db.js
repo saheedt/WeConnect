@@ -1,22 +1,29 @@
 window.DB = [
     {
         businessName: 'yy solicitors',
-        address: 'Plot 759, Central Business District,Abuja',
-        description: 'The principal goals of the Firm are to position itself to deliver broad based and excellent legal services.'
+        address: 'Plot 759, Central Business District',
+        state: 'Abuja',
+        description: 'Delivering excellent legal services.',
+        phonenumber: 122346776
     },
     {
-        businessName: 'mary aje',
+        businessName: 'm and j',
         address: 'Plot 59, lagos island',
-        description: 'buy like never before.'
+        state:'lagos',
+        description: 'discount like never before.',
+        phonenumber: 122346776
     },
     {
-        businessName: 'twins venture',
-        address: '19, tokura street, alagbado',
-        description: 'buy game knowedge.'
+        businessName: 'x venture',
+        address: '19, xyz street',
+        state: 'kano',
+        description: 'we sell games.',
+        phonenumber: 122346776
     },
     {
         businessName: 'Andela',
         address: 'Epic towers, ilupeju, alagbado',
-        description: 'Paying you to learn to code.'
+        description: 'Paying you to learn to code.',
+        phonenumber: 122346776
     }
 ];
