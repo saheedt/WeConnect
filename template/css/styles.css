@@ -96,11 +96,40 @@ main{
 }
 
   /* landing */
-#landing-section-a{
+@media only screen and (min-width: 730px){
+  #landing-section-a h1{
+    font-size: 3rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* overflow: hidden; */
+  }
+  #landing-section-a h3{
+    font-size: 2rem;
+  }
+  #landing-section-a{
+    height: 100vh;
+    width: 50vw;
+    flex-direction: column;
+    /* justify-content: flex-end; */
+    padding-top: 80px;
+  }
+}
+@media only screen and (max-width: 730px) {
+  #landing-section-a h1 {
+    font-size: 2.5rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* overflow: hidden; */
+  }
+  #landing-section-a h3 {
+  font-size: 1.5rem;
+  }
+  #landing-section-a {
   height: 100vh;
   width: 50vw;
   flex-direction: column;
-  justify-content: center;
+  padding-top: 50px;
+  }
 }
 #landing-section-b{
   height: 100vh;
@@ -111,12 +140,8 @@ main{
   overflow: auto;
   /* margin: auto auto; */
 }
-#landing-section-a h1{
-  font-size: 3rem;
-}
-#landing-section-a h3{
-  font-size: 2rem;
-}
+
+
 #landing-login-wrapper{
   display: flex;
   flex-direction: column;
@@ -137,7 +162,7 @@ main{
   align-items: center;
 }
 .landing-info-wrapper{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* padding: 20px; */
 }
 #landing-login-wrapper center h3 {
