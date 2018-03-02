@@ -6,6 +6,7 @@ window.addEventListener('load', () => {
     const listingsCategoryInput = document.querySelector('#listings-category-input');
     const listingsLocationInput = document.querySelector('#listings-location-input');
     const addBusinessBtn = document.getElementById('add-business-btn');
+    const updateBusinessBtn = document.getElementById('update-business-btn');
     const postReview = document.getElementById('post-review');
 
     const listingsList = document.querySelector('#listings-list');
@@ -30,6 +31,12 @@ window.addEventListener('load', () => {
         postReview.addEventListener('click', (e) => {
             alert('Review added.')
         })
+    }
+    /**Update business */
+    if (updateBusinessBtn) {
+        updateBusinessBtn.addEventListener('click', (e) => {
+            alert('Business profile successfully update.')
+        });
     }
     /**Register business */
     if (addBusinessBtn) {
