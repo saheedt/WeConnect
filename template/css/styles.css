@@ -303,6 +303,12 @@ main{
   align-items: center;
   margin-top: 4rem;
 }
+#update-business-btn{
+  border: 0px;
+  height: 4rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
 /**add business*/
 #add-business-btn{
   border: 0px;
@@ -326,6 +332,16 @@ main{
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
   transition: box-shadow .25s, -webkit-box-shadow .25s;
 }
+#route-profile-btn{
+  float: left;
+  height: 100%;
+  padding-left: 2px;
+  padding-right: 2px;
+  color: #fff;
+  justify-content:  center;
+  align-items: center;
+  width: 20%;
+}
 .wc-header{
   background-color: #7fc6c8;
   height: 4rem;
@@ -338,12 +354,12 @@ main{
   color: #FFF;
   margin: 0;
   float: left;
-  width: 90%;
+  width: 70%;
   text-align: center;
   height: 100%;
 }
 .wc-header h3 span.header-text{
-  margin-left: -17%;
+  margin-left: 3%;
   vertical-align: sub;
 }
 .wc-header-back-btn-holder{
