@@ -2,6 +2,7 @@
 window.addEventListener('load', () => {
     const supportsImports =  () => ('import' in document.createElement('link'));
     const landingRegBtn = document.getElementById('landing-reg-btn');
+    const signupBtn = document.getElementById('signup-btn');
     const listingsSwitchInput = document.getElementById('listings-switch-input');
     const listingsCategoryInput = document.querySelector('#listings-category-input');
     const listingsLocationInput = document.querySelector('#listings-location-input');
@@ -11,7 +12,7 @@ window.addEventListener('load', () => {
 
     const listingsList = document.querySelector('#listings-list');
 
-    /** login/register */
+    /** login/signup */
     if (landingRegBtn) {
         landingRegBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -25,6 +26,16 @@ window.addEventListener('load', () => {
             }
         })
     }
+    if (signupBtn) {
+        signupBtn.addEventListener('click', (e) => {
+            const regModal = document.getElementById('register-modal')
+            e.preventDefault();
+            regModal.style.display = "none";
+            alert('Sign up Successful');
+            
+        });
+    }
+    
 
     /** Post review */
     if (postReview) {
