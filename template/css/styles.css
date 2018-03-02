@@ -231,20 +231,27 @@ main{
 }
 
 /**add business*/
+#add-business-btn{
+  border: 0px;
+  height: 4rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
 #add-business-container{
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   justify-content: center;
   align-items: center;
+  margin-top: 4rem;
 }
 #add-business-holder{
-  width: 50vw;
+  width: 100%;
   /* height: 50vh; */
-  max-width: 630px;
+  /* max-width: 630px; */
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  /* transition: box-shadow .25s, -webkit-box-shadow .25s; */
 }
 .wc-header{
   background-color: #7fc6c8;
