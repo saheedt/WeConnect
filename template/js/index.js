@@ -5,6 +5,8 @@ window.addEventListener('load', () => {
     const listingsSwitchInput = document.getElementById('listings-switch-input');
     const listingsCategoryInput = document.querySelector('#listings-category-input');
     const listingsLocationInput = document.querySelector('#listings-location-input');
+    const addBusinessBtn = document.getElementById('add-business-btn');
+    const postReview = document.getElementById('post-review');
 
     const listingsList = document.querySelector('#listings-list');
 
@@ -23,6 +25,18 @@ window.addEventListener('load', () => {
         })
     }
 
+    /** Post review */
+    if (postReview) {
+        postReview.addEventListener('click', (e) => {
+            alert('Review added.')
+        })
+    }
+    /**Register business */
+    if (addBusinessBtn) {
+        addBusinessBtn.addEventListener('click', (e) => {
+            alert('Business successfully registered.')
+        });
+    }
     /**listings */
     if (listingsSwitchInput) {
         listingsSwitchInput.addEventListener('change', (e)=> {
@@ -54,13 +68,20 @@ window.addEventListener('load', () => {
             li.className = "collection-item"
             li.innerHTML = `
         <!-- <li class="collection-item avatar"> -->
-        <!-- <i class="material-icons circle">business_center</i> -->
-            <h4><a href="#"><span class="title">${biz.businessName}</span></a></h4>
-        <!-- <i class="material-icons circle">place</i> -->
-            <p>${biz.address}</p> <!--<br /><br /> -->
-            <!-- <i class="material-icons circle">description</i> -->
-            <p>${biz.description}</p> <!--<br />-->
-       <!--</li>-->`;
+        <div class="listings-list-groupings flex" >
+        <div class="listings-list-groupings-items-left flex"> <i class="material-icons circle">business_center</i></div>
+        <div class="listings-list-groupings-items-right"><h4><a href="businessprofile.html"><span class="title">${biz.businessName}</span></a></h4></div>
+        </div>
+
+        <div class="listings-list-groupings flex">
+        <div class="listings-list-groupings-items-left flex"><i class="material-icons circle">place</i></div>
+        <div class="listings-list-groupings-items-right"><p>${biz.address}</p></div>
+        </div>
+
+        <div class="listings-list-groupings flex">
+        <div class="listings-list-groupings-items-left flex"><i class="material-icons circle">description</i></div>
+        <div class="listings-list-groupings-items-right"><p>${biz.description}</p></div>
+        </div>`;
         list.push(li);
         }
         for ( let ele of list) {

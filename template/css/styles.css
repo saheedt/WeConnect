@@ -26,6 +26,7 @@ main{
 .generic-container{
   width: 100vw;
   height: 100vh;
+  overflow: auto;
 }
 .generic-flex{
   display: flex;
@@ -108,6 +109,7 @@ main{
   justify-content: center;
   align-items: center;
   overflow: auto;
+  /* margin: auto auto; */
 }
 #landing-section-a h1{
   font-size: 3rem;
@@ -131,11 +133,16 @@ main{
   height: 3rem;
   margin-bottom: 20px;
   color: #fff;
+  justify-content: center;
+  align-items: center;
 }
 .landing-info-wrapper{
   margin-bottom: 20px;
+  /* padding: 20px; */
 }
-
+#landing-login-wrapper center h3 {
+  margin: 0px;
+}
 /* register */
 #signup-btn{
   border: 0px;
@@ -151,6 +158,13 @@ main{
 #listings{
   margin-top: 6rem;
 }
+#listings-list{
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+}
+#listings #listings-list .collection-item h4 a {
+  color: black
+}
 #listings-search-holder{
   flex-direction: row;
   justify-content: center;
@@ -158,6 +172,31 @@ main{
   width: 80%;
   height: 100%;
   float: left;
+}
+.listings-list-groupings{
+  height: 3rem;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  /* border-bottom: 1px solid teal; */
+}
+.listings-list-groupings-items-left{
+  width: 10%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.listings-list-groupings-items-right{
+  width: 70%;
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* border-bottom: 1px solid teal; */
+}
+.listings-list-groupings-items-right h4{
+  margin: 0;
 }
 #listings-category-input{
   /* width: 50%;
@@ -179,6 +218,7 @@ main{
   border: 0;
   display: none;
   background-color: #fff;
+  padding-left: 20px;
 }
 #listings-location-input:focus{
   border: 0;
@@ -276,7 +316,7 @@ main{
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-  /* transition: box-shadow .25s, -webkit-box-shadow .25s; */
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
 }
 .wc-header{
   background-color: #7fc6c8;
@@ -444,4 +484,4 @@ main{
   align-items: center;
 }
 /* .header-header-title h3{
-  color: #FFF
+  color: #FF
