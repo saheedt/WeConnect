@@ -29,6 +29,7 @@ main{
 }
 .generic-flex{
   display: flex;
+  /* overflow: auto; */
 }
 .padding-10{
   padding: 10px;
@@ -68,23 +69,29 @@ main{
 }
 .generic-modal {
   /* display: none; */
-  position: fixed; 
+  position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
-  height: 100vh; 
+  height: 100vh;
   overflow: auto;
-  background-color: rgb(0,0,0); 
+  /* background-color: rgb(0,0,0); */
   background-color: rgba(0,0,0,0.4);
 }
 .generic-modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  /* margin: auto auto auto auto; */
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
   max-width: 430px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  margin-bottom: auto;
 }
 
   /* landing */
@@ -100,6 +107,7 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: auto;
 }
 #landing-section-a h1{
   font-size: 3rem;
@@ -135,8 +143,14 @@ main{
   margin-bottom: 20px;
   color: #fff;
 }
+#register-modal{
+  display: none;
+}
 
 /* listings */
+#listings{
+  margin-top: 6rem;
+}
 #listings-search-holder{
   flex-direction: row;
   justify-content: center;
@@ -153,6 +167,7 @@ main{
   margin: 0px;
   border: 0;
   background-color: #fff;
+  padding-left: 20px;
 }
 #listings-category-input:focus{
   border: 0;
@@ -188,12 +203,16 @@ main{
   width: 100vw;
   /* position: fixed;
   z-index: 2; */
+  position: fixed;
+  z-index: 2;
+  top: 0;
 }
 #listings-filter-switch{
-  width: 25%;
+  width: 10%;
   height: 55%;
   justify-content: center;
   align-items: center;
+  margin-left: 10%;
 }
 #listings-input-holder{
   width: 35%;
@@ -228,6 +247,12 @@ main{
 }
 .switch label{
   color: #fff
+}
+.switch label a{
+  color: #fff;
+}
+.switch label .lever{
+  vertical-align: super;
 }
 
 /**add business*/
@@ -419,5 +444,4 @@ main{
   align-items: center;
 }
 /* .header-header-title h3{
-  color: #FFF;
-  
+  color: #FFF
