@@ -254,11 +254,24 @@ main{
   z-index: 2;
   top: 0px;
 }
+.wc-header h3{
+  color: #FFF;
+  margin: 0;
+  float: left;
+  width: 90%;
+  text-align: center;
+  height: 100%;
+}
+.wc-header h3 span.header-text{
+  margin-left: -17%;
+  vertical-align: sub;
+}
 .wc-header-back-btn-holder{
   width: 10%;
   height: 100%;
   justify-content: center;
   align-items: center;
+  float: left;
 }
 .wc-header-back-btn-holder a{
   display: flex;
@@ -326,7 +339,12 @@ main{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* height: 5rem */
+}
+.profile-reviews-maker-holder{
+  background-color: #f7f7f7;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .profile-review{
   flex-direction: column;
@@ -348,6 +366,29 @@ main{
   display: flex;
   align-items: center
 }
+#review-input-holder{
+  width: 100%
+}
+#post-review-holder{
+  width: 100%;
+  height: 3rem
+}
+#review-input-holder .row {
+  margin-bottom: 5px !important;
+}
+#post-review{
+  color: #FFF;
+  height: 100%;
+  width: 20%;
+  justify-content: center;
+  align-items: center;
+}
+#post-review:visited{
+  color: #FFF
+}
+#review-input-holder .row form .row .input-field textarea.materialize-textarea{
+  padding: 0 !important
+}
 
 /* override */
 .reviewer .collection .collection-item.avatar{
@@ -362,3 +403,14 @@ main{
   text-align: center;
   margin-bottom: 0.5rem;
 }
+.header-header-title{
+  width: 90%;
+  height: 4rem;
+  text-align: center;
+  float: left;
+  justify-content: center;
+  align-items: center;
+}
+/* .header-header-title h3{
+  color: #FFF;
+  
