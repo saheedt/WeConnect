@@ -12,14 +12,14 @@
 </head>
 <body>
     <main>
-      <header id="add-business-header" class="wc-header">
+      <header id="add-business-header" class="wc-header"><!-- header -->
         <div id="add-business-back-btn-holder" class="wc-header-back-btn-holder flex">
           <a href="listings.html"><i class="material-icons">arrow_back</i></a>
         </div>
         <h3 class="header-text-holder"><span class="header-text">Update Business Profile</span></h3>
-      </header>
+      </header><!-- header end -->
       <div class="flex vertical-after-header">
-        <section id="update-business-container" class="flex holder-60-shadow padding-20">
+        <section id="update-business-container" class="flex holder-60-shadow padding-20"><!-- business details update form -->
             <div class="row">
                 <form class="col s12 m12 l12">
                     <div class="row">
@@ -44,6 +44,10 @@
                         <label for="description">Short description</label>
                     </div>
                     <div class="input-field col s12 m12 l12">
+                        <input id="category" type="text" class="validate">
+                        <label for="category">Category</label>
+                    </div>
+                    <div class="input-field col s12 m12 l12">
                         <input id="phone-number" type="number" class="validate">
                         <label for="phone-number">Phone number</label>
                     </div>
@@ -51,7 +55,7 @@
                     <button id="update-business-btn" class="teal col s12 m12 l12">Update Business Profile</button>
                 </form>
             </div>
-        </section>
+        </section><!-- business details update form end -->
       </div>
     </main>
     <!--Import custom js file-->
