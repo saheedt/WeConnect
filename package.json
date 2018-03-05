@@ -4,7 +4,9 @@
   "description": "WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "gulp transpile",
+    "start": "node ./build/server.js",
+    "test": "gulp transpile && gulp coverage"
   },
   "repository": {
     "type": "git",
