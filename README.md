@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/saheedt/WeConnect.svg?branch=master)](https://travis-ci.org/saheedt/WeConnect)
 [![Maintainability](https://api.codeclimate.com/v1/badges/96e045c38f268c4a8c76/maintainability)](https://codeclimate.com/github/saheedt/WeConnect/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/96e045c38f268c4a8c76/test_coverage)](https://codeclimate.com/github/saheedt/WeConnect/test_coverage)
+
 # WeConnect
 
 ## Introduction
