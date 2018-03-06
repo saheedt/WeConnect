@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "gulp transpile",
+    "dev": "gulp transpile",
     "start": "node ./build/server.js",
     "test": "gulp transpile && gulp coverage"
   },

@@ -10,11 +10,11 @@ dotenv.config();
 
 process.env.NODE_ENV = 'test';
 
-gulp.task('transpile', () => gulp.src('server/**/*.js'))
+gulp.task('transpile', () => gulp.src('server/**/*.js')
   .pipe(babel({
     presets: ['env', 'stage-2']
   }))
-  .pipe(gulp.dest('build'));
+  .pipe(gulp.dest('build')));
 
 gulp.task('coverage', () => {
   gulp.src('./build/**/*.js')
