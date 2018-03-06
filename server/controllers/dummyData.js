@@ -1,5 +1,3 @@
-import baseController from './baseController';
-
 const dummyData = [
   {
     id: 1,
@@ -54,21 +52,4 @@ const dummyData = [
     },
   }
 ];
-
-/**
- * @description Contains all user related functionalities
- * @export
- * @class userController
- */
-export default class userController extends baseController {
-  /**
-    * @description Allows user signup
-    * @static
-    * @param {object} req Client request
-    * @param {object} res Server response
-    * //@returns {Function} User
-    * @memberof userController
-    */
-  static create(req, res) {
-  }
-}
+export default dummyData;
