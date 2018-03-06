@@ -1,7 +1,6 @@
 const dummyData = [
   {
     id: 1,
-    name: 'Ayo David',
     email: 'ayo_david@xyz.com',
     password: 'testing_123',
     createdAt: '2018-2-4T08:57:49.571Z',
@@ -23,11 +22,10 @@ const dummyData = [
           review: 'well, not bad, and not good either'
         }
       ]
-    },
+    }
   },
   {
     id: 2,
-    name: 'john doe',
     email: 'doejohn@xyz.com',
     password: 'doenation',
     createdAt: '2018-3-1T08:57:49.571Z',
@@ -49,7 +47,7 @@ const dummyData = [
           review: 'one word: perfect'
         }
       ]
-    },
+    }
   }
 ];
 export default dummyData;
