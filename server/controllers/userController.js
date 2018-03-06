@@ -11,8 +11,8 @@ export default class userController extends baseController {
   /**
     * @description Allows user signup
     * @static
-    * @param {object} req Client request
-    * @param {object} res Server response
+    * @param {object} req client request
+    * @param {object} res erver response
     * @returns {Object} server response object
     * @memberof userController
     */
