@@ -1,5 +1,6 @@
-import baseController from './baseController';
+import { log } from 'util';
 
+import baseController from './baseController';
 import dummyData from './dummyData';
 
 /**
@@ -17,15 +18,18 @@ export default class userController extends baseController {
     * @memberof userController
     */
   static create(req, res) {
+    log(`req [req] -> ${req}`);
     if (userController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
       });
     }
     const found = dummyData.some(user => user.email === req.body.email);
+    console.log(`first [found] -> ${found}`);
     if (!userController.emailExists(req, res, found) &&
     userController.isPasswordValid(req, res, req.body.password)) {
-      const ID = dummyData.length + 1;
+      const ID = dummyData.length + 1,
+        userIndex = ID - 1;
       dummyData.push({
         id: ID,
         email: req.body.email,
@@ -34,11 +38,14 @@ export default class userController extends baseController {
           reviews: []
         }
       });
+      console.log(`userIndex: , ${userIndex}`);
+      console.log(`id: , ${dummyData[userIndex].id}`);
+      console.log(`email: , ${dummyData[userIndex].email}`);
       return res.status(201).send({
         message: 'user registered successfully',
         user: {
-          id: dummyData[ID].id,
-          email: dummyData[ID].email
+          id: dummyData[userIndex].id,
+          email: dummyData[userIndex].email
         }
       });
     }

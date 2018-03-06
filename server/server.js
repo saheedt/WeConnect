@@ -2,6 +2,7 @@ import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import logger from 'morgan';
 import { log } from 'util';
 
 // import all api routes
@@ -14,6 +15,7 @@ const app = express();
 const port = parseInt(process.env.PORT, 10) || 8011;
 
 app.set('port', port);
+app.use(logger('dev'));
 
 // parse api request body into JSON
 app.use(bodyParser.json());

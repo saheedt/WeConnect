@@ -1,4 +1,5 @@
 import gulp from 'gulp';
+import nodemon from 'gulp-nodemon';
 import babel from 'gulp-babel';
 import jasmineNode from 'gulp-jasmine-node';
 import istanbul from 'gulp-istanbul';
@@ -9,6 +10,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 process.env.NODE_ENV = 'test';
+
+gulp.task('nodemon', () => {
+  nodemon({
+    script: 'build/server.js',
+    ext: 'js',
+    ignore: ['README.md', 'node_modules/**', '.DS_Store'],
+    tasks: ['transpile'],
+    watch: ['server']
+  });
+});
 
 gulp.task('transpile', () => gulp.src('server/**/*.js')
   .pipe(babel({
