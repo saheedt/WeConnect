@@ -43,4 +43,43 @@ export default class userController extends baseController {
       });
     }
   }
+  /**
+   * @description Allows registered users sign in
+   * @static
+   * @param {object} req client request
+   * @param {object} res server Response
+   * @returns {object} server response object
+   * @memberof userController
+   */
+  static login(req, res) {
+    if (userController.isEmptyOrNull(req.body.email)) {
+      return res.status(400).send({
+        message: 'email cannot be empty or null'
+      });
+    }
+    const found = dummyData.some(user => user.email === req.body.email);
+    let appUser;
+    if (userController.isUser(req, res, found)) {
+      const isPasswordSame = dummyData.some((user) => {
+        if (user.email === req.body.email &&
+            user.password === req.body.password) {
+          appUser = {
+            id: user.id,
+            email: user.email
+          };
+          return true;
+        }
+        return false;
+      });
+      if (isPasswordSame) {
+        return res.status(200).send({
+          message: 'login success',
+          user: appUser
+        });
+      }
+      return res.status(401).send({
+        message: 'email and/or password invalid'
+      });
+    }
+  }
 }
