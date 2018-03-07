@@ -29,6 +29,7 @@ export default class userController extends baseController {
       dummyData.push({
         id: ID,
         email: req.body.email,
+        password: req.body.password,
         createdAt: new Date(),
         business: {
           reviews: []
@@ -39,7 +40,8 @@ export default class userController extends baseController {
         user: {
           id: dummyData[userIndex].id,
           email: dummyData[userIndex].email
-        }
+        },
+        dummyData
       });
     }
   }
@@ -72,7 +74,6 @@ export default class userController extends baseController {
         return false;
       });
       if (isPasswordSame) {
-        req.locals.loggedInUser = { id: user.id, email: user.email };
         return res.status(200).send({
           message: 'login success',
           user: appUser
