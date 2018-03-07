@@ -10,6 +10,7 @@ const Routes = (app) => {
   app.route('/api/v1/businesses').post(businessController.create);
   app.route('/api/v1/businesses/:businessId').put(businessController.update);
   app.route('/api/v1/businesses/:businessId').delete(businessController.delete);
+  app.route('/api/v1/businesses/:businessId').get(businessController.fetch);
 };
 
 export default Routes;

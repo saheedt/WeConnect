@@ -17,7 +17,7 @@ export default class businessController extends baseController {
     */
   static create(req, res) {
     if (!req.body.userId) {
-      return res.status(400).send({
+      return res.status(401).send({
         message: 'you appear offline, please log in'
       });
     }
@@ -43,7 +43,7 @@ export default class businessController extends baseController {
         business: addedBusiness
       });
     }
-    return res.status(401).send({
+    return res.status(200).send({
       message: 'business exists for user, update business as an alternative'
     });
   }
@@ -57,7 +57,7 @@ export default class businessController extends baseController {
     */
   static update(req, res) {
     if (!req.body.userId) {
-      return res.status(400).send({
+      return res.status(401).send({
         message: 'you appear offline, please log in'
       });
     }
@@ -99,7 +99,7 @@ export default class businessController extends baseController {
         business: updatedBusiness
       });
     }
-    return res.status(401).send({
+    return res.status(404).send({
       message: 'no business to update, register business first'
     });
   }
@@ -113,7 +113,7 @@ export default class businessController extends baseController {
     */
   static delete(req, res) {
     if (!req.body.userId) {
-      return res.status(400).send({
+      return res.status(401).send({
         message: 'you appear offline, please log in'
       });
     }
@@ -128,13 +128,13 @@ export default class businessController extends baseController {
       return false;
     });
     if (deleteBusiness) {
-      return res.status(201).send({
+      return res.status(200).send({
         message: 'business sucessfully deleted',
         business: deletedBusiness,
         dummyData
       });
     }
-    return res.status(401).send({
+    return res.status(404).send({
       message: 'no business to delete'
     });
   }
@@ -147,21 +147,16 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetch(req, res) {
-    if (!req.body.userId) {
-      return res.status(400).send({
-        message: 'you appear offline, please log in'
-      });
-    }
     const fetchedBusiness = dummyData
       .find(user => user.business.id === parseInt(req.params.businessId, 10));
+    console.log(fetchedBusiness);
     if (fetchedBusiness) {
-      return res.status(201).send({
+      return res.status(200).send({
         message: 'business sucessfully fetched',
-        business: fetchedBusiness,
-        dummyData
+        business: fetchedBusiness.business
       });
     }
-    return res.status(401).send({
+    return res.status(404).send({
       message: 'no business found'
     });
   }
