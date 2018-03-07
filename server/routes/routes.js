@@ -14,6 +14,8 @@ const Routes = (app) => {
   app.route('/api/v1/businesses').get(businessController.fetchAll);
   app.route('/api/v1/businesses/:businessId/reviews')
     .post(businessController.reviewBusiness);
+  app.route('/api/v1/businesses/:businessId/reviews')
+    .get(businessController.fetchBusinessReviews);
 };
 
 export default Routes;
