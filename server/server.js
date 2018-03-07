@@ -16,10 +16,11 @@ const port = parseInt(process.env.PORT, 10) || 8011;
 
 app.set('port', port);
 app.use(logger('dev'));
+app.disable('x-powered-by');
 
 // parse api request body into JSON
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 Routes(app);
 

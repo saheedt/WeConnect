@@ -5,6 +5,7 @@ const dummyData = [
     password: 'testing_123',
     createdAt: '2018-2-4T08:57:49.571Z',
     business: {
+      id: 1,
       name: 'specimen a',
       address: '15a, ayo david close, ajah',
       location: 'lagos',
@@ -30,6 +31,7 @@ const dummyData = [
     password: 'doenation',
     createdAt: '2018-3-1T08:57:49.571Z',
     business: {
+      id: 2,
       name: 'doe-doe',
       address: 'plot 33, don doe doe crescent,',
       location: 'Abuja',

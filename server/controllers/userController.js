@@ -72,6 +72,7 @@ export default class userController extends baseController {
         return false;
       });
       if (isPasswordSame) {
+        req.locals.loggedInUser = { id: user.id, email: user.email };
         return res.status(200).send({
           message: 'login success',
           user: appUser
