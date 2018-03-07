@@ -11,7 +11,7 @@ export default class businessController extends baseController {
     * @description Allows user register business
     * @static
     * @param {object} req client request
-    * @param {object} res erver response
+    * @param {object} res server response
     * @returns {Object} server response object
     * @memberof businessController
     */
@@ -51,7 +51,7 @@ export default class businessController extends baseController {
     * @description Allow user update business details
     * @static
     * @param {object} req client request
-    * @param {object} res erver response
+    * @param {object} res server response
     * @returns {Object} server response object
     * @memberof businessController
     */
@@ -101,6 +101,40 @@ export default class businessController extends baseController {
     }
     return res.status(401).send({
       message: 'no business to update, register business first'
+    });
+  }
+  /**
+    * @description Allow user delete business details
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static delete(req, res) {
+    if (!req.body.userId) {
+      return res.status(400).send({
+        message: 'you appear offline, please log in'
+      });
+    }
+    let deletedBusiness;
+    const deleteBusiness = dummyData.some((user) => {
+      if (user.id === parseInt(req.body.userId, 10) &&
+      user.business.id === parseInt(req.params.businessId, 10)) {
+        user.business = { review: [] };
+        deletedBusiness = user.business;
+        return true;
+      }
+      return false;
+    });
+    if (deleteBusiness) {
+      return res.status(201).send({
+        message: 'business sucessfully deleted',
+        business: deletedBusiness
+      });
+    }
+    return res.status(401).send({
+      message: 'no business to delete'
     });
   }
 }
