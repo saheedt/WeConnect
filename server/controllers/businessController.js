@@ -130,7 +130,8 @@ export default class businessController extends baseController {
     if (deleteBusiness) {
       return res.status(201).send({
         message: 'business sucessfully deleted',
-        business: deletedBusiness
+        business: deletedBusiness,
+        dummyData
       });
     }
     return res.status(401).send({
