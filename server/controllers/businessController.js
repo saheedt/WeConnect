@@ -168,8 +168,7 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchAll(req, res) {
-    const allBusinesses = dummyData
-      .map(user => user.business);
+    const allBusinesses = dummyData.map(user => user.business);
     if (allBusinesses) {
       return res.status(200).send({
         message: 'businesses sucessfully fetched',
@@ -209,6 +208,27 @@ export default class businessController extends baseController {
     }
     return res.status(404).send({
       message: 'cannot review a non-existent business'
+    });
+  }
+  /**
+    * @description Allow user retrieve reviews of a business
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static fetchBusinessReviews(req, res) {
+    const reviews = dummyData
+      .find(user => user.business.id === parseInt(req.params.businessId, 10));
+    if (reviews) {
+      return res.status(200).send({
+        message: 'reviews sucessfully retrieved',
+        reviews: reviews.business.reviews
+      });
+    }
+    return res.status(404).send({
+      message: 'no reviews found'
     });
   }
 }
