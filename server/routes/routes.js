@@ -8,6 +8,7 @@ const Routes = (app) => {
 
   // business endpoint(s)
   app.route('/api/v1/businesses').post(businessController.create);
+  app.route('/api/v1/businesses/:businessId').put(businessController.update);
 };
 
 export default Routes;

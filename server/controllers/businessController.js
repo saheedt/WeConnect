@@ -63,15 +63,31 @@ export default class businessController extends baseController {
     }
     let updatedBusiness;
     const updateBusiness = dummyData.some((user) => {
-      if (user.id === parseInt(req.body.userId, 10) && user.business.name) {
-        user.business.id = parseInt(req.body.userId, 10);
-        user.business.name = req.body.name;
-        user.business.address = req.body.address;
-        user.business.location = req.body.location;
-        user.business.phonenumber = parseInt(req.body.phonenumber, 10);
-        user.business.employees = req.body.employees;
-        user.business.category = req.body.category;
-        user.business.createdAt = new Date();
+      if (user.id === parseInt(req.body.userId, 10) &&
+      user.business.id === parseInt(req.params.businessId, 10)) {
+        Object.assign(user.business, req.body.name && { name: req.body.name });
+        Object.assign(
+          user.business,
+          req.body.address && { address: req.body.address }
+        );
+        Object.assign(
+          user.business,
+          req.body.location && { location: req.body.location }
+        );
+        Object.assign(
+          user.business,
+          req.body.phonenumber &&
+          { phonenumber: parseInt(req.body.phonenumber, 10) }
+        );
+        Object.assign(
+          user.business,
+          req.body.employees && { employees: parseInt(req.body.employees, 10) }
+        );
+        Object.assign(
+          user.business,
+          req.body.category && { category: req.body.category }
+        );
+        user.business.updatedAt = new Date();
         updatedBusiness = user.business;
         return true;
       }
