@@ -47,4 +47,44 @@ export default class businessController extends baseController {
       message: 'business exists for user, update business as an alternative'
     });
   }
+  /**
+    * @description Allow user update business details
+    * @static
+    * @param {object} req client request
+    * @param {object} res erver response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static update(req, res) {
+    if (!req.body.userId) {
+      return res.status(400).send({
+        message: 'you appear offline, please log in'
+      });
+    }
+    let updatedBusiness;
+    const updateBusiness = dummyData.some((user) => {
+      if (user.id === parseInt(req.body.userId, 10) && user.business.name) {
+        user.business.id = parseInt(req.body.userId, 10);
+        user.business.name = req.body.name;
+        user.business.address = req.body.address;
+        user.business.location = req.body.location;
+        user.business.phonenumber = parseInt(req.body.phonenumber, 10);
+        user.business.employees = req.body.employees;
+        user.business.category = req.body.category;
+        user.business.createdAt = new Date();
+        updatedBusiness = user.business;
+        return true;
+      }
+      return false;
+    });
+    if (updateBusiness) {
+      return res.status(201).send({
+        message: 'business sucessfully updated',
+        business: updatedBusiness
+      });
+    }
+    return res.status(401).send({
+      message: 'no business to update, register business first'
+    });
+  }
 }
