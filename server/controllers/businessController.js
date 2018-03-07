@@ -208,7 +208,7 @@ export default class businessController extends baseController {
       });
     }
     return res.status(404).send({
-      message: 'no businesses to review'
+      message: 'cannot review a non-existent business'
     });
   }
 }
