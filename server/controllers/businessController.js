@@ -149,7 +149,6 @@ export default class businessController extends baseController {
   static fetch(req, res) {
     const fetchedBusiness = dummyData
       .find(user => user.business.id === parseInt(req.params.businessId, 10));
-    console.log(fetchedBusiness);
     if (fetchedBusiness) {
       return res.status(200).send({
         message: 'business sucessfully fetched',
@@ -158,6 +157,27 @@ export default class businessController extends baseController {
     }
     return res.status(404).send({
       message: 'no business found'
+    });
+  }
+  /**
+    * @description Allow user get all businesses
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static fetchAll(req, res) {
+    const allBusinesses = dummyData
+      .map(user => user.business);
+    if (allBusinesses) {
+      return res.status(200).send({
+        message: 'businesses sucessfully fetched',
+        business: allBusinesses
+      });
+    }
+    return res.status(404).send({
+      message: 'no businesses found'
     });
   }
 }
