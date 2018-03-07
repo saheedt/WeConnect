@@ -180,4 +180,35 @@ export default class businessController extends baseController {
       message: 'no businesses found'
     });
   }
+  /**
+    * @description Allow user review a business
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static reviewBusiness(req, res) {
+    const review = {
+      name: req.body.name,
+      review: req.body.review
+    };
+    const reviewed = dummyData
+      .some((user) => {
+        if (user.business.id === parseInt(req.params.businessId, 10)) {
+          user.business.reviews.push(review);
+          return true;
+        }
+        return false;
+      });
+    if (reviewed) {
+      return res.status(200).send({
+        message: 'businesses sucessfully reviewed',
+        review
+      });
+    }
+    return res.status(404).send({
+      message: 'no businesses to review'
+    });
+  }
 }
