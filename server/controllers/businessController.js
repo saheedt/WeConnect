@@ -138,4 +138,31 @@ export default class businessController extends baseController {
       message: 'no business to delete'
     });
   }
+  /**
+    * @description Allow user get a business details
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static fetch(req, res) {
+    if (!req.body.userId) {
+      return res.status(400).send({
+        message: 'you appear offline, please log in'
+      });
+    }
+    const fetchedBusiness = dummyData
+      .find(user => user.business.id === parseInt(req.params.businessId, 10));
+    if (fetchedBusiness) {
+      return res.status(201).send({
+        message: 'business sucessfully fetched',
+        business: fetchedBusiness,
+        dummyData
+      });
+    }
+    return res.status(401).send({
+      message: 'no business found'
+    });
+  }
 }
