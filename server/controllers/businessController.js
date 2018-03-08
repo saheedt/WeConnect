@@ -168,18 +168,42 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchAllOrFilter(req, res) {
-    const { location } = req.query;
-    let byLocation;
-    if (location) {
-      byLocation = dummyData.map(user => user.business.location === location);
-      if (byLocation) {
-        return res.status(200).send({
-          message: 'business successfully filtered',
-          business: byLocation
+    const { location, category } = req.query;
+    const filteredBy = [];
+    if (req.query) {
+      if (location || category) {
+        dummyData
+          .map((user) => {
+            if (location) {
+              if (user.business.location
+                === businessController.queryBy({ location, category })) {
+                filteredBy.push(user.business);
+                return true;
+              }
+              return false;
+            }
+            if (category) {
+              if (user.business.category
+                === businessController.queryBy({ location, category })) {
+                filteredBy.push(user.business);
+                return true;
+              }
+              return false;
+            }
+            return false;
+          });
+        if (filteredBy && filteredBy.length > 0) {
+          return res.status(200).send({
+            message: 'business successfully filtered',
+            business: filteredBy
+          });
+        }
+        return res.status(404).send({
+          message: 'no businesses found in this location'
         });
       }
-      return res.status(404).send({
-        message: 'no businesses found'
+      return res.status(400).send({
+        message: 'invalid query'
       });
     }
     const allBusinesses = dummyData.map(user => user.business);

@@ -80,4 +80,20 @@ export default class baseController {
     }
     return true;
   }
+  /**
+   * @description Checks what to query by
+   * @static
+   * @param {object} queryParams query parameters
+   * @returns {string} location or category
+   * @memberof baseController
+   */
+  static queryBy(queryParams) {
+    const { location, category } = queryParams;
+    if (location) {
+      return location;
+    }
+    if (category) {
+      return category;
+    }
+  }
 }
