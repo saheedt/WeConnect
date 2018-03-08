@@ -40,8 +40,7 @@ export default class userController extends baseController {
         user: {
           id: dummyData[userIndex].id,
           email: dummyData[userIndex].email
-        },
-        dummyData
+        }
       });
     }
   }

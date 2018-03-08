@@ -21,7 +21,7 @@ gulp.task('nodemon', () => {
   });
 });
 
-gulp.task('transpile', () => gulp.src('server/**/*.js')
+gulp.task('transpile', () => gulp.src('./server/**/*.js')
   .pipe(babel({
     presets: ['env', 'stage-2']
   }))
@@ -32,7 +32,7 @@ gulp.task('coverage', () => {
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {
-      gulp.src('test/**/*.js')
+      gulp.src('./build/tests/*.js')
         .pipe(babel())
         .pipe(injectModules())
         .pipe(jasmineNode())

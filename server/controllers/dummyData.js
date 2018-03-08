@@ -50,32 +50,6 @@ const dummyData = [
         }
       ]
     }
-  },
-  {
-    id: 2,
-    email: 'doejohn@xyz.com',
-    password: 'doenation',
-    createdAt: '2018-3-1T08:57:49.571Z',
-    business: {
-      id: 2,
-      name: 'doe-doe',
-      address: 'plot 33, don doe doe crescent,',
-      location: 'lagos',
-      phonenumber: 122346776,
-      employees: 12,
-      category: 'finance',
-      createdAt: '2018-3-5T11:57:49.571Z',
-      reviews: [
-        {
-          name: 'xox',
-          review: 'patronize only if you are willi gto go bankrupt'
-        },
-        {
-          name: 'laurie',
-          review: 'one word: perfect'
-        }
-      ]
-    }
   }
 ];
 export default dummyData;
