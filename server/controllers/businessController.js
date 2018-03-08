@@ -167,11 +167,25 @@ export default class businessController extends baseController {
     * @returns {Object} server response object
     * @memberof businessController
     */
-  static fetchAll(req, res) {
+  static fetchAllOrFilter(req, res) {
+    const { location } = req.query;
+    let byLocation;
+    if (location) {
+      byLocation = dummyData.map(user => user.business.location === location);
+      if (byLocation) {
+        return res.status(200).send({
+          message: 'business successfully filtered',
+          business: byLocation
+        });
+      }
+      return res.status(404).send({
+        message: 'no businesses found'
+      });
+    }
     const allBusinesses = dummyData.map(user => user.business);
     if (allBusinesses) {
       return res.status(200).send({
-        message: 'businesses sucessfully fetched',
+        message: 'businesses successfully fetched',
         business: allBusinesses
       });
     }
@@ -229,27 +243,6 @@ export default class businessController extends baseController {
     }
     return res.status(404).send({
       message: 'no reviews found'
-    });
-  }
-  /**
-    * @description Allow user retrieve reviews of a business
-    * @static
-    * @param {object} req client request
-    * @param {object} res server response
-    * @returns {Object} server response object
-    * @memberof businessController
-    */
-  static filterByLocation(req, res) {
-    const byLocation = dummyData
-      .map(user => user.business.location === req.query.location.trim());
-    if (byLocation) {
-      return res.status(200).send({
-        message: 'businesses sucessfully filtered',
-        businesses: byLocation
-      });
-    }
-    return res.status(404).send({
-      message: 'no business found in this location'
     });
   }
 }
