@@ -231,4 +231,25 @@ export default class businessController extends baseController {
       message: 'no reviews found'
     });
   }
+  /**
+    * @description Allow user retrieve reviews of a business
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @returns {Object} server response object
+    * @memberof businessController
+    */
+  static filterByLocation(req, res) {
+    const byLocation = dummyData
+      .map(user => user.business.location === req.query.location.trim());
+    if (byLocation) {
+      return res.status(200).send({
+        message: 'businesses sucessfully filtered',
+        businesses: byLocation
+      });
+    }
+    return res.status(404).send({
+      message: 'no business found in this location'
+    });
+  }
 }
