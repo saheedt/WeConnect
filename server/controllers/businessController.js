@@ -169,9 +169,9 @@ export default class businessController extends baseController {
     */
   static fetchAllOrFilter(req, res) {
     const filteredBy = [];
-    const queryObject = Object.values(req.query);
-    console.log('queryObject: ', queryObject);
-    if (queryObject.length > 0) {
+    // const queryObject = Object.values(req.query);
+    console.log('queryObject: ', req.query);
+    if (req.query.location || req.query.category) {
       const { location, category } = req.query;
       console.log(location, category);
       if (location || category) {
