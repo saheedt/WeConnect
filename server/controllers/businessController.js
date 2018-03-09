@@ -169,8 +169,7 @@ export default class businessController extends baseController {
     */
   static fetchAllOrFilter(req, res) {
     const filteredBy = [];
-    const queryObject = Object.values(req.query);
-    if (queryObject.length > 0) {
+    if (JSON.stringify(req.query) !== '{}') {
       const { location, category } = req.query;
       if (location || category) {
         dummyData
