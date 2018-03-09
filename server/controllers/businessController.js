@@ -168,11 +168,12 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchAllOrFilter(req, res) {
-    console.log('got called..');
     const filteredBy = [];
     const queryObject = Object.values(req.query);
+    console.log('queryObject: ', queryObject);
     if (queryObject.length > 0) {
       const { location, category } = req.query;
+      console.log(location, category);
       if (location || category) {
         dummyData
           .map((user) => {
@@ -211,11 +212,13 @@ export default class businessController extends baseController {
     const allBusinesses = [];
     dummyData
       .map((user) => {
+        console.log('user.business.name: ', user.business.name);
         if (user.business.name) {
           allBusinesses.push(user.business);
         }
         return false;
       });
+    console.log('allBusinesses: ', allBusinesses);
     if (allBusinesses) {
       return res.status(200).send({
         message: 'businesses successfully fetched',
