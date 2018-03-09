@@ -168,6 +168,7 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchAllOrFilter(req, res) {
+    console.log('got called..');
     const filteredBy = [];
     const queryObject = Object.values(req.query);
     if (queryObject.length > 0) {
