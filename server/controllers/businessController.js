@@ -168,9 +168,10 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchAllOrFilter(req, res) {
-    const { location, category } = req.query;
     const filteredBy = [];
-    if (req.query) {
+    const queryObject = Object.values(req.query);
+    if (queryObject.length > 0) {
+      const { location, category } = req.query;
       if (location || category) {
         dummyData
           .map((user) => {
@@ -199,14 +200,21 @@ export default class businessController extends baseController {
           });
         }
         return res.status(404).send({
-          message: 'no businesses found in this location'
+          message: 'no businesses found'
         });
       }
       return res.status(400).send({
         message: 'invalid query'
       });
     }
-    const allBusinesses = dummyData.map(user => user.business);
+    const allBusinesses = [];
+    dummyData
+      .map((user) => {
+        if (user.business.name) {
+          allBusinesses.push(user.business);
+        }
+        return false;
+      });
     if (allBusinesses) {
       return res.status(200).send({
         message: 'businesses successfully fetched',
@@ -226,6 +234,11 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static reviewBusiness(req, res) {
+    if (businessController.isEmptyOrNull(req.body.review)) {
+      return res.status(401).send({
+        message: 'review cannot be empty'
+      });
+    }
     const review = {
       name: req.body.name,
       review: req.body.review
