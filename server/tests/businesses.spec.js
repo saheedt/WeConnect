@@ -388,7 +388,7 @@ describe('businesses endpoint', () => {
             review: 'xyz'
           })
           .end((err, resp) => {
-            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(resp.status, 201);
             assert.deepEqual(
               resp.body.message,
               'businesses sucessfully reviewed'
