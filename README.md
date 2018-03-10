@@ -23,17 +23,23 @@ This is a project divided into three parts:
 
 ## Getting Started
 
-This part of the project contains the UI templates, hosted on github pages.
-To view the UI template for the WeConnect web application, please click this link [WeConnect](https://saheedt.github.io/WeConnect/template/landing.html)
+* The template folder holds the project UI templates, hosted on github pages.
+To view the UI template for the WeConnect web application, please click this link [WeConnect UI](https://saheedt.github.io/WeConnect/template/landing.html)
+
+* The server folder holds the backend API, hosted on heroku.
+To view the API documentation, please click this link
+[WeConnect API docs](https://weconnect-saheed.herokuapp.com)
 
 ### Prerequisites
-To view the UI Template, please use a web browser, preferably, Google Chrome.
+To view the UI Template and API docs, please use a web browser, preferably, Google Chrome.
 
 ### Built With
 
 * HTML/CSS
 * [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [Materialize Css](http://materializecss.com/)
+* [Express Js](https://expressjs.com/)
+* [Node js](https://nodejs.org/en/)
 
 ## Authors
 
