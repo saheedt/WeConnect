@@ -3,7 +3,7 @@ import path from 'path';
 import Sequelize from 'sequelize';
 import dotenv from 'dotenv';
 
-const configfile = require('../../server/config/config');
+const configfile = require('../config/config');
 
 dotenv.config();
 

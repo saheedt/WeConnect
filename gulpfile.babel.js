@@ -21,6 +21,9 @@ gulp.task('nodemon', () => {
   });
 });
 
+gulp.task('copy', () => gulp.src('!server/**/*.*')
+  .pipe(gulp.dest('build')));
+
 gulp.task('transpile', () => gulp.src('./server/**/*.js')
   .pipe(babel({
     presets: ['env', 'stage-2']
@@ -43,3 +46,5 @@ gulp.task('coverage', () => {
         .pipe(exit());
     });
 });
+
+gulp.task('transcopy', ['transpile', 'copy']);
