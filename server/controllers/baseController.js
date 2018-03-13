@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 /**
  * @description Contains all helper Functions
  * @export
@@ -27,6 +28,18 @@ export default class baseController {
       return false;
     }
     return true;
+  }
+  /**
+   * @description jwt sign function
+   * @param {Object} data User data
+   * @returns {object} encoded token
+   */
+  static sign(data) {
+    return jwt.sign(
+      data,
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
   }
   /**
    * @description Checks if Email Exists
