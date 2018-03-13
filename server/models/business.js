@@ -22,14 +22,14 @@ export default (sequelize, DataTypes) => {
       }
     },
     phonenumber: {
-      type: DataTypes.INTERGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     employees: {
-      type: DataTypes.INTERGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -37,6 +37,13 @@ export default (sequelize, DataTypes) => {
     },
     category: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    userId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true

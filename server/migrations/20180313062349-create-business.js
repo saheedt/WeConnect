@@ -33,14 +33,14 @@ module.exports = {
           notEmpty: true
         },
         allowNull: false,
-        type: Sequelize.INTERGER
+        type: Sequelize.INTEGER
       },
       employees: {
         validate: {
           notEmpty: true
         },
         allowNull: false,
-        type: Sequelize.INTERGER
+        type: Sequelize.INTEGER
       },
       category: {
         validate: {
@@ -56,6 +56,16 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Users',
+          key: 'id',
+          as: 'userId'
+        }
       }
     }),
   down: queryInterface => queryInterface.dropTable('Businesses')

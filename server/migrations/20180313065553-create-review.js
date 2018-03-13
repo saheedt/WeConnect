@@ -28,6 +28,16 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      businessId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Businesses',
+          key: 'id',
+          as: 'businessId'
+        }
       }
     }),
   down: queryInterface => queryInterface.dropTable('Reviews')
