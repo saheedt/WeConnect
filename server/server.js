@@ -52,4 +52,5 @@ app.route('*').delete((req, res) => res.status(404).send({
 const server = http.createServer(app);
 server.listen(port);
 log(`listening on port: ${port}`);
+log(`environment: ${process.env.NODE_ENV}`);
 export default server;

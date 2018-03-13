@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-process.env.NODE_ENV = 'test';
+// process.env.NODE_ENV = 'test';
 
 gulp.task('nodemon', () => {
   nodemon({
@@ -31,6 +31,7 @@ gulp.task('transpile', () => gulp.src('./server/**/*.js')
   .pipe(gulp.dest('build')));
 
 gulp.task('coverage', () => {
+  process.env.NODE_ENV = 'test';
   gulp.src('./build/**/*.js')
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
@@ -46,5 +47,3 @@ gulp.task('coverage', () => {
         .pipe(exit());
     });
 });
-
-gulp.task('transcopy', ['transpile', 'copy']);

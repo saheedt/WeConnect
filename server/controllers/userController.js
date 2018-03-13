@@ -1,4 +1,4 @@
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import baseController from './baseController';
 
 const { User } = require('../models');
@@ -20,6 +20,7 @@ export default class userController extends baseController {
     * @memberof userController
     */
   static create(req, res) {
+    // check if email is sent with the request
     if (userController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
@@ -30,6 +31,7 @@ export default class userController extends baseController {
         email: req.body.email
       }
     }).then((user) => {
+      // if user doesn't exist, register new user
       if (!userController.emailExists(req, res, user) &&
       userController.isPasswordValid(req, res, req.body.password)) {
         hash(req.body.password, saltRounds, (err, encrypted) => {
@@ -37,6 +39,8 @@ export default class userController extends baseController {
             email: req.body.email,
             password: encrypted
           }).then((createduser) => {
+            // delete sensitive info from the DB resposnse
+            // and generate a JWT(JSON web token) with user id & email
             delete createduser.dataValues.password;
             delete createduser.dataValues.updatedAt;
             delete createduser.dataValues.createdAt;
@@ -44,6 +48,7 @@ export default class userController extends baseController {
               id: createduser.dataValues.id,
               email: createduser.dataValues.email
             });
+            // send created user details & token
             res.status(201).send({
               message: 'sign up successful',
               user: createduser,
@@ -69,34 +74,47 @@ export default class userController extends baseController {
    * @memberof userController
    */
   static login(req, res) {
+    // check if email is sent with the request
     if (userController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
       });
     }
-    const found = dummyData.some(user => user.email === req.body.email);
-    let appUser;
-    if (userController.isUser(req, res, found)) {
-      const isPasswordSame = dummyData.some((user) => {
-        if (user.email === req.body.email &&
-            user.password === req.body.password) {
-          appUser = {
-            id: user.id,
-            email: user.email
-          };
-          return true;
-        }
-        return false;
-      });
-      if (isPasswordSame) {
-        return res.status(200).send({
-          message: 'login success',
-          user: appUser
+    return User.findOne({
+      where: {
+        email: req.body.email
+      },
+      attributes: {
+        excludes: ['createdAt', 'updatedAt']
+      }
+    }).then((user) => {
+      if (userController.isUser(req, res, user)) {
+        compare(req.body.password, user.dataValues.password, (err, resp) => {
+          // handle incorrect password
+          if (!resp || err) {
+            return res.status(400).send({
+              message: 'wrong email or password'
+            });
+          }
+          // make a JWT (JSON web token) with id and email
+          const token = userController.sign({
+            id: user.dataValues.id,
+            email: user.dataValues.email
+          });
+          // delete sensitive data from DB response
+          delete user.dataValues.password;
+          delete user.dataValues.updatedAt;
+          delete user.dataValues.createdAt;
+          // send token with success response
+          return res.status(200).send({
+            message: 'sign in successful',
+            token
+          });
         });
       }
-      return res.status(401).send({
-        message: 'email and/or password invalid'
-      });
-    }
+    }).catch(loginError => res.status(500).send({
+      message: 'unexpected error, please try again',
+      error: loginError.toString()
+    }));
   }
 }
