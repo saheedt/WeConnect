@@ -33,7 +33,7 @@ module.exports = {
           notEmpty: true
         },
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       employees: {
         validate: {

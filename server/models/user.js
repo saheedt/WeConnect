@@ -17,11 +17,10 @@ export default (sequelize, DataTypes) => {
     }
   });
 
-  // User.associate = (models) => {
-  //   User.hasOne(models.Business, {
-  //     foreignKey: 'userId',
-  //     as: 'business'
-  //   });
-  // };
+  User.associate = (models) => {
+    User.hasOne(models.Business, {
+      foreignKey: 'userId'
+    });
+  };
   return User;
 };

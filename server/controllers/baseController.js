@@ -62,7 +62,7 @@ export default class baseController {
           return res.status(401).send({ message: 'invalid token' });
         }
         if (decoded) {
-          req.loggedInUser = decoded;
+          req.authenticatedUser = decoded;
           next();
         }
       }

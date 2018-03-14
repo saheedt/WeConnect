@@ -17,19 +17,25 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static create(req, res) {
-    if (!req.body.userId) {
+    if (!req.authenticatedUser) {
       return res.status(401).send({
         message: 'you appear offline, please log in'
+      });
+    }
+    if (parseInt(req.body.userId, 10)
+        !== parseInt(req.authenticatedUser.id, 10)) {
+      return res.status(401).send({
+        message: 'you are not authorized to create a business on this account'
       });
     }
     return Business.create({
       name: req.body.name,
       address: req.body.address,
       location: req.body.location,
-      phonenumber: req.body.phonenumber,
-      employees: req.body.employees,
+      phonenumber: parseInt(req.body.phonenumber, 10),
+      employees: parseInt(req.body.employees, 10),
       category: req.body.category,
-      userId: req.authenticatedUser.id
+      userId: parseInt(req.authenticatedUser.id, 10)
     }).then((business) => {
       if (!business) {
         return res.status(400).send({
@@ -37,12 +43,12 @@ export default class businessController extends baseController {
         });
       }
       res.status(201).send({
-        message: 'business successfully registered',
+        message: 'business successfully added',
         business
       });
     }).catch(businessError => res.status(500).send({
       message: 'unexpected error, please try again',
-      error: businessError
+      error: businessError.toString()
     }));
   }
   /**
@@ -54,52 +60,55 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static update(req, res) {
-    if (!req.body.userId) {
+    if (!req.authenticatedUser) {
       return res.status(401).send({
         message: 'you appear offline, please log in'
       });
     }
-    let updatedBusiness;
-    const updateBusiness = dummyData.some((user) => {
-      if (user.id === parseInt(req.body.userId, 10) &&
-      user.business.id === parseInt(req.params.businessId, 10)) {
-        Object.assign(user.business, req.body.name && { name: req.body.name });
-        Object.assign(
-          user.business,
-          req.body.address && { address: req.body.address }
-        );
-        Object.assign(
-          user.business,
-          req.body.location && { location: req.body.location }
-        );
-        Object.assign(
-          user.business,
-          req.body.phonenumber &&
-          { phonenumber: parseInt(req.body.phonenumber, 10) }
-        );
-        Object.assign(
-          user.business,
-          req.body.employees && { employees: parseInt(req.body.employees, 10) }
-        );
-        Object.assign(
-          user.business,
-          req.body.category && { category: req.body.category }
-        );
-        user.business.updatedAt = new Date();
-        updatedBusiness = user.business;
-        return true;
+    return Business.findOne({
+      where: {
+        id: parseInt(req.params.businessId, 10)
       }
-      return false;
-    });
-    if (updateBusiness) {
-      return res.status(201).send({
-        message: 'business sucessfully updated',
-        business: updatedBusiness
+    }).then((business) => {
+      if (!business) {
+        return res.status(404).send({
+          mesage: 'no business to update, register business first'
+        });
+      }
+      if (business.dataValues.userId
+        === parseInt(req.authenticatedUser.id, 10)) {
+        return business
+          .update({
+            name: req.body.name || business.dataValues.name,
+            address: req.body.address || business.dataValues.address,
+            location: req.body.location || business.dataValues.location,
+            phonenumber: parseInt(req.body.phonenumber, 10) ||
+              business.dataValues.phonenumber,
+            employees: parseInt(req.body.employees, 10) ||
+              business.dataValues.employees,
+            category: req.body.category || business.dataValues.category
+          }).then((updatedBusiness) => {
+            if (!updatedBusiness) {
+              return res.status(500).send({
+                message: 'update failed, try again'
+              });
+            }
+            res.status(200).send({
+              message: 'business successfully updated',
+              business: business.dataValues
+            });
+          }).catch(updateError => res.status(500).send({
+            message: 'error occured during update, please try agin',
+            error: updateError.toString()
+          }));
+      }
+      return res.status(401).send({
+        message: 'unathorized, business belongs to another user'
       });
-    }
-    return res.status(404).send({
-      message: 'no business to update, register business first'
-    });
+    }).catch(updateError => res.status(500).send({
+      message: 'an unexpected error has occured',
+      error: updateError.toString()
+    }));
   }
   /**
     * @description Allow user delete business details
@@ -110,30 +119,38 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static delete(req, res) {
-    if (!req.body.userId) {
+    if (!req.authenticatedUser) {
       return res.status(401).send({
         message: 'you appear offline, please log in'
       });
     }
-    let deletedBusiness;
-    const deleteBusiness = dummyData.some((user) => {
-      if (user.id === parseInt(req.body.userId, 10) &&
-      user.business.id === parseInt(req.params.businessId, 10)) {
-        user.business = { review: [] };
-        deletedBusiness = user.business;
-        return true;
-      }
-      return false;
-    });
-    if (deleteBusiness) {
-      return res.status(200).send({
-        message: 'business sucessfully deleted',
-        business: deletedBusiness
-      });
-    }
-    return res.status(404).send({
-      message: 'no business to delete'
-    });
+    return Business
+      .findById(req.params.businessId)
+      .then((business) => {
+        if (!business) {
+          return res.status(404).send({
+            message: 'you have no registered business to delete'
+          });
+        }
+        if (recipe.dataValues.userId === req.authenticatedUser.id) {
+          return business
+            .destroy()
+            .then(() => res.status(200).send({
+              message: 'business sucessfully deleted'
+            }))
+            .catch(error => res.status(500).send({
+              message: 'an error occured while deleting business',
+              error: error.toString()
+            }));
+        }
+        res.status(401).send({
+          message: 'unauthorized, business belongs to another user'
+        });
+      })
+      .catch(error => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: error.toString()
+      }));
   }
   /**
     * @description Allow user get a business details

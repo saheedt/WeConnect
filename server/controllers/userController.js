@@ -50,7 +50,7 @@ export default class userController extends baseController {
             });
             // send created user details & token
             res.status(201).send({
-              message: 'sign up successful',
+              message: 'user registered successfully',
               user: createduser,
               token
             });
@@ -61,7 +61,7 @@ export default class userController extends baseController {
         });
       }
     }).catch(userError => res.status(500).send({
-      message: 'unexpected error, please try again',
+      message: 'an unexpected error has occured',
       error: userError.toString()
     }));
   }
@@ -101,19 +101,24 @@ export default class userController extends baseController {
             id: user.dataValues.id,
             email: user.dataValues.email
           });
+          const authUser = {
+            id: user.dataValues.id,
+            email: user.dataValues.email
+          };
           // delete sensitive data from DB response
           delete user.dataValues.password;
           delete user.dataValues.updatedAt;
           delete user.dataValues.createdAt;
           // send token with success response
           return res.status(200).send({
-            message: 'sign in successful',
+            message: 'login successful',
+            user: authUser,
             token
           });
         });
       }
     }).catch(loginError => res.status(500).send({
-      message: 'unexpected error, please try again',
+      message: 'an unexpected error has occured',
       error: loginError.toString()
     }));
   }

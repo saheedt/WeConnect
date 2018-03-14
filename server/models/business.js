@@ -1,3 +1,5 @@
+require('pg').defaults.parseInt8 = true;
+
 export default (sequelize, DataTypes) => {
   const Business = sequelize.define('Business', {
     name: {
@@ -22,7 +24,7 @@ export default (sequelize, DataTypes) => {
       }
     },
     phonenumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       validate: {
         notEmpty: true

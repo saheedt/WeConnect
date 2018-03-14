@@ -7,8 +7,10 @@ const Routes = (app) => {
   app.route('/api/v1/auth/login').post(userController.login);
 
   // business endpoint(s)
-  app.route('/api/v1/businesses').post(businessController.create);
-  app.route('/api/v1/businesses/:businessId').put(businessController.update);
+  app.route('/api/v1/businesses')
+    .post(businessController.isAuthorized, businessController.create);
+  app.route('/api/v1/businesses/:businessId')
+    .put(businessController.isAuthorized, businessController.update);
   app.route('/api/v1/businesses/:businessId').delete(businessController.delete);
   app.route('/api/v1/businesses/:businessId').get(businessController.fetch);
   app.route('/api/v1/businesses').get(businessController.fetchAllOrFilter);
