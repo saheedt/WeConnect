@@ -135,14 +135,23 @@ export default class baseController {
       where: queryParams
     })
       .then((query) => {
+        let querried;
         if (!query) {
+          return res.status(404).send({
+            message: 'no businesses found'
+          });
+        }
+        if (Array.isArray(query)) {
+          querried = query.map(quarryData => quarryData.dataValues);
+        }
+        if (querried.length === 0) {
           return res.status(404).send({
             message: 'no businesses found'
           });
         }
         return res.status(200).send({
           message: 'business successfully filtered',
-          business: query.dataValues
+          business: querried
         });
       }).catch(queryError => res.status(500).send({
         message: 'an unexpected error occured',

@@ -11,7 +11,8 @@ const Routes = (app) => {
     .post(businessController.isAuthorized, businessController.create);
   app.route('/api/v1/businesses/:businessId')
     .put(businessController.isAuthorized, businessController.update);
-  app.route('/api/v1/businesses/:businessId').delete(businessController.delete);
+  app.route('/api/v1/businesses/:businessId')
+    .delete(businessController.isAuthorized, businessController.delete);
   app.route('/api/v1/businesses/:businessId').get(businessController.fetch);
   app.route('/api/v1/businesses')
     .get(businessController.filter, businessController.fetchAll);

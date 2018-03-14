@@ -214,15 +214,19 @@ export default class businessController extends baseController {
     */
   static fetchAll(req, res) {
     return Business.findAll()
-      .then((businesses) => {
-        if (!businesses) {
+      .then((business) => {
+        let businesses;
+        if (!business) {
           return res.status(404).send({
             message: 'no businesses found'
           });
         }
+        if (Array.isArray(business)) {
+          businesses = business.map(biz => biz.dataValues);
+        }
         return res.status(200).send({
           message: 'businesses successfully fetched',
-          business: businesses.dataValues
+          business: businesses
         });
       }).catch(fetchAllError => res.status(500).send({
         message: 'an unexpected error occured',
