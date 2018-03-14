@@ -129,10 +129,10 @@ export default class businessController extends baseController {
       .then((business) => {
         if (!business) {
           return res.status(404).send({
-            message: 'you have no registered business to delete'
+            message: 'business not found'
           });
         }
-        if (recipe.dataValues.userId === req.authenticatedUser.id) {
+        if (business.dataValues.userId === req.authenticatedUser.id) {
           return business
             .destroy()
             .then(() => res.status(200).send({
@@ -161,17 +161,48 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetch(req, res) {
-    const fetchedBusiness = dummyData
-      .find(user => user.business.id === parseInt(req.params.businessId, 10));
-    if (fetchedBusiness) {
-      return res.status(200).send({
-        message: 'business sucessfully fetched',
-        business: fetchedBusiness.business
+    return Business
+      .findById(req.params.businessId)
+      .then((business) => {
+        if (!business) {
+          return res.status(404).send({
+            message: 'business not found'
+          });
+        }
+        return res.status(200).send({
+          message: 'business sucessfully fetched',
+          business: business.dataValues
+        });
+      }).catch(businessFetchError => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: businessFetchError.toString()
+      }));
+  }
+  /**
+    * @description Allow user filter all businesses
+    * @static
+    * @param {object} req client request
+    * @param {object} res server response
+    * @param {Function} next next controller
+    * @returns {Object} server response object or next controller
+    * @memberof businessController
+    */
+  static filter(req, res, next) {
+    if (JSON.stringify(req.query) !== '{}') {
+      const { location, category } = req.query;
+      if (location) {
+        return businessController
+          .queryBy(req, res, Business, { location });
+      }
+      if (category) {
+        return businessController
+          .queryBy(req, res, Business, { category });
+      }
+      return res.status(400).send({
+        message: 'invalid query'
       });
     }
-    return res.status(404).send({
-      message: 'no business found'
-    });
+    return next();
   }
   /**
     * @description Allow user get all businesses
@@ -181,62 +212,22 @@ export default class businessController extends baseController {
     * @returns {Object} server response object
     * @memberof businessController
     */
-  static fetchAllOrFilter(req, res) {
-    const filteredBy = [];
-    if (JSON.stringify(req.query) !== '{}') {
-      const { location, category } = req.query;
-      if (location || category) {
-        dummyData
-          .map((user) => {
-            if (location) {
-              if (user.business.location
-                === businessController.queryBy({ location, category })) {
-                filteredBy.push(user.business);
-                return true;
-              }
-              return false;
-            }
-            if (category) {
-              if (user.business.category
-                === businessController.queryBy({ location, category })) {
-                filteredBy.push(user.business);
-                return true;
-              }
-              return false;
-            }
-            return false;
-          });
-        if (filteredBy && filteredBy.length > 0) {
-          return res.status(200).send({
-            message: 'business successfully filtered',
-            business: filteredBy
+  static fetchAll(req, res) {
+    return Business.findAll()
+      .then((businesses) => {
+        if (!businesses) {
+          return res.status(404).send({
+            message: 'no businesses found'
           });
         }
-        return res.status(404).send({
-          message: 'no businesses found'
+        return res.status(200).send({
+          message: 'businesses successfully fetched',
+          business: businesses.dataValues
         });
-      }
-      return res.status(400).send({
-        message: 'invalid query'
-      });
-    }
-    const allBusinesses = [];
-    dummyData
-      .map((user) => {
-        if (user.business.name) {
-          allBusinesses.push(user.business);
-        }
-        return false;
-      });
-    if (allBusinesses) {
-      return res.status(200).send({
-        message: 'businesses successfully fetched',
-        business: allBusinesses
-      });
-    }
-    return res.status(404).send({
-      message: 'no businesses found'
-    });
+      }).catch(fetchAllError => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: fetchAllError.toString()
+      }));
   }
   /**
     * @description Allow user review a business

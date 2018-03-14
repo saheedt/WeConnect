@@ -13,7 +13,8 @@ const Routes = (app) => {
     .put(businessController.isAuthorized, businessController.update);
   app.route('/api/v1/businesses/:businessId').delete(businessController.delete);
   app.route('/api/v1/businesses/:businessId').get(businessController.fetch);
-  app.route('/api/v1/businesses').get(businessController.fetchAllOrFilter);
+  app.route('/api/v1/businesses')
+    .get(businessController.filter, businessController.fetchAll);
   app.route('/api/v1/businesses/:businessId/reviews')
     .post(businessController.reviewBusiness);
   app.route('/api/v1/businesses/:businessId/reviews')

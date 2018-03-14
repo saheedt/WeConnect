@@ -123,17 +123,30 @@ export default class baseController {
   /**
    * @description Checks what to query by
    * @static
+   * @param {object} req request object
+   * @param {object} res response object
+   * @param {Object} model sequelize model
    * @param {object} queryParams query parameters
-   * @returns {string} location or category
+   * @returns {Function} Promise
    * @memberof baseController
    */
-  static queryBy(queryParams) {
-    const { location, category } = queryParams;
-    if (location) {
-      return location;
-    }
-    if (category) {
-      return category;
-    }
+  static queryBy(req, res, model, queryParams) {
+    return model.findAll({
+      where: queryParams
+    })
+      .then((query) => {
+        if (!query) {
+          return res.status(404).send({
+            message: 'no businesses found'
+          });
+        }
+        return res.status(200).send({
+          message: 'business successfully filtered',
+          business: query.dataValues
+        });
+      }).catch(queryError => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: queryError.toString()
+      }));
   }
 }
