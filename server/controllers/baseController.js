@@ -42,6 +42,33 @@ export default class baseController {
     );
   }
   /**
+   * @description Middleware to check authorization status
+   * @param {Object} req client's request
+   * @param {Object} res server response
+   * @param {Function} next calls appropriate controller
+   * @returns {Object} response object
+   */
+  static isAuthorized(req, res, next) {
+    if (!req.headers.authorization) {
+      return res.status(401).send({
+        message: 'unauthorized user'
+      });
+    }
+    jwt.verify(
+      req.headers.authorization,
+      process.env.JWT_SECRET,
+      (err, decoded) => {
+        if (err) {
+          return res.status(401).send({ message: 'invalid token' });
+        }
+        if (decoded) {
+          req.loggedInUser = decoded;
+          next();
+        }
+      }
+    );
+  }
+  /**
    * @description Checks if Email Exists
    * @static
    * @param {object} req Client request

@@ -1,5 +1,6 @@
 import baseController from './baseController';
-import dummyData from './dummyData';
+
+const { Business } = require('../models');
 
 /**
  * @description Contains all business related functionalities
@@ -21,31 +22,28 @@ export default class businessController extends baseController {
         message: 'you appear offline, please log in'
       });
     }
-    let addedBusiness;
-    const addBusiness = dummyData.some((user) => {
-      if (user.id === parseInt(req.body.userId, 10) && !user.business.name) {
-        user.business.id = parseInt(req.body.userId, 10);
-        user.business.name = req.body.name;
-        user.business.address = req.body.address;
-        user.business.location = req.body.location;
-        user.business.phonenumber = parseInt(req.body.phonenumber, 10);
-        user.business.employees = req.body.employees;
-        user.business.category = req.body.category;
-        user.business.createdAt = new Date();
-        addedBusiness = user.business;
-        return true;
+    return Business.create({
+      name: req.body.name,
+      address: req.body.address,
+      location: req.body.location,
+      phonenumber: req.body.phonenumber,
+      employees: req.body.employees,
+      category: req.body.category,
+      userId: req.authenticatedUser.id
+    }).then((business) => {
+      if (!business) {
+        return res.status(400).send({
+          message: 'error registering business, verify all fields and try again'
+        });
       }
-      return false;
-    });
-    if (addBusiness) {
-      return res.status(201).send({
-        message: 'business sucessfully added',
-        business: addedBusiness
+      res.status(201).send({
+        message: 'business successfully registered',
+        business
       });
-    }
-    return res.status(200).send({
-      message: 'business exists for user, update business as an alternative'
-    });
+    }).catch(businessError => res.status(500).send({
+      message: 'unexpected error, please try again',
+      error: businessError
+    }));
   }
   /**
     * @description Allow user update business details
