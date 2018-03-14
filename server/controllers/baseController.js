@@ -144,7 +144,7 @@ export default class baseController {
         if (Array.isArray(query)) {
           querried = query.map(quarryData => quarryData.dataValues);
         }
-        if (querried.length === 0) {
+        if (querried.length <= 0) {
           return res.status(404).send({
             message: 'no businesses found'
           });

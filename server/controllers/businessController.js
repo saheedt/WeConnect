@@ -1,6 +1,6 @@
 import baseController from './baseController';
 
-const { Business } = require('../models');
+const { Business, Review } = require('../models');
 
 /**
  * @description Contains all business related functionalities
@@ -28,27 +28,41 @@ export default class businessController extends baseController {
         message: 'you are not authorized to create a business on this account'
       });
     }
-    return Business.create({
-      name: req.body.name,
-      address: req.body.address,
-      location: req.body.location,
-      phonenumber: parseInt(req.body.phonenumber, 10),
-      employees: parseInt(req.body.employees, 10),
-      category: req.body.category,
-      userId: parseInt(req.authenticatedUser.id, 10)
+    return Business.findOne({
+      where: {
+        userId: parseInt(req.authenticatedUser.id, 10)
+      }
     }).then((business) => {
-      if (!business) {
+      if (business) {
         return res.status(400).send({
-          message: 'error registering business, verify all fields and try again'
+          mesage: 'user has a registered business'
         });
       }
-      res.status(201).send({
-        message: 'business successfully added',
-        business
-      });
-    }).catch(businessError => res.status(500).send({
-      message: 'unexpected error, please try again',
-      error: businessError.toString()
+      return Business.create({
+        name: req.body.name,
+        address: req.body.address,
+        location: req.body.location,
+        phonenumber: parseInt(req.body.phonenumber, 10),
+        employees: parseInt(req.body.employees, 10),
+        category: req.body.category,
+        userId: parseInt(req.authenticatedUser.id, 10)
+      }).then((regBusiness) => {
+        if (!regBusiness) {
+          return res.status(400).send({
+            message: 'registeration error, verify all fields and try again'
+          });
+        }
+        res.status(201).send({
+          message: 'business successfully added',
+          regBusiness
+        });
+      }).catch(businessError => res.status(500).send({
+        message: 'unexpected error, please try again',
+        error: businessError.toString()
+      }));
+    }).catch(createError => res.status(500).send({
+      message: 'an unexpected error has occured',
+      error: createError.toString()
     }));
   }
   /**
@@ -125,14 +139,15 @@ export default class businessController extends baseController {
       });
     }
     return Business
-      .findById(req.params.businessId)
+      .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
           return res.status(404).send({
             message: 'business not found'
           });
         }
-        if (business.dataValues.userId === req.authenticatedUser.id) {
+        if (business.dataValues.userId ===
+          parseInt(req.authenticatedUser.id, 10)) {
           return business
             .destroy()
             .then(() => res.status(200).send({
@@ -162,7 +177,7 @@ export default class businessController extends baseController {
     */
   static fetch(req, res) {
     return Business
-      .findById(req.params.businessId)
+      .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
           return res.status(404).send({
@@ -224,6 +239,11 @@ export default class businessController extends baseController {
         if (Array.isArray(business)) {
           businesses = business.map(biz => biz.dataValues);
         }
+        if (businesses.length <= 0) {
+          return res.status(404).send({
+            message: 'no businesses found'
+          });
+        }
         return res.status(200).send({
           message: 'businesses successfully fetched',
           business: businesses
@@ -247,27 +267,42 @@ export default class businessController extends baseController {
         message: 'review cannot be empty'
       });
     }
-    const review = {
-      name: req.body.name,
-      review: req.body.review
-    };
-    const reviewed = dummyData
-      .some((user) => {
-        if (user.business.id === parseInt(req.params.businessId, 10)) {
-          user.business.reviews.push(review);
-          return true;
-        }
-        return false;
-      });
-    if (reviewed) {
-      return res.status(201).send({
-        message: 'businesses sucessfully reviewed',
-        review
+    if (businessController.isEmptyOrNull(req.params.businessId)) {
+      return res.status(401).send({
+        message: 'business identity cannot be empty'
       });
     }
-    return res.status(404).send({
-      message: 'cannot review a non-existent business'
-    });
+    return Business
+      .findById(parseInt(req.params.businessId, 10))
+      .then((business) => {
+        if (!business) {
+          return res.status(404).send({
+            message: 'business not found'
+          });
+        }
+        return Review.create({
+          name: req.body.name || 'anonymous',
+          review: req.body.review,
+          businessId: parseInt(req.params.businessId, 10)
+        }).then((review) => {
+          if (!review) {
+            return res.status(400).send({
+              message: 'error reviewing business, verify fields and try again'
+            });
+          }
+          delete review.dataValues.businessId;
+          return res.status(201).send({
+            message: 'business sucessfully reviewed',
+            review: review.dataValues
+          });
+        }).catch(reviewError => res.status(500).send({
+          message: 'an unexpected error occured',
+          error: reviewError.toString()
+        }));
+      }).catch(businessFetchError => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: businessFetchError.toString()
+      }));
   }
   /**
     * @description Allow user retrieve reviews of a business
@@ -278,16 +313,44 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static fetchBusinessReviews(req, res) {
-    const reviews = dummyData
-      .find(user => user.business.id === parseInt(req.params.businessId, 10));
-    if (reviews) {
-      return res.status(200).send({
-        message: 'reviews sucessfully retrieved',
-        reviews: reviews.business.reviews
-      });
-    }
-    return res.status(404).send({
-      message: 'no reviews found'
-    });
+    return Business
+      .findById(req.params.businessId)
+      .then((business) => {
+        if (!business) {
+          return res.status(404).send({
+            message: 'business not found'
+          });
+        }
+        return Review.findAll({
+          where: {
+            businessId: parseInt(req.params.businessId, 10)
+          }
+        }).then((reviews) => {
+          let fetchedReviews;
+          if (!reviews) {
+            return res.status(404).send({
+              message: 'no reviews found'
+            });
+          }
+          if (Array.isArray(reviews)) {
+            fetchedReviews = reviews.map(revs => revs.dataValues);
+          }
+          if (fetchedReviews.length <= 0) {
+            return res.status(404).send({
+              message: 'no reviews found',
+            });
+          }
+          return res.status(200).send({
+            message: 'reviews successfully retrieved',
+            reviews: fetchedReviews
+          });
+        }).catch(reviewsfetchError => res.status(500).send({
+          message: 'an unexpected error occured',
+          error: reviewsfetchError.toString()
+        }));
+      }).catch(businessFetchError => res.status(500).send({
+        message: 'an unexpected error occured',
+        error: businessFetchError.toString()
+      }));
   }
 }
