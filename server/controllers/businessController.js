@@ -319,7 +319,11 @@ export default class businessController extends baseController {
         return Review.findAll({
           where: {
             businessId: parseInt(req.params.businessId, 10)
-          }
+          },
+          include: [{
+            model: Business,
+            attributes: ['id', 'name']
+          }]
         }).then((reviews) => {
           let fetchedReviews;
           if (!reviews) {
