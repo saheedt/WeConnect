@@ -22,10 +22,10 @@ export default class baseController {
         });
         return false;
       }
-      res.status(404).send({
-        message: 'user not found'
-      });
-      return false;
+      // res.status(404).send({
+      //   message: 'user not found'
+      // });
+      // return false;
     }
     return true;
   }
@@ -50,7 +50,7 @@ export default class baseController {
    */
   static isAuthorized(req, res, next) {
     if (!req.headers.authorization) {
-      return res.status(401).send({
+      return res.status(403).send({
         message: 'unauthorized user'
       });
     }
@@ -59,7 +59,7 @@ export default class baseController {
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
-          return res.status(401).send({ message: 'invalid token' });
+          return res.status(403).send({ message: 'invalid token' });
         }
         if (decoded) {
           req.authenticatedUser = decoded;

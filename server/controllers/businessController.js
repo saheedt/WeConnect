@@ -17,11 +17,6 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static create(req, res) {
-    if (!req.authenticatedUser) {
-      return res.status(401).send({
-        message: 'you appear offline, please log in'
-      });
-    }
     if (parseInt(req.body.userId, 10)
         !== parseInt(req.authenticatedUser.id, 10)) {
       return res.status(401).send({
@@ -30,12 +25,12 @@ export default class businessController extends baseController {
     }
     return Business.findOne({
       where: {
-        userId: parseInt(req.authenticatedUser.id, 10)
+        userId: parseInt(req.body.userId, 10)
       }
     }).then((business) => {
       if (business) {
         return res.status(400).send({
-          mesage: 'user has a registered business'
+          message: 'user has a registered business'
         });
       }
       return Business.create({
@@ -54,7 +49,7 @@ export default class businessController extends baseController {
         }
         res.status(201).send({
           message: 'business successfully added',
-          regBusiness
+          business: regBusiness
         });
       }).catch(businessError => res.status(500).send({
         message: 'unexpected error, please try again',
@@ -74,11 +69,11 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static update(req, res) {
-    if (!req.authenticatedUser) {
-      return res.status(401).send({
-        message: 'you appear offline, please log in'
-      });
-    }
+    // if (!req.authenticatedUser) {
+    //   return res.status(401).send({
+    //     message: 'unauthorized user'
+    //   });
+    // }
     return Business.findOne({
       where: {
         id: parseInt(req.params.businessId, 10)
@@ -86,7 +81,7 @@ export default class businessController extends baseController {
     }).then((business) => {
       if (!business) {
         return res.status(404).send({
-          mesage: 'no business to update, register business first'
+          message: 'no business to update, register business first'
         });
       }
       if (business.dataValues.userId
@@ -133,11 +128,11 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static delete(req, res) {
-    if (!req.authenticatedUser) {
-      return res.status(401).send({
-        message: 'you appear offline, please log in'
-      });
-    }
+    // if (!req.authenticatedUser) {
+    //   return res.status(401).send({
+    //     message: 'unauthorized user'
+    //   });
+    // }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
@@ -324,7 +319,11 @@ export default class businessController extends baseController {
         return Review.findAll({
           where: {
             businessId: parseInt(req.params.businessId, 10)
-          }
+          },
+          include: [{
+            model: Business,
+            attributes: ['id', 'name']
+          }]
         }).then((reviews) => {
           let fetchedReviews;
           if (!reviews) {
