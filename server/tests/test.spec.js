@@ -4,12 +4,95 @@ import dotenv from 'dotenv';
 
 import server from '../server';
 
+const { User } = require('../models');
+
 dotenv.config();
 process.env.NODE_ENV = 'test';
 
+const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0Ij';
 let userId1, testToken1, testToken2, businessId;
 
+describe('un-matched endpoints', () => {
+  describe('Invalid Post request', () => {
+    it(
+      'should display the right message for an invalid POST request',
+      (done) => {
+        request(server)
+          .post('/api/auth/signup')
+          .send({
+            email: ' ',
+            password: 1234567
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(resp.body.message, 'invalid route!');
+            done();
+          });
+      }
+    );
+  });
+  describe('Invalid Get request', () => {
+    it(
+      'should display the right message for an invalid GET request',
+      (done) => {
+        request(server)
+          .get('/api/businesses')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(resp.body.message, 'invalid route!');
+            done();
+          });
+      }
+    );
+  });
+  describe('Invalid Put request', () => {
+    it(
+      'should display the right message for an invalid PUT request',
+      (done) => {
+        request(server)
+          .put('/api/businesses/1')
+          .send({
+            name: 'specimen b',
+            employees: 16
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(resp.body.message, 'invalid route!');
+            done();
+          });
+      }
+    );
+  });
+  describe('Invalid Delete request', () => {
+    it(
+      'should display the right message for an invalid DELETE request',
+      (done) => {
+        request(server)
+          .delete('/api/businesses/1')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(resp.body.message, 'invalid route!');
+            done();
+          });
+      }
+    );
+  });
+});
+/** ============== ======================= =================== ============== */
+
 describe('user endpoints', () => {
+  describe('manually drop DB data', () => {
+    it('should drop all user data', (done) => {
+      User.findAll().then((users) => {
+        if (Array.isArray(users)) {
+          users.forEach((user) => {
+            user.destroy();
+          });
+        }
+        done();
+      });
+    });
+  });
   describe('create user endpoint', () => {
     it('should not create a user if email is empty', (done) => {
       request(server)
@@ -94,6 +177,26 @@ describe('user endpoints', () => {
             assert.deepEqual(
               resp.body.user.email,
               process.env.TESTEMAIL1
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not create user, if user already exists',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/signup')
+          .send({
+            email: process.env.TESTEMAIL1,
+            password: process.env.TESTPWORD1
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'email already exists'
             );
             done();
           });
@@ -274,6 +377,23 @@ describe('businesses endpoint', () => {
           assert.deepEqual(
             resp.body.message,
             'unauthorized user'
+          );
+          done();
+        });
+    });
+    it('should return appropriate message if token is invalid', (done) => {
+      request(server)
+        .put(`/api/v1/businesses/${businessId}`)
+        .set('authorization', invalidToken)
+        .send({
+          name: 'specimen b',
+          employees: 16
+        })
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 403);
+          assert.deepEqual(
+            resp.body.message,
+            'invalid token'
           );
           done();
         });
@@ -520,6 +640,25 @@ describe('businesses endpoint', () => {
             assert.deepEqual(
               resp.body.message,
               'business identity cannot be empty'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return appropriate error if business has no review',
+      (done) => {
+        request(server)
+          .get(`/api/v1/businesses/${businessId}/reviews`)
+          .send({
+            name: 'reviewer x',
+            review: 'xyz'
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no reviews found'
             );
             done();
           });
