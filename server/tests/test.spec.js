@@ -1,7 +1,13 @@
 import { assert } from 'chai';
 import request from 'supertest';
+import dotenv from 'dotenv';
 
-import server from '../../build/server';
+import server from '../server';
+
+dotenv.config();
+process.env.NODE_ENV = 'test';
+
+let userId1, testToken1, testToken2, businessId;
 
 describe('user endpoints', () => {
   describe('create user endpoint', () => {
@@ -65,11 +71,13 @@ describe('user endpoints', () => {
         request(server)
           .post('/api/v1/auth/signup')
           .send({
-            email: 'testing@testing.com',
-            password: '123456'
+            email: process.env.TESTEMAIL1,
+            password: process.env.TESTPWORD1
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
+            testToken1 = resp.body.token;
+            userId1 = resp.body.user.id;
             assert.deepEqual(resp.status, 201);
             assert.deepEqual(
               resp.body.message,
@@ -77,11 +85,15 @@ describe('user endpoints', () => {
             );
             assert.deepEqual(
               resp.body.user.id,
-              5
+              userId1
+            );
+            assert.deepEqual(
+              resp.body.user.password,
+              undefined
             );
             assert.deepEqual(
               resp.body.user.email,
-              'testing@testing.com'
+              process.env.TESTEMAIL1
             );
             done();
           });
@@ -93,43 +105,32 @@ describe('user endpoints', () => {
       'should login successfully',
       (done) => {
         request(server)
-          .post('/api/v1/auth/signup')
+          .post('/api/v1/auth/login')
           .send({
-            email: 'tester@testing.com',
-            password: '123456'
+            email: process.env.TESTEMAIL1,
+            password: process.env.TESTPWORD1
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            if (!err && resp) {
-              request(server)
-                .post('/api/v1/auth/login')
-                .send({
-                  email: 'tester@testing.com',
-                  password: '123456'
-                })
-                .expect('Content-Type', /json/)
-                .end((err, innerResp) => {
-                  assert.deepEqual(innerResp.status, 200);
-                  assert.deepEqual(
-                    innerResp.body.message,
-                    'login success'
-                  );
-                  assert.deepEqual(
-                    innerResp.body.user.id,
-                    6
-                  );
-                  assert.deepEqual(
-                    innerResp.body.user.email,
-                    'tester@testing.com'
-                  );
-                });
-            }
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'login successful'
+            );
+            assert.deepEqual(
+              resp.body.user.id,
+              userId1
+            );
+            assert.deepEqual(
+              resp.body.user.email,
+              process.env.TESTEMAIL1
+            );
             done();
           });
       }
     );
     it(
-      'should not login successfully',
+      'should not login unregisterd user',
       (done) => {
         request(server)
           .post('/api/v1/auth/login')
@@ -150,3 +151,4 @@ describe('user endpoints', () => {
     );
   });
 });
+/** ============== ======================= =================== ============== */
