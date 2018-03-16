@@ -159,7 +159,7 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            console.log(resp);
+            console.log(resp.body);
             testToken1 = resp.body.token;
             userId1 = resp.body.user.id;
             assert.deepEqual(resp.status, 201);
