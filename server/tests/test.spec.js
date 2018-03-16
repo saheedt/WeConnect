@@ -152,3 +152,510 @@ describe('user endpoints', () => {
   });
 });
 /** ============== ======================= =================== ============== */
+describe('businesses endpoint', () => {
+  describe('create business endpoint', () => {
+    it('should not create business without user id', (done) => {
+      request(server)
+        .post('/api/v1/businesses')
+        .set('authorization', testToken1)
+        .send({
+          name: 'xx',
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
+          employees: 8,
+          category: 'ride sharing services'
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 401);
+          assert.deepEqual(
+            resp.body.message,
+            'you are not authorized to create a business on this account'
+          );
+          done();
+        });
+    });
+    it('should not create business without authorization token', (done) => {
+      request(server)
+        .post('/api/v1/businesses')
+        .send({
+          name: 'xx',
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
+          employees: 8,
+          category: 'ride sharing services',
+          userId: userId1
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 403);
+          assert.deepEqual(
+            resp.body.message,
+            'unauthorized user'
+          );
+          done();
+        });
+    });
+    it('should successfully add a business for a user', (done) => {
+      request(server)
+        .post('/api/v1/businesses')
+        .set('authorization', testToken1)
+        .send({
+          userId: userId1,
+          name: 'test business',
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
+          employees: 8,
+          category: 'ride sharing services'
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          businessId = resp.body.business.id;
+          assert.deepEqual(resp.status, 201);
+          assert.deepEqual(
+            resp.body.message,
+            'business successfully added'
+          );
+          assert.deepEqual(
+            resp.body.business.name,
+            'test business'
+          );
+          assert.deepEqual(
+            resp.body.business.category,
+            'ride sharing services'
+          );
+          done();
+        });
+    });
+    /*
+    it(
+      'should not create business for accounts with existing business',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            userId: userId1,
+            name: 'xx',
+            address: '123, gaga',
+            location: 'ogun',
+            phonenumber: 122424552,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'user has a registered business'
+            );
+            done();
+          });
+      }
+    );
+    */
+  });
+  /** */
+  /** */
+  describe('update business endpoint', () => {
+    it('should not update without authorization token', (done) => {
+      request(server)
+        .put(`/api/v1/businesses/${businessId}`)
+        .send({
+          name: 'specimen b',
+          employees: 16
+        })
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 403);
+          assert.deepEqual(
+            resp.body.message,
+            'unauthorized user'
+          );
+          done();
+        });
+    });
+    it('should update business successfully', (done) => {
+      request(server)
+        .put(`/api/v1/businesses/${businessId}`)
+        .set('authorization', testToken1)
+        .send({
+          name: 'specimen b',
+          employees: 16
+        })
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 200);
+          assert.deepEqual(
+            resp.body.message,
+            'business successfully updated'
+          );
+          assert.deepEqual(
+            resp.body.business.name,
+            'specimen b'
+          );
+          assert.deepEqual(
+            resp.body.business.employees,
+            16
+          );
+          done();
+        });
+    });
+    it(
+      'should not update business, when business is not registered',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/signup')
+          .send({
+            email: process.env.TESTEMAIL2,
+            password: process.env.TESTPWORD2
+          })
+          .end((err, outerResp) => {
+            if (outerResp.body.user) {
+              testToken2 = outerResp.body.token;
+              request(server)
+                .put('/api/v1/businesses/80')
+                .set('authorization', testToken2)
+                .send({
+                  name: 'specimen b1',
+                  employees: 6
+                })
+                .end((err, resp) => {
+                  assert.deepEqual(
+                    resp.status,
+                    404
+                  );
+                  assert.deepEqual(
+                    resp.body.message,
+                    'no business to update, register business first'
+                  );
+                  done();
+                });
+            }
+          });
+      }
+    );
+  });
+  /** */
+  /** */
+  describe('fetch business(s) endpoint', () => {
+    it('should successfully fetch business if it exists', (done) => {
+      request(server)
+        .get(`/api/v1/businesses/${businessId}`)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 200);
+          assert.deepEqual(
+            resp.body.message,
+            'business sucessfully fetched'
+          );
+          assert.deepEqual(
+            resp.body.business.id,
+            businessId
+          );
+          assert.deepEqual(
+            resp.body.business.name,
+            'specimen b'
+          );
+          done();
+        });
+    });
+    it('should return error if business does not exists', (done) => {
+      request(server)
+        .get('/api/v1/businesses/200000')
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 404);
+          assert.deepEqual(
+            resp.body.message,
+            'business not found'
+          );
+          done();
+        });
+    });
+  });
+  /** */
+  /** */
+  describe('fetch all / filter endpoint', () => {
+    it(
+      'should return all businesses if no query parameter is added to request',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'businesses successfully fetched'
+            );
+            assert.deepEqual(
+              resp.body.business[0].name,
+              'specimen b',
+            );
+            assert.deepEqual(
+              resp.body.business[0].id,
+              businessId
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return all businesses in a location',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?location=ogun')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'business successfully filtered'
+            );
+            assert.deepEqual(
+              resp.body.business[0].location,
+              'ogun'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return all businesses in a category',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?category=ride sharing services')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'business successfully filtered'
+            );
+            assert.deepEqual(
+              resp.body.business[0].category,
+              'ride sharing services'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return appropriate message if no businesses in a location',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?location=x')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no businesses found'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return appropriate message if no businesses in a category',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?category=y')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no businesses found'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return appropriate message if query is invalid',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?foo=bar')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'invalid query'
+            );
+            done();
+          });
+      }
+    );
+  });
+  /** */
+  /** */
+  describe('review endpoint', () => {
+    it(
+      'should not allow empty review',
+      (done) => {
+        request(server)
+          .post(`/api/v1/businesses/${businessId}/reviews`)
+          .send({
+            name: 'reviewer x',
+            review: ' '
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 401);
+            assert.deepEqual(
+              resp.body.message,
+              'review cannot be empty'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not allow empty business identity',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses/ /reviews')
+          .send({
+            name: 'reviewer x',
+            review: 'xyz'
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 401);
+            assert.deepEqual(
+              resp.body.message,
+              'business identity cannot be empty'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should successfully review an existent business',
+      (done) => {
+        request(server)
+          .post(`/api/v1/businesses/${businessId}/reviews`)
+          .send({
+            name: 'reviewer x',
+            review: 'xyz'
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 201);
+            assert.deepEqual(
+              resp.body.message,
+              'business sucessfully reviewed'
+            );
+            assert.deepEqual(
+              resp.body.review.review,
+              'xyz'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should fail to review a non-existent business',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses/3009/reviews')
+          .send({
+            name: 'reviewer y',
+            review: 'yz'
+          })
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'business not found'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not retrieve a business reviews if business does not exist',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses/4334/reviews')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'business not found'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should retrieve a business reviews sucessfully',
+      (done) => {
+        request(server)
+          .get(`/api/v1/businesses/${businessId}/reviews`)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'reviews successfully retrieved'
+            );
+            assert.deepEqual(
+              resp.body.reviews.length,
+              1
+            );
+            done();
+          });
+      }
+    );
+  });
+  /** */
+  /** */
+  describe('delete business end point', () => {
+    it('should not delete without authorization token', (done) => {
+      request(server)
+        .delete(`/api/v1/businesses/${userId1}`)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 403);
+          assert.deepEqual(
+            resp.body.message,
+            'unauthorized user'
+          );
+          done();
+        });
+    });
+    it('should return appropriate error if business is not found', (done) => {
+      request(server)
+        .delete('/api/v1/businesses/16')
+        .set('authorization', testToken2)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 404);
+          assert.deepEqual(
+            resp.body.message,
+            'business not found'
+          );
+          done();
+        });
+    });
+    it('should not delete when business belongs to another user', (done) => {
+      request(server)
+        .delete(`/api/v1/businesses/${businessId}`)
+        .set('authorization', testToken2)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 401);
+          assert.deepEqual(
+            resp.body.message,
+            'unauthorized, business belongs to another user'
+          );
+          done();
+        });
+    });
+    it('should successfully delete business if it belongs to user', (done) => {
+      request(server)
+        .delete(`/api/v1/businesses/${businessId}`)
+        .set('authorization', testToken1)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 200);
+          assert.deepEqual(
+            resp.body.message,
+            'business sucessfully deleted'
+          );
+          done();
+        });
+    });
+  });
+  /** */
+});
