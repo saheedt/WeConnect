@@ -1,4 +1,6 @@
 import { hash, compare } from 'bcrypt';
+import nodemailer from 'nodemailer';
+
 import baseController from './baseController';
 
 const { User } = require('../models');
@@ -120,6 +122,66 @@ export default class userController extends baseController {
     }).catch(loginError => res.status(500).send({
       message: 'an unexpected error has occured',
       error: loginError.toString()
+    }));
+  }
+  /**
+   * @description Allows registered reset password
+   * @static
+   * @param {object} req client request
+   * @param {object} res server Response
+   * @returns {object} server response object
+   * @memberof userController
+   */
+  static reset(req, res) {
+    if (userController.isEmptyOrNull(req.body.email)) {
+      return res.status(400).send({
+        message: 'invalid identity supplied'
+      });
+    }
+    return User.findOne({
+      where: {
+        email: req.body.email
+      }
+    }).then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'no user found with this identity'
+        });
+      }
+      const emailEncode = userController.sign(user.dataValues.email);
+      const idEncode = userController.sign(user.dataValues.id);
+      const location = req.baseUrl;
+      const resetLink = `${location}/${emailEncode}_nioj_${idEncode}`;
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.RESET_EMAIL,
+          pass: process.env.RESET_PASSWORD
+        }
+      });
+      const mailOptions = {
+        from: process.env.RESET_EMAIL,
+        to: req.body.email,
+        subject: 'WeConnect password reset',
+        text: `Please reset your WeConnect password via:  ${resetLink}`
+      };
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return res.status(400).send({
+            message: 'error sending mail, try again',
+            error
+          });
+        }
+        if (info.response) {
+          return res.status(200).send({
+            message: 'password reset link generated, please check email'
+          });
+        }
+      });
+    }).catch(resetError => res.status(500).send({
+      message: 'an unexpected error has occured',
+      error: resetError.toString()
     }));
   }
 }
