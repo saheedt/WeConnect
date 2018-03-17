@@ -1,5 +1,5 @@
 import { hash, compare } from 'bcrypt';
-import nodemailer from 'nodemailer';
+import sendGrid from '@sendgrid/mail';
 
 import baseController from './baseController';
 
@@ -152,33 +152,42 @@ export default class userController extends baseController {
       const idEncode = userController.sign({ id: user.dataValues.id });
       const location = req.get('host');
       const resetLink = `${location}/reset/${emailEncode}_nioj_${idEncode}`;
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.RESET_EMAIL,
-          pass: process.env.RESET_PASSWORD
-        }
-      });
+      sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
       const mailOptions = {
-        from: process.env.RESET_EMAIL,
+        from: 'no-reply@weconnect.com',
         to: req.body.email,
         subject: 'WeConnect password reset',
-        text: `Please reset your WeConnect password via:  ${resetLink}`
+        text: `Please reset your WeConnect password with this link:
+          ${resetLink}`
       };
-
-      transporter.sendMail(mailOptions, (error, info) => {
+      sendGrid.send(mailOptions, (error, body) => {
         if (error) {
           return res.status(400).send({
             message: 'error sending mail, try again',
             error
           });
         }
-        if (info.response) {
+        if (body) {
           return res.status(200).send({
             message: 'password reset link generated, please check email'
           });
         }
       });
+      // mailgun.messages().send(mailOptions, (error, body) => {
+      //   console.log(error);
+      //   console.log(body);
+      //   if (error) {
+      //     return res.status(400).send({
+      //       message: 'error sending mail, try again',
+      //       error
+      //     });
+      //   }
+      //   if (body) {
+      //     return res.status(200).send({
+      //       message: 'password reset link generated, please check email'
+      //     });
+      //   }
+      // });
     }).catch(resetError => res.status(500).send({
       message: 'an unexpected error has occured',
       error: resetError.toString()
