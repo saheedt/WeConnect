@@ -264,7 +264,6 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            console.log(resp.body);
             assert.deepEqual(resp.status, 200);
             assert.deepEqual(
               resp.body.message,
