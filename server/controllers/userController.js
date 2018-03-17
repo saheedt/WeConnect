@@ -148,11 +148,10 @@ export default class userController extends baseController {
           message: 'no user found with this identity'
         });
       }
-      const emailEncode = userController.sign(user.dataValues.email);
-      const idEncode = userController.sign(user.dataValues.id);
-      const location = req.baseUrl;
-      const resetLink = `${location}/${emailEncode}_nioj_${idEncode}`;
-
+      const emailEncode = userController.sign({ email: user.dataValues.email });
+      const idEncode = userController.sign({ id: user.dataValues.id });
+      const location = req.get('host');
+      const resetLink = `${location}/reset/${emailEncode}_nioj_${idEncode}`;
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -166,6 +165,7 @@ export default class userController extends baseController {
         subject: 'WeConnect password reset',
         text: `Please reset your WeConnect password via:  ${resetLink}`
       };
+
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           return res.status(400).send({

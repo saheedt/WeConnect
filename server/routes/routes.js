@@ -5,7 +5,7 @@ const Routes = (app) => {
   // user endpoint(s)
   app.route('/api/v1/auth/signup').post(userController.create);
   app.route('/api/v1/auth/login').post(userController.login);
-  app.route('/api/v1/auth/password/reset').post(userController.reset);
+  app.route('/api/v1/auth/reset').post(userController.reset);
 
   // business endpoint(s)
   app.route('/api/v1/businesses')

@@ -230,6 +230,9 @@
                   <li>
                     <a href="#login" class="toc-h2 toc-link" data-title="login">Login</a>
                   </li>
+                  <li>
+                    <a href="#password-reset" class="toc-h2 toc-link" data-title="password-reset">Password reset</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -330,6 +333,31 @@
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
 </ul>
+<h2 id='password-reset'>Password reset</h2>
+<blockquote>
+<p>Request:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@address.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<blockquote>
+<p>Response:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"password reset link generated, please check email"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='request-3'>Request</h3>
+<ul>
+<li>Endpoint: POST: <code>/api/v1/auth/reset</code></li>
+</ul>
+<h3 id='response-3'>Response</h3>
+<ul>
+<li>status: <code>200 Ok</code></li>
+<li>Body <code>(application/json)</code></li>
+</ul>
 <h1 id='businesses'>Businesses</h1><h2 id='create-business'>Create business</h2>
 <blockquote>
 <p>Request:</p>
@@ -360,20 +388,20 @@
     </span><span class="s2">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-3-5T11:57:49.571Z"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='request-3'>Request</h3>
+</span></code></pre><h3 id='request-4'>Request</h3>
 <ul>
 <li>Endpoint: POST: <code>/api/v1/businesses</code></li>
 </ul>
-<h3 id='response-3'>Response</h3>
+<h3 id='response-4'>Response</h3>
 <ul>
 <li>status: <code>201 Created</code></li>
 <li>Body <code>(application/json)</code></li>
 </ul>
-<h2 id='get-business'>Get business</h2><h3 id='request-4'>Request</h3>
+<h2 id='get-business'>Get business</h2><h3 id='request-5'>Request</h3>
 <ul>
 <li>Endpoint: GET: <code>/api/v1/businesses/:businessId</code></li>
 </ul>
-<h3 id='response-4'>Response</h3>
+<h3 id='response-5'>Response</h3>
 <ul>
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
@@ -396,11 +424,11 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre><h2 id='delete-business'>Delete business</h2><h3 id='request-5'>Request</h3>
+</span></code></pre><h2 id='delete-business'>Delete business</h2><h3 id='request-6'>Request</h3>
 <ul>
 <li>Endpoint: DELETE: <code>/api/v1/businesses/:businessId</code></li>
 </ul>
-<h3 id='response-5'>Response</h3>
+<h3 id='response-6'>Response</h3>
 <ul>
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
@@ -428,11 +456,11 @@
 <blockquote>
 <p>Response:</p>
 </blockquote>
-<h3 id='request-6'>Request</h3>
+<h3 id='request-7'>Request</h3>
 <ul>
 <li>Endpoint: PUT: <code>/api/v1/businesses/:businessId</code></li>
 </ul>
-<h3 id='response-6'>Response</h3>
+<h3 id='response-7'>Response</h3>
 <ul>
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
@@ -499,11 +527,11 @@
       </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='request-7'>Request</h3>
+</span></code></pre><h3 id='request-8'>Request</h3>
 <ul>
 <li>Endpoint: GET: <code>/api/v1/businesses</code></li>
 </ul>
-<h3 id='response-7'>Response</h3>
+<h3 id='response-8'>Response</h3>
 <ul>
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
@@ -547,20 +575,20 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre><h3 id='request-8'>Request</h3>
+</span></code></pre><h3 id='request-9'>Request</h3>
 <ul>
 <li>Endpoint: POST: <code>/api/v1/businesses/:businessId/reviews</code></li>
 </ul>
-<h3 id='response-8'>Response</h3>
+<h3 id='response-9'>Response</h3>
 <ul>
 <li>status: <code>201 Created</code></li>
 <li>Body <code>(application/json)</code></li>
 </ul>
-<h2 id='get-business-review'>Get business review</h2><h3 id='request-9'>Request</h3>
+<h2 id='get-business-review'>Get business review</h2><h3 id='request-10'>Request</h3>
 <ul>
 <li>Endpoint: GET: <code>/api/v1/businesses/:businessId/reviews</code></li>
 </ul>
-<h3 id='response-9'>Response</h3>
+<h3 id='response-10'>Response</h3>
 <ul>
 <li>status: <code>200 Ok</code></li>
 <li>Body <code>(application/json)</code></li>
@@ -605,7 +633,11 @@
 </tr>
 <tr>
 <td>401</td>
-<td>Unauthorized -- Authentication error</td>
+<td>Unauthorized -- Unauthorized for endpoint</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden -- Authentication error</td>
 </tr>
 <tr>
 <td>404</td>
