@@ -253,6 +253,46 @@ describe('user endpoints', () => {
       }
     );
   });
+  describe('password reset endpoint', () => {
+    it(
+      'should successfully request password reset if email is registered',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/reset')
+          .send({
+            email: process.env.TESTEMAIL1
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'password reset link generated, please check email'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully request password reset for unregistered email',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/reset')
+          .send({
+            email: 'c@test.com'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no user found with this identity'
+            );
+            done();
+          });
+      }
+    );
+  });
 });
 /** ============== ======================= =================== ============== */
 describe('businesses endpoint', () => {

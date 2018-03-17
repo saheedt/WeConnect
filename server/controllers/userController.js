@@ -1,4 +1,6 @@
 import { hash, compare } from 'bcrypt';
+import sendGrid from '@sendgrid/mail';
+
 import baseController from './baseController';
 
 const { User } = require('../models');
@@ -120,6 +122,75 @@ export default class userController extends baseController {
     }).catch(loginError => res.status(500).send({
       message: 'an unexpected error has occured',
       error: loginError.toString()
+    }));
+  }
+  /**
+   * @description Allows registered reset password
+   * @static
+   * @param {object} req client request
+   * @param {object} res server Response
+   * @returns {object} server response object
+   * @memberof userController
+   */
+  static reset(req, res) {
+    if (userController.isEmptyOrNull(req.body.email)) {
+      return res.status(400).send({
+        message: 'invalid identity supplied'
+      });
+    }
+    return User.findOne({
+      where: {
+        email: req.body.email
+      }
+    }).then((user) => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'no user found with this identity'
+        });
+      }
+      const emailEncode = userController.sign({ email: user.dataValues.email });
+      const idEncode = userController.sign({ id: user.dataValues.id });
+      const location = req.get('host');
+      const resetLink = `${location}/reset/${emailEncode}_nioj_${idEncode}`;
+      sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
+      const mailOptions = {
+        from: 'no-reply@weconnect.com',
+        to: req.body.email,
+        subject: 'WeConnect password reset',
+        text: `Please reset your WeConnect password with this link:
+          ${resetLink}`
+      };
+      sendGrid.send(mailOptions, (error, body) => {
+        if (error) {
+          return res.status(400).send({
+            message: 'error sending mail, try again',
+            error
+          });
+        }
+        if (body) {
+          return res.status(200).send({
+            message: 'password reset link generated, please check email'
+          });
+        }
+      });
+      // mailgun.messages().send(mailOptions, (error, body) => {
+      //   console.log(error);
+      //   console.log(body);
+      //   if (error) {
+      //     return res.status(400).send({
+      //       message: 'error sending mail, try again',
+      //       error
+      //     });
+      //   }
+      //   if (body) {
+      //     return res.status(200).send({
+      //       message: 'password reset link generated, please check email'
+      //     });
+      //   }
+      // });
+    }).catch(resetError => res.status(500).send({
+      message: 'an unexpected error has occured',
+      error: resetError.toString()
     }));
   }
 }
