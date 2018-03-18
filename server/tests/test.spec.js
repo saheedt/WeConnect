@@ -252,6 +252,46 @@ describe('user endpoints', () => {
           });
       }
     );
+    it(
+      'should not login request with empty email',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/login')
+          .send({
+            email: '',
+            password: '123456'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'email cannot be empty or null'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not login with wrong credentials',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/login')
+          .send({
+            email: process.env.TESTEMAIL1,
+            password: 'hahahahuhuhu'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'wrong email or password'
+            );
+            done();
+          });
+      }
+    );
   });
   describe('password reset endpoint', () => {
     it(
@@ -268,6 +308,44 @@ describe('user endpoints', () => {
             assert.deepEqual(
               resp.body.message,
               'password reset link generated, please check email'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully request password reset for empty email',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/reset')
+          .send({
+            email: ''
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'invalid identity supplied'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully request password reset for invalid email',
+      (done) => {
+        request(server)
+          .post('/api/v1/auth/reset')
+          .send({
+            email: 'invalid@'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no user found with this identity'
             );
             done();
           });
@@ -373,7 +451,6 @@ describe('businesses endpoint', () => {
           done();
         });
     });
-    /*
     it(
       'should not create business for accounts with existing business',
       (done) => {
@@ -382,8 +459,8 @@ describe('businesses endpoint', () => {
           .set('authorization', testToken1)
           .send({
             userId: userId1,
-            name: 'xx',
-            address: '123, gaga',
+            name: 'xxyyzzz',
+            address: '123, gaga, gags',
             location: 'ogun',
             phonenumber: 122424552,
             employees: 8,
@@ -400,7 +477,6 @@ describe('businesses endpoint', () => {
           });
       }
     );
-    */
   });
   /** */
   /** */
@@ -497,6 +573,23 @@ describe('businesses endpoint', () => {
           });
       }
     );
+    it('should not update business if it belongs to another user', (done) => {
+      request(server)
+        .put(`/api/v1/businesses/${businessId}`)
+        .set('authorization', testToken2)
+        .send({
+          name: 'specimen b',
+          employees: 16
+        })
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 401);
+          assert.deepEqual(
+            resp.body.message,
+            'unathorized, business belongs to another user'
+          );
+          done();
+        });
+    });
   });
   /** */
   /** */
@@ -593,6 +686,21 @@ describe('businesses endpoint', () => {
             assert.deepEqual(
               resp.body.business[0].category,
               'ride sharing services'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should return all appropriate error message if query matches no record',
+      (done) => {
+        request(server)
+          .get('/api/v1/businesses?location=yobe')
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(
+              resp.body.message,
+              'no businesses found'
             );
             done();
           });
@@ -798,7 +906,7 @@ describe('businesses endpoint', () => {
     });
     it('should return appropriate error if business is not found', (done) => {
       request(server)
-        .delete('/api/v1/businesses/16')
+        .delete('/api/v1/businesses/6000000')
         .set('authorization', testToken2)
         .end((err, resp) => {
           assert.deepEqual(resp.status, 404);
