@@ -35,16 +35,7 @@ app.route('/').get((req, res) => {
 Routes(app);
 
 // handle unmatched routes with of each of the http methods
-app.route('*').get((req, res) => res.status(404).send({
-  message: 'invalid route!',
-}));
-app.route('*').post((req, res) => res.status(404).send({
-  message: 'invalid route!',
-}));
-app.route('*').put((req, res) => res.status(404).send({
-  message: 'invalid route!',
-}));
-app.route('*').delete((req, res) => res.status(404).send({
+app.all('*', (req, res) => res.status(404).send({
   message: 'invalid route!',
 }));
 
