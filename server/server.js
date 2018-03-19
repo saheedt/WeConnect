@@ -13,7 +13,7 @@ import Routes from './routes/routes';
 dotenv.config();
 
 const app = express();
-const port = parseInt(process.env.PORT, 10) || 8011;
+const port = process.env.PORT || 8011;
 
 app.set('port', port);
 app.use(logger('dev'));
