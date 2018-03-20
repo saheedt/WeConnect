@@ -5,6 +5,21 @@
 # WeConnect
 WeConnect provides a platform that brings businesses and individuals (customers) together.
 
+---
+
+## Table of contents
+
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Tests](#tests)
+- [Built With](#built-with)
+- [Authors](#authors)
+- [License](#license)
+
+---
+
 ## Introduction
 The application **_currently_** has the following features working:
 - sign up
