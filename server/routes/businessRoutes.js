@@ -1,12 +1,6 @@
-import userController from '../controllers/userController';
 import businessController from '../controllers/businessController';
 
-const Routes = (app) => {
-  // user endpoint(s)
-  app.route('/api/v1/auth/signup').post(userController.create);
-  app.route('/api/v1/auth/login').post(userController.login);
-  app.route('/api/v1/auth/reset').post(userController.reset);
-
+const businessRoutes = (app) => {
   // business endpoint(s)
   app.route('/api/v1/businesses')
     .post(businessController.isAuthorized, businessController.create);
@@ -23,4 +17,4 @@ const Routes = (app) => {
     .get(businessController.fetchBusinessReviews);
 };
 
-export default Routes;
+export default businessRoutes;

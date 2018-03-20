@@ -7,7 +7,7 @@ import { log } from 'util';
 import path from 'path';
 
 // import all api routes
-import Routes from './routes/routes';
+import Routes from './routes';
 
 // load environment variables into proccess.env method
 dotenv.config();
@@ -32,7 +32,7 @@ app.route('/').get((req, res) => {
 });
 
 // expose all routes
-Routes(app);
+app.use(Routes(app));
 
 // handle unmatched routes with of each of the http methods
 app.all('*', (req, res) => res.status(404).send({
