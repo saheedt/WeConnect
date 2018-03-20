@@ -4,6 +4,7 @@ import babel from 'gulp-babel';
 import jasmineNode from 'gulp-jasmine-node';
 import istanbul from 'gulp-istanbul';
 import injectModules from 'gulp-inject-modules';
+import gulpSequence from 'gulp-sequence';
 import exit from 'gulp-exit';
 import dotenv from 'dotenv';
 
@@ -16,7 +17,7 @@ gulp.task('nodemon', () => {
     script: 'build/server.js',
     ext: 'js',
     ignore: ['README.md', 'node_modules/**', '.DS_Store'],
-    tasks: ['transpile'],
+    tasks: ['build'],
     watch: ['server']
   });
 });
@@ -47,3 +48,5 @@ gulp.task('coverage', () => {
         .pipe(exit());
     });
 });
+
+gulp.task('build', gulpSequence('copy', 'transpile'));

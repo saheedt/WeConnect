@@ -10,7 +10,6 @@ import path from 'path';
 import routes from './routes';
 
 const { businessRoutes, userRoutes } = routes;
-// console.log(' user and business routes: ', userRoutes, businessRoutes, routes);
 
 // load environment variables into proccess.env method
 dotenv.config();

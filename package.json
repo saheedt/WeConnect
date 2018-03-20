@@ -4,7 +4,7 @@
   "description": "WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with",
   "main": "index.js",
   "scripts": {
-    "postinstall": "gulp copy && gulp transpile",
+    "postinstall": "gulp build",
     "dev": "gulp nodemon",
     "start": "node ./build/server.js",
     "test": "gulp copy && gulp transpile && gulp coverage"
@@ -34,7 +34,7 @@
     "supertest": "3.0.0"
   },
   "dependencies": {
-    "@sendgrid/mail": "^6.2.1",
+    "@sendgrid/mail": "6.2.1",
     "babel-core": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-2": "6.24.1",
@@ -48,6 +48,7 @@
     "gulp-inject-modules": "1.0.0",
     "gulp-istanbul": "1.1.3",
     "gulp-jasmine-node": "1.0.7",
+    "gulp-sequence": "1.0.0",
     "jsonwebtoken": "8.2.0",
     "morgan": "1.9.0",
     "pg": "7.4.1",

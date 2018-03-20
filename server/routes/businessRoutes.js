@@ -5,6 +5,7 @@ import businessController from '../controllers/businessController';
 const businessRoutes = express.Router();
 
 // business endpoint(s)
+// chain endpoints with multiple method calls
 businessRoutes.route('/api/v1/businesses')
   .post(businessController.isAuthorized, businessController.create)
   .get(businessController.filter, businessController.fetchAll);
