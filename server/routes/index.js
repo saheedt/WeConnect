@@ -1,8 +1,6 @@
-import userRoutes from '../routes/userRoutes';
-import businessRoutes from '../routes/businessRoutes';
+import userRoutes from './userRoutes';
+import businessRoutes from './businessRoutes';
 
-const Routes = (app) => {
-  userRoutes(app);
-  businessRoutes(app);
-};
-export default Routes;
+const routes = { userRoutes, businessRoutes };
+
+export default routes;

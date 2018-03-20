@@ -7,7 +7,10 @@ import { log } from 'util';
 import path from 'path';
 
 // import all api routes
-import Routes from './routes';
+import routes from './routes';
+
+const { businessRoutes, userRoutes } = routes;
+// console.log(' user and business routes: ', userRoutes, businessRoutes, routes);
 
 // load environment variables into proccess.env method
 dotenv.config();
@@ -32,7 +35,8 @@ app.route('/').get((req, res) => {
 });
 
 // expose all routes
-app.use(Routes(app));
+app.use(userRoutes);
+app.use(businessRoutes);
 
 // handle unmatched routes with of each of the http methods
 app.all('*', (req, res) => res.status(404).send({
