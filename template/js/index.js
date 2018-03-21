@@ -2,11 +2,16 @@
 this.window.addEventListener('load', () => {
   const landingRegBtn = this.window.document.getElementById('landing-reg-btn');
   const signupBtn = this.window.document.getElementById('signup-btn');
-  const listingsSwitchInput = this.window.document.getElementById('listings-switch-input');
-  const listingsCategoryInput = this.window.document.querySelector('#listings-category-input');
-  const listingsLocationInput = this.window.document.querySelector('#listings-location-input');
-  const addBusinessBtn = this.window.document.getElementById('add-business-btn');
-  const updateBusinessBtn = this.window.document.getElementById('update-business-btn');
+  const listingsSwitchInput =
+    this.window.document.getElementById('listings-switch-input');
+  const listingsCategoryInput =
+    this.window.document.querySelector('#listings-category-input');
+  const listingsLocationInput =
+    this.window.document.querySelector('#listings-location-input');
+  const addBusinessBtn =
+    this.window.document.getElementById('add-business-btn');
+  const updateBusinessBtn =
+    this.window.document.getElementById('update-business-btn');
   const postReview = this.window.document.getElementById('post-review');
 
   const listingsList = this.window.document.querySelector('#listings-list');
@@ -27,28 +32,24 @@ this.window.addEventListener('load', () => {
   }
   if (signupBtn) {
     signupBtn.addEventListener('click', (e) => {
-      const regModal = this.window.document.getElementById('register-modal')
+      const regModal = this.window.document.getElementById('register-modal');
       e.preventDefault();
       regModal.style.display = 'none';
-      alert('Sign up Successful');     
     });
   }
   /** Post review */
   if (postReview) {
     postReview.addEventListener('click', () => {
-      alert('Review added.')
     });
   }
   /** Update business */
   if (updateBusinessBtn) {
     updateBusinessBtn.addEventListener('click', () => {
-      alert('Business profile successfully update.')
     });
   }
   /** Register business */
   if (addBusinessBtn) {
     addBusinessBtn.addEventListener('click', () => {
-      alert('Business successfully registered.')
     });
   }
   /** listings */
@@ -80,22 +81,37 @@ this.window.addEventListener('load', () => {
       li.innerHTML = `
         <!-- <li class="collection-item avatar"> -->
         <div class="listings-list-groupings flex" >
-        <div class="listings-list-groupings-items-left flex"> <i class="material-icons circle">business_center</i></div>
-        <div class="listings-list-groupings-items-right"><h4><a href="businessprofile.html"><span class="title">${biz.businessName}</span></a></h4></div>
+          <div class="listings-list-groupings-items-left flex">
+            <i class="material-icons circle">business_center</i>
+          </div>
+          <div class="listings-list-groupings-items-right">
+            <h4>
+              <a href="businessprofile.html">
+                <span class="title">${biz.businessName}</span>
+              </a>
+            </h4>
+          </div>
         </div>
 
         <div class="listings-list-groupings flex">
-        <div class="listings-list-groupings-items-left flex"><i class="material-icons circle">place</i></div>
-        <div class="listings-list-groupings-items-right"><p>${biz.address}</p></div>
+          <div class="listings-list-groupings-items-left flex">
+            <i class="material-icons circle">place</i>
+          </div>
+          <div class="listings-list-groupings-items-right">
+            <p>${biz.address}</p>
+          </div>
         </div>
 
         <div class="listings-list-groupings flex">
-        <div class="listings-list-groupings-items-left flex"><i class="material-icons circle">description</i></div>
-        <div class="listings-list-groupings-items-right"><p>${biz.description}</p></div>
+          <div class="listings-list-groupings-items-left flex">
+            <i class="material-icons circle">description</i>
+          </div>
+          <div class="listings-list-groupings-items-right">
+            <p>${biz.description}</p>
+          </div>
         </div>`;
       return list.push(li);
     });
-    // for ( let ele of list) {
     list.map(ele => listingsList.appendChild(ele));
   }
 
