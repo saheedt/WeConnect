@@ -7,7 +7,7 @@
     "postinstall": "gulp build",
     "dev": "gulp nodemon",
     "start": "node ./build/server.js",
-    "test": "gulp copy && gulp transpile && gulp coverage"
+    "test": "gulp build && gulp coverage"
   },
   "repository": {
     "type": "git",

@@ -41,7 +41,7 @@ gulp.task('coverage', () => {
         .pipe(babel())
         .pipe(injectModules())
         .pipe(jasmineNode())
-        .pipe(istanbul.writeReports())
+        .pipe(istanbul.writeReports({ dir: './server/tests/coverage' }))
         .pipe(istanbul.enforceThresholds({ thresholds: { global: 70 } }))
         .on('error', () => exit())
         .on('end', () => exit())
