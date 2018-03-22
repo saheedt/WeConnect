@@ -930,6 +930,35 @@ describe('businesses endpoint', () => {
           done();
         });
     });
+    it(
+      'should not delete business, when user doesn\'t exist but token is valid',
+      (done) => {
+        User.findOne({
+          where: {
+            email: process.env.TESTEMAIL2
+          }
+        }).then((user) => {
+          if (user) {
+            return user.destroy().then(() => {
+              request(server)
+                .delete('/api/v1/businesses/80')
+                .set('authorization', testToken2)
+                .end((err, resp) => {
+                  assert.deepEqual(
+                    resp.status,
+                    404
+                  );
+                  assert.deepEqual(
+                    resp.body.message,
+                    'user does not exist'
+                  );
+                  done();
+                });
+            });
+          }
+        });
+      }
+    );
     it('should successfully delete business if it belongs to user', (done) => {
       request(server)
         .delete(`/api/v1/businesses/${businessId}`)

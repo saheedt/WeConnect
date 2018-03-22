@@ -50,3 +50,5 @@ gulp.task('coverage', () => {
 });
 
 gulp.task('build', gulpSequence('copy', 'transpile'));
+
+gulp.task('test', gulpSequence('build', 'coverage'));

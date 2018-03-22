@@ -8,7 +8,7 @@
     "dev": "gulp nodemon",
     "start": "node ./build/server.js",
     "copy": "gulp copy",
-    "test": "gulp build && gulp coverage"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",

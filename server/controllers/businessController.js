@@ -128,11 +128,6 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static delete(req, res) {
-    // if (!req.authenticatedUser) {
-    //   return res.status(401).send({
-    //     message: 'unauthorized user'
-    //   });
-    // }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {

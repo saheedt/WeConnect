@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+
+const { User } = require('../models');
 /**
  * @description Contains all helper Functions
  * @export
@@ -22,12 +24,37 @@ export default class baseController {
         });
         return false;
       }
-      // res.status(404).send({
-      //   message: 'user not found'
-      // });
-      // return false;
     }
     return true;
+  }
+  /**
+     * @description Checks if User exists
+     * @static
+     * @param {Object} req Client request
+     * @param {Object} res Server response
+     * @param {Object} user User details
+     * @param {Function} proceed calls next controller
+     * @memberof baseController
+     */
+  static userExistsInDb(req, res, user, proceed) {
+    const { id, email } = user;
+    User.findOne({
+      where: {
+        id: parseInt(id, 10),
+        email
+      }
+    }).then((foundUser) => {
+      if (foundUser) {
+        if (foundUser.dataValues.id === id &&
+          foundUser.dataValues.email === email) {
+          req.authenticatedUser = user;
+          return proceed();
+        }
+      }
+      return res.status(404).send({
+        message: 'user does not exist'
+      });
+    }).catch(error => res.status(500).send({ error: error.toString() }));
   }
   /**
    * @description jwt sign function
@@ -62,8 +89,7 @@ export default class baseController {
           return res.status(403).send({ message: 'invalid token' });
         }
         if (decoded) {
-          req.authenticatedUser = decoded;
-          next();
+          baseController.userExistsInDb(req, res, decoded, next);
         }
       }
     );
