@@ -22,7 +22,7 @@ gulp.task('nodemon', () => {
   });
 });
 
-gulp.task('copy', () => gulp.src('!server/**/*.*')
+gulp.task('copy', () => gulp.src('server/**/*.*')
   .pipe(gulp.dest('build')));
 
 gulp.task('transpile', () => gulp.src('./server/**/*.js')

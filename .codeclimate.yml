@@ -16,5 +16,8 @@ ratings:
   - "**.js"
 exclude_paths:
 - node_modules/**/*
-- tests/**/*
-- public/**/*
+- client/tests/**/*
+- server/tests/**/*
+- client/public/**/*
+- server/public/**/*
+- template/**/**/*
