@@ -1,6 +1,7 @@
 import baseController from './baseController';
 
-const { Business, Review } = require('../models');
+// const { Business, Review } = require('../models');
+import { Business, Review } from '../models';
 
 /**
  * @description Contains all business related functionalities
