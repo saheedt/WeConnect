@@ -13,8 +13,16 @@ this.window.addEventListener('load', () => {
   const updateBusinessBtn =
     this.window.document.getElementById('update-business-btn');
   const postReview = this.window.document.getElementById('post-review');
+  const backToPrevious = document.getElementById('update-business-cancel-btn');
 
   const listingsList = this.window.document.querySelector('#listings-list');
+
+  if (backToPrevious) {
+    backToPrevious.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.history.back();
+    });
+  }
 
   /** login/signup */
   if (landingRegBtn) {

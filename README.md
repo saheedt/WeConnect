@@ -59,7 +59,9 @@ This project is divided into three parts:
   - To view the API docs with database data, please click this link [WeConnect API docs (database data)](https://weconnect-saheed-updated.herokuapp.com)
 
 ### Prerequisites
-To view the UI Template and API docs, please use a web browser, preferably, Google Chrome.
+* To view the UI Template and API docs, please use a web browser, preferably, [Google Chrome](https://www.google.com/chrome).
+* To run the app, you need to have [NODE JS](https://nodejs.org/en/) installed
+* You need to have [POSTGRES](https://www.postgresql.org/) database
 
 ### Installation
 

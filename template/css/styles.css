@@ -18,7 +18,7 @@ main{
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 1rem
+  margin-top: 1rem;
 }
 .max630{
   max-width: 630px;
@@ -228,6 +228,14 @@ main{
   height: 100%;
   float: left;
 }
+#listings-search-holder-gen{
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  float: left;
+}
 .listings-list-groupings{
   height: 3rem;
   width: 100%;
@@ -301,6 +309,7 @@ main{
   position: fixed;
   z-index: 2;
   top: 0;
+  float: left;
 }
 #listings-filter-switch{
   width: 10%;
@@ -422,7 +431,7 @@ main{
   vertical-align: sub;
 }
 .wc-header-back-btn-holder{
-  width: 10%;
+  width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -568,4 +577,19 @@ main{
 }
 .bold {
   font-weight: bold;
+}
+#update-business-cancel-btn{
+  width: 30%;
+  float: right;
+  height: 4rem;
+  background-color: red !important
+}
+
+#listings-header-holder-left-first {
+  width: 10%;
+  height: 100%;
+}
+#listenings-header-holder-right {
+  width: 70%;
+  height: 100%;
 }

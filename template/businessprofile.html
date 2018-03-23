@@ -12,13 +12,43 @@
 </head>
 <body>
     <main>
-        <header class="wc-header"><!-- header -->
-          <div class="wc-header-back-btn-holder flex">
-            <a href="listings.html"><i class="material-icons">arrow_back</i></a>
+        <header id="listings-header" class="flex"><!-- header -->
+          <div id="listings-header-holder-left-first">
+            <div class="wc-header-back-btn-holder flex">
+              <a href="listings.html"><i class="material-icons">arrow_back</i></a>
+            </div>
           </div>
-          <h3 class="header-text-holder"><span class="header-text">Business Profile</span></h3>
+          <div id="listenings-header-holder-right">
+            <div id="listings-search-holder-gen" class="flex">
+              <div id="listings-filter-switch" class="flex" > <!--filter switch -->
+                <div class="switch">
+                  <label>
+                      <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Toggle switch to change filter type">
+                          <i class="material-icons">info_outline</i>
+                      </a>
+                    <input id="listings-switch-input"type="checkbox">
+                    <span class="lever"></span>
+                  </label>
+                </div>                    
+              </div> <!--filter switch end-->
+              <div id="listings-input-holder"> <!--filter search field-->
+                <div style="width: 100%; height: 100%">
+                  <input id="listings-category-input" placeholder="Filter by category" />
+                  <input id="listings-location-input" placeholder="Filter by location" />
+                </div>
+              </div> <!--filter search field end-->
+              <div id="listings-search-btn-holder"> <!--filter button-->
+                  <button id="listings-search-btn" class="white"><i class="material-icons">search</i></button>
+              </div> <!--filter search button end -->
+            </div>
+        </div>
+        <div id="listings-add-holder">
+          <!-- <a href="addbusiness.html">Add Business</a> -->
           <a id="route-profile-btn" class="flex" href="updatebusinessprofile.html">Update profile</a>
-        </header><!-- header end-->
+        </div>
+        </header><!-- header end -->
+
+        
         <div class="flex vertical-after-header"> <!-- profile details -->
           <section id="business-profile" class="holder-60-shadow padding-20 flex">
             <div id="business-name-emph"><h3>yy solicitors</h3></div>
