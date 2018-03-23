@@ -218,7 +218,7 @@ main{
   transition: box-shadow .25s, -webkit-box-shadow .25s;
 }
 #listings #listings-list .collection-item h4 a {
-  color: black
+  color: #7fc6c8;
 }
 #listings-search-holder{
   flex-direction: row;
@@ -566,5 +566,6 @@ main{
   justify-content: center;
   align-items: center;
 }
-/* .header-header-title h3{
-  color: #FF
+.bold {
+  font-weight: bold;
+}
