@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-// const { User } = require('../models');
 import { User } from '../models';
 /**
  * @description Contains all helper Functions

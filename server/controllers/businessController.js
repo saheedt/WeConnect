@@ -1,6 +1,4 @@
 import baseController from './baseController';
-
-// const { Business, Review } = require('../models');
 import { Business, Review } from '../models';
 
 /**

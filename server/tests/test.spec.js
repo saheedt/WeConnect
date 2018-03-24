@@ -3,8 +3,7 @@ import request from 'supertest';
 import dotenv from 'dotenv';
 
 import server from '../server';
-
-const { User } = require('../models');
+import { User } from '../models';
 
 dotenv.config();
 process.env.NODE_ENV = 'test';
@@ -105,6 +104,23 @@ describe('user endpoints', () => {
         .end((err, resp) => {
           assert.deepEqual(resp.status, 400);
           assert.deepEqual(resp.body.message, 'email cannot be empty or null');
+          done();
+        });
+    });
+    it('should not create a user if email is invalid', (done) => {
+      request(server)
+        .post('/api/v1/auth/signup')
+        .send({
+          email: 'andelagmail.com',
+          password: 1234567
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 400);
+          assert.deepEqual(
+            resp.body.message,
+            'invalid credentials, verify credentials and try again'
+          );
           done();
         });
     });
@@ -375,28 +391,6 @@ describe('user endpoints', () => {
 /** ============== ======================= =================== ============== */
 describe('businesses endpoint', () => {
   describe('create business endpoint', () => {
-    it('should not create business without user id', (done) => {
-      request(server)
-        .post('/api/v1/businesses')
-        .set('authorization', testToken1)
-        .send({
-          name: 'xx',
-          address: '123, gaga',
-          location: 'ogun',
-          phonenumber: 122424552,
-          employees: 8,
-          category: 'ride sharing services'
-        })
-        .expect('Content-Type', /json/)
-        .end((err, resp) => {
-          assert.deepEqual(resp.status, 401);
-          assert.deepEqual(
-            resp.body.message,
-            'you are not authorized to create a business on this account'
-          );
-          done();
-        });
-    });
     it('should not create business without authorization token', (done) => {
       request(server)
         .post('/api/v1/businesses')
@@ -406,8 +400,7 @@ describe('businesses endpoint', () => {
           location: 'ogun',
           phonenumber: 122424552,
           employees: 8,
-          category: 'ride sharing services',
-          userId: userId1
+          category: 'ride sharing services'
         })
         .expect('Content-Type', /json/)
         .end((err, resp) => {
@@ -424,7 +417,6 @@ describe('businesses endpoint', () => {
         .post('/api/v1/businesses')
         .set('authorization', testToken1)
         .send({
-          userId: userId1,
           name: 'test business',
           address: '123, gaga',
           location: 'ogun',
@@ -451,32 +443,6 @@ describe('businesses endpoint', () => {
           done();
         });
     });
-    it(
-      'should not create business for accounts with existing business',
-      (done) => {
-        request(server)
-          .post('/api/v1/businesses')
-          .set('authorization', testToken1)
-          .send({
-            userId: userId1,
-            name: 'xxyyzzz',
-            address: '123, gaga, gags',
-            location: 'ogun',
-            phonenumber: 122424552,
-            employees: 8,
-            category: 'ride sharing services'
-          })
-          .expect('Content-Type', /json/)
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 400);
-            assert.deepEqual(
-              resp.body.message,
-              'user has a registered business'
-            );
-            done();
-          });
-      }
-    );
   });
   /** */
   /** */

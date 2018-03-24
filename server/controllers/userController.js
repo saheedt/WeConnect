@@ -2,8 +2,6 @@ import { hash, compare } from 'bcrypt';
 import sendGrid from '@sendgrid/mail';
 
 import baseController from './baseController';
-
-// const { User } = require('../models');
 import { User } from '../models';
 
 const saltRounds = 10;
