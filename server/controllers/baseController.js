@@ -185,4 +185,35 @@ export default class baseController {
         error: queryError.toString()
       }));
   }
+  /**
+     * @description formats sequelize error
+     * @static
+     * @param {Object} req Client request
+     * @param {Object} res Server response
+     * @param {Function} errorMsg Sequelize error message
+     * @return {Function} response object
+     * @memberof baseController
+     */
+  static formatError(req, res, errorMsg) {
+    const error = errorMsg.split(':')[0];
+
+    switch (error) {
+    case 'SequelizeValidationError':
+      return res.status(400).send({
+        message: 'invalid credentials, verify credentials and try again'
+      });
+    case 'ConnectionTimedOutError':
+      return res.status(408).send({
+        message: 'connection timeout, please try again'
+      });
+    case 'TimeoutError':
+      return res.status(400).send({
+        message: 'invalid input, verify input and try again'
+      });
+    default:
+      return res.status(503).send({
+        message: 'service is temporarily unavailable, please try again later'
+      });
+    }
+  }
 }

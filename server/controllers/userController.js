@@ -3,7 +3,8 @@ import sendGrid from '@sendgrid/mail';
 
 import baseController from './baseController';
 
-const { User } = require('../models');
+// const { User } = require('../models');
+import { User } from '../models';
 
 const saltRounds = 10;
 
@@ -22,7 +23,6 @@ export default class userController extends baseController {
     * @memberof userController
     */
   static create(req, res) {
-    // check if email is sent with the request
     if (userController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
@@ -33,7 +33,6 @@ export default class userController extends baseController {
         email: req.body.email
       }
     }).then((user) => {
-      // if user doesn't exist, register new user
       if (!userController.emailExists(req, res, user) &&
       userController.isPasswordValid(req, res, req.body.password)) {
         hash(req.body.password, saltRounds, (err, encrypted) => {
@@ -41,8 +40,6 @@ export default class userController extends baseController {
             email: req.body.email,
             password: encrypted
           }).then((createduser) => {
-            // delete sensitive info from the DB resposnse
-            // and generate a JWT(JSON web token) with user id & email
             delete createduser.dataValues.password;
             delete createduser.dataValues.updatedAt;
             delete createduser.dataValues.createdAt;
@@ -50,22 +47,17 @@ export default class userController extends baseController {
               id: createduser.dataValues.id,
               email: createduser.dataValues.email
             });
-            // send created user details & token
             res.status(201).send({
               message: 'user registered successfully',
               user: createduser,
               token
             });
-          }).catch(createdUserError => res.status(500).send({
-            message: 'error signing up, please try again',
-            error: createdUserError.toString()
-          }));
+          }).catch(createdUserError =>
+            userController.formatError(req, res, createdUserError.toString()));
         });
       }
-    }).catch(userError => res.status(500).send({
-      message: 'an unexpected error has occured',
-      error: userError.toString()
-    }));
+    }).catch(findUserError =>
+      userController.formatError(req, res, findUserError.toString()));
   }
   /**
    * @description Allows registered users sign in
@@ -111,7 +103,6 @@ export default class userController extends baseController {
           delete user.dataValues.password;
           delete user.dataValues.updatedAt;
           delete user.dataValues.createdAt;
-          // send token with success response
           return res.status(200).send({
             message: 'login successful',
             user: authUser,
@@ -119,10 +110,8 @@ export default class userController extends baseController {
           });
         });
       }
-    }).catch(loginError => res.status(500).send({
-      message: 'an unexpected error has occured',
-      error: loginError.toString()
-    }));
+    }).catch(loginError =>
+      userController.formatError(req, res, loginError.toString()));
   }
   /**
    * @description Allows registered reset password
@@ -154,7 +143,7 @@ export default class userController extends baseController {
       const resetLink = `${location}/reset/${emailEncode}_nioj_${idEncode}`;
       sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
       const mailOptions = {
-        from: 'no-reply@weconnect.com',
+        from: 'no-reply@weconnect-saheed-updated.herokuapp.com',
         to: req.body.email,
         subject: 'WeConnect password reset',
         text: `Please reset your WeConnect password with this link:
@@ -163,8 +152,7 @@ export default class userController extends baseController {
       sendGrid.send(mailOptions, (error, body) => {
         if (error) {
           return res.status(400).send({
-            message: 'error sending mail, try again',
-            error
+            message: 'error sending mail, try again'
           });
         }
         if (body) {
@@ -173,24 +161,7 @@ export default class userController extends baseController {
           });
         }
       });
-      // mailgun.messages().send(mailOptions, (error, body) => {
-      //   console.log(error);
-      //   console.log(body);
-      //   if (error) {
-      //     return res.status(400).send({
-      //       message: 'error sending mail, try again',
-      //       error
-      //     });
-      //   }
-      //   if (body) {
-      //     return res.status(200).send({
-      //       message: 'password reset link generated, please check email'
-      //     });
-      //   }
-      // });
-    }).catch(resetError => res.status(500).send({
-      message: 'an unexpected error has occured',
-      error: resetError.toString()
-    }));
+    }).catch(resetError =>
+      userController.formatError(req, res, resetError.toString()));
   }
 }

@@ -18,48 +18,26 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static create(req, res) {
-    if (parseInt(req.body.userId, 10)
-        !== parseInt(req.authenticatedUser.id, 10)) {
-      return res.status(401).send({
-        message: 'you are not authorized to create a business on this account'
-      });
-    }
-    return Business.findOne({
-      where: {
-        userId: parseInt(req.body.userId, 10)
-      }
-    }).then((business) => {
-      if (business) {
+    return Business.create({
+      name: req.body.name,
+      address: req.body.address,
+      location: req.body.location,
+      phonenumber: parseInt(req.body.phonenumber, 10),
+      employees: parseInt(req.body.employees, 10),
+      category: req.body.category,
+      userId: parseInt(req.authenticatedUser.id, 10)
+    }).then((regBusiness) => {
+      if (!regBusiness) {
         return res.status(400).send({
-          message: 'user has a registered business'
+          message: 'registeration error, verify all fields and try again'
         });
       }
-      return Business.create({
-        name: req.body.name,
-        address: req.body.address,
-        location: req.body.location,
-        phonenumber: parseInt(req.body.phonenumber, 10),
-        employees: parseInt(req.body.employees, 10),
-        category: req.body.category,
-        userId: parseInt(req.authenticatedUser.id, 10)
-      }).then((regBusiness) => {
-        if (!regBusiness) {
-          return res.status(400).send({
-            message: 'registeration error, verify all fields and try again'
-          });
-        }
-        res.status(201).send({
-          message: 'business successfully added',
-          business: regBusiness
-        });
-      }).catch(businessError => res.status(500).send({
-        message: 'unexpected error, please try again',
-        error: businessError.toString()
-      }));
-    }).catch(createError => res.status(500).send({
-      message: 'an unexpected error has occured',
-      error: createError.toString()
-    }));
+      res.status(201).send({
+        message: 'business successfully added',
+        business: regBusiness
+      });
+    }).catch(businessError =>
+      businessController.formatError(req, res, businessError.toString()));
   }
   /**
     * @description Allow user update business details
@@ -70,11 +48,6 @@ export default class businessController extends baseController {
     * @memberof businessController
     */
   static update(req, res) {
-    // if (!req.authenticatedUser) {
-    //   return res.status(401).send({
-    //     message: 'unauthorized user'
-    //   });
-    // }
     return Business.findOne({
       where: {
         id: parseInt(req.params.businessId, 10)
@@ -107,18 +80,14 @@ export default class businessController extends baseController {
               message: 'business successfully updated',
               business: business.dataValues
             });
-          }).catch(updateError => res.status(500).send({
-            message: 'error occured during update, please try agin',
-            error: updateError.toString()
-          }));
+          }).catch(updateError =>
+            businessController.formatError(req, res, updateError.toString()));
       }
       return res.status(401).send({
         message: 'unathorized, business belongs to another user'
       });
-    }).catch(updateError => res.status(500).send({
-      message: 'an unexpected error has occured',
-      error: updateError.toString()
-    }));
+    }).catch(updateFindError =>
+      businessController.formatError(re, res, updateFindError.toString()));
   }
   /**
     * @description Allow user delete business details
@@ -144,19 +113,15 @@ export default class businessController extends baseController {
             .then(() => res.status(200).send({
               message: 'business sucessfully deleted'
             }))
-            .catch(error => res.status(500).send({
-              message: 'an error occured while deleting business',
-              error: error.toString()
-            }));
+            .catch(deleteError =>
+              businessController.formatError(req, res, deleteError.toString()));
         }
         res.status(401).send({
           message: 'unauthorized, business belongs to another user'
         });
       })
-      .catch(error => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: error.toString()
-      }));
+      .catch(deleteFindError =>
+        businessController.formatError(req, res, deleteFindError.toString()));
   }
   /**
     * @description Allow user get a business details
@@ -179,10 +144,8 @@ export default class businessController extends baseController {
           message: 'business sucessfully fetched',
           business: business.dataValues
         });
-      }).catch(businessFetchError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: businessFetchError.toString()
-      }));
+      }).catch(bizFetchError =>
+        businessController.formatError(req, res, bizFetchError.toString()));
   }
   /**
     * @description Allow user filter all businesses
@@ -239,10 +202,8 @@ export default class businessController extends baseController {
           message: 'businesses successfully fetched',
           business: businesses
         });
-      }).catch(fetchAllError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: fetchAllError.toString()
-      }));
+      }).catch(fetchAllError =>
+        businessController.formatError(req, res, fetchAllError.toString()));
   }
   /**
     * @description Allow user review a business
@@ -286,14 +247,10 @@ export default class businessController extends baseController {
             message: 'business sucessfully reviewed',
             review: review.dataValues
           });
-        }).catch(reviewError => res.status(500).send({
-          message: 'an unexpected error occured',
-          error: reviewError.toString()
-        }));
-      }).catch(businessFetchError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: businessFetchError.toString()
-      }));
+        }).catch(reviewError =>
+          businessController.formatError(req, res, reviewError.toString()));
+      }).catch(bizFetchError =>
+        businessController.formatError(req, res, bizFetchError.toString()));
   }
   /**
     * @description Allow user retrieve reviews of a business
@@ -339,13 +296,9 @@ export default class businessController extends baseController {
             message: 'reviews successfully retrieved',
             reviews: fetchedReviews
           });
-        }).catch(reviewsfetchError => res.status(500).send({
-          message: 'an unexpected error occured',
-          error: reviewsfetchError.toString()
-        }));
-      }).catch(businessFetchError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: businessFetchError.toString()
-      }));
+        }).catch(revFetchError =>
+          businessController.formatError(req, res, revFetchError.toString()));
+      }).catch(bizFetchError =>
+        businessController.formatError(req, res, bizFetchError.toString()));
   }
 }
