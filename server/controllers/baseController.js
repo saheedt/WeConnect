@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const { User } = require('../models');
+import { User } from '../models';
 /**
  * @description Contains all helper Functions
  * @export
@@ -54,7 +54,7 @@ export default class baseController {
       return res.status(404).send({
         message: 'user does not exist'
       });
-    }).catch(error => res.status(500).send({ error: error.toString() }));
+    }).catch(error => baseController.formatError(req, res, error.toString()));
   }
   /**
    * @description jwt sign function
@@ -162,11 +162,6 @@ export default class baseController {
     })
       .then((query) => {
         let querried;
-        if (!query) {
-          return res.status(404).send({
-            message: 'no businesses found'
-          });
-        }
         if (Array.isArray(query)) {
           querried = query.map(quarryData => quarryData.dataValues);
         }
@@ -179,9 +174,38 @@ export default class baseController {
           message: 'business successfully filtered',
           business: querried
         });
-      }).catch(queryError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: queryError.toString()
-      }));
+      }).catch(queryError =>
+        baseController.formatError(req, res, queryError.toString()));
+  }
+  /**
+     * @description formats sequelize error
+     * @static
+     * @param {Object} req Client request
+     * @param {Object} res Server response
+     * @param {Function} errorMsg Sequelize error message
+     * @return {Function} response object
+     * @memberof baseController
+     */
+  static formatError(req, res, errorMsg) {
+    const error = errorMsg.split(':')[0];
+
+    switch (error) {
+    case 'SequelizeValidationError':
+      return res.status(400).send({
+        message: 'invalid credentials, verify credentials and try again'
+      });
+    case 'ConnectionTimedOutError':
+      return res.status(408).send({
+        message: 'connection timeout, please try again'
+      });
+    case 'TimeoutError':
+      return res.status(400).send({
+        message: 'invalid input, verify input and try again'
+      });
+    default:
+      return res.status(503).send({
+        message: 'service is temporarily unavailable, please try again later'
+      });
+    }
   }
 }
