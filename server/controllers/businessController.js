@@ -70,7 +70,7 @@ export default class businessController extends baseController {
             category: req.body.category || business.dataValues.category
           }).then((updatedBusiness) => {
             if (!updatedBusiness) {
-              return res.status(500).send({
+              return res.status(417).send({
                 message: 'update failed, try again'
               });
             }
@@ -183,11 +183,6 @@ export default class businessController extends baseController {
     return Business.findAll()
       .then((business) => {
         let businesses;
-        if (!business) {
-          return res.status(404).send({
-            message: 'no businesses found'
-          });
-        }
         if (Array.isArray(business)) {
           businesses = business.map(biz => biz.dataValues);
         }
@@ -277,11 +272,6 @@ export default class businessController extends baseController {
           }]
         }).then((reviews) => {
           let fetchedReviews;
-          if (!reviews) {
-            return res.status(404).send({
-              message: 'no reviews found'
-            });
-          }
           if (Array.isArray(reviews)) {
             fetchedReviews = reviews.map(revs => revs.dataValues);
           }

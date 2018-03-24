@@ -658,7 +658,7 @@ describe('businesses endpoint', () => {
       }
     );
     it(
-      'should return all appropriate error message if query matches no record',
+      'should return appropriate error message if query matches no record',
       (done) => {
         request(server)
           .get('/api/v1/businesses?location=yobe')

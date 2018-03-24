@@ -54,7 +54,7 @@ export default class baseController {
       return res.status(404).send({
         message: 'user does not exist'
       });
-    }).catch(error => res.status(500).send({ error: error.toString() }));
+    }).catch(error => baseController.formatError(req, res, error.toString()));
   }
   /**
    * @description jwt sign function
@@ -162,11 +162,6 @@ export default class baseController {
     })
       .then((query) => {
         let querried;
-        if (!query) {
-          return res.status(404).send({
-            message: 'no businesses found'
-          });
-        }
         if (Array.isArray(query)) {
           querried = query.map(quarryData => quarryData.dataValues);
         }
@@ -179,10 +174,8 @@ export default class baseController {
           message: 'business successfully filtered',
           business: querried
         });
-      }).catch(queryError => res.status(500).send({
-        message: 'an unexpected error occured',
-        error: queryError.toString()
-      }));
+      }).catch(queryError =>
+        baseController.formatError(req, res, queryError.toString()));
   }
   /**
      * @description formats sequelize error
