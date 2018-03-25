@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "gulp nodemon",
+    "Dev": "webpack -d && webpack-dev-server --content-base client/src/ --inline --hot --history-api-fallback",
     "start": "gulp build && node ./build/server.js",
     "test": "gulp test"
   },

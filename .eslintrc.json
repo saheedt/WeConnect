@@ -9,6 +9,8 @@
     "jest": true
   },
   "rules": {
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": ["error"],
     "es6version": 6,
     "max-len": [1, 80, 2],
     "indent": [1, 2],
@@ -25,7 +27,7 @@
     "no-undef": 0,
     "jsx-quotes": 1,
     "class-methods-use-this": 0,
-    "radix": ["error", "always"],
+    "radix": ["error", "as-needed"],
     "valid-jsdoc": [1, {
       "requireReturn": false,
       "requireReturnType": false,

@@ -16,7 +16,7 @@ const dotEnv = new webpack.DefinePlugin({
   }
 });
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
-  template: 'src/index.html'
+  template: 'client/src/index.html'
 });
 
 
