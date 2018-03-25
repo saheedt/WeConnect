@@ -24,7 +24,7 @@ const DIST_DIR = path.resolve(__dirname, 'dist'),
   SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
-  entry: path.join(SRC_DIR, '/WeConnectRoot.js'),
+  entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
   output: {
     path: path.join(DIST_DIR, '/app'),
     filename: 'bundle.js',
