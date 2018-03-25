@@ -7,7 +7,7 @@ const webpack = require('webpack');
 DotEnv.config({ path: `${__dirname}/.env` });
 
 const extractPlugin = new ExtractTextPlugin({
-  filemame: 'styles.css'
+  filename: 'styles.css'
 });
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
@@ -24,9 +24,9 @@ const DIST_DIR = path.resolve(__dirname, 'dist'),
   SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
-  entry: `${SRC_DIR}/WeConnectRoot.js`,
+  entry: path.join(SRC_DIR, '/WeConnectRoot.js'),
   output: {
-    path: `${DIST_DIR}/app`,
+    path: path.join(DIST_DIR, '/app'),
     filename: 'bundle.js',
     publicPath: '/app/'
   },
@@ -43,17 +43,20 @@ const config = {
       },
       {
         test: /\.scss$/,
+        exclude: /node_modules/,
         use: extractPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'scss-loader']
+          use: ['css-loader', 'sass-loader']
         })
       },
       {
         test: /\.(png|jpg|gif|svg|jpeg)$/,
+        exclude: /node_modules/,
         loader: 'url-loader'
       },
       {
         test: /\.html$/,
+        exclude: /node_modules/,
         use: 'html-loader'
       }
     ]
