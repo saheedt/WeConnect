@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import { Route } from 'react-router-dom';
+import Header from '../components/Header';
 
 class Businesses extends Component {
   constructor(props) {
@@ -7,9 +8,11 @@ class Businesses extends Component {
     this.state = {};
   }
   render() {
-    console.log(this.props);
     return (
-      <h1>BUSINESSES</h1>
+      <div>
+        <h1>BUSINESSES</h1>
+        <Header />
+      </div>
     );
   }
 }
