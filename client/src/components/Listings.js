@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Route } from 'react-router-dom';
 
 class Listings extends Component {
   constructor(props) {
@@ -8,7 +7,10 @@ class Listings extends Component {
   }
   render() {
     return (
-      <h1>Listings</h1>
+      <section id="listings" className="header-margin">
+        <ul id="listings-list" className="collection max630">
+        </ul>
+      </section>
     );
   }
 }
