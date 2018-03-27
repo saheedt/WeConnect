@@ -259,10 +259,10 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            assert.deepEqual(resp.status, 401);
+            assert.deepEqual(resp.status, 404);
             assert.deepEqual(
               resp.body.message,
-              'kindly sign up first'
+              'user not found'
             );
             done();
           });
@@ -299,7 +299,7 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(resp.status, 404);
             assert.deepEqual(
               resp.body.message,
               'wrong email or password'

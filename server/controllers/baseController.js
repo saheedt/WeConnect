@@ -19,8 +19,8 @@ export default class baseController {
   static isUser(req, res, user) {
     if (!user) {
       if (req.url === '/api/v1/auth/login') {
-        res.status(401).send({
-          message: 'kindly sign up first'
+        res.status(404).send({
+          message: 'user not found'
         });
         return false;
       }
