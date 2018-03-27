@@ -16,7 +16,7 @@ DotEnv.config({ path: `${__dirname}/.env` });
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
     BASE_URL: JSON.stringify(process.env.BASE_URL),
-    PORT: process.env.PORT2
+    // PORT: process.env.PORT
   }
 });
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
