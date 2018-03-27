@@ -1,14 +1,18 @@
 const DotEnv = require('dotenv');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 DotEnv.config({ path: `${__dirname}/.env` });
 
-const extractPlugin = new ExtractTextPlugin({
-  filename: 'styles.css'
-});
+// const extractPlugin = new ExtractTextPlugin({
+//   filename: 'styles.css'
+// });
+// use: extractPlugin.extract({
+//   fallback: 'style-loader',
+//   use: ['css-loader', 'sass-loader']
+// })
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
     BASE_URL: JSON.stringify(process.env.BASE_URL),
@@ -26,9 +30,9 @@ const DIST_DIR = path.resolve(__dirname, 'dist'),
 const config = {
   entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
   output: {
-    path: path.join(DIST_DIR, '/app'),
+    path: path.join(DIST_DIR),
     filename: 'bundle.js',
-    publicPath: '/app/'
+    publicPath: '/'
   },
   module: {
     loaders: [
@@ -44,10 +48,7 @@ const config = {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: extractPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
-        })
+        use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(png|jpg|gif|svg|jpeg)$/,
@@ -63,7 +64,7 @@ const config = {
   },
   plugins: [
     dotEnv,
-    extractPlugin,
+    // extractPlugin,
     htmlWebpackPlugin
   ]
 };

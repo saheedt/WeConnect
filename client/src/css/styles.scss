@@ -1,3 +1,5 @@
+$header-color: #7fc6c8;
+$soft-white: #fff;
 body{
     width: 100vw;
     height: 100vh;
@@ -8,13 +10,48 @@ body{
     height: 100vh;
 }
 #listings-header{
-    background-color: #7fc6c8;
+    background-color: $header-color;
     height: 6rem;
     width: 100vw;
     position: fixed;
     z-index: 2;
     top: 0;
     float: left;
+}
+#listings-header-holder-left-first {
+  width: 10%;
+  height: 100%;
+}
+.wc-header-back-btn-holder{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  float: left;
+}
+.wc-header-back-btn-holder a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 80%;
+  background-color: transparent;
+  border: 0;
+}
+.wc-header-back-btn-holder a > i{
+  color: $soft-white
+}
+#listenings-header-holder-right {
+  width: 70%;
+  height: 100%;
+}
+#listings-search-holder-gen{
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  float: left;
 }
 #listings-search-holder{
     flex-direction: row;
@@ -33,4 +70,101 @@ body{
 }
 .flex{
   display: flex
+}
+.switch{
+  color: $soft-white;
+}
+#listings-input-holder{
+  width: 35%;
+  height: 55%;
+}
+#listings-category-input{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    background-color: $soft-white;
+    padding-left: 20px;
+  }
+  #listings-category-input:focus{
+    border: 0;
+  }
+  #listings-location-input{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    display: none;
+    background-color: $soft-white;
+    padding-left: 20px;
+}
+#listings-location-input:focus{
+  border: 0;
+}
+#listings-search-btn-holder{
+  width: 5%;
+  height: 55%;
+}
+#listings-search-btn{
+  height: 100%;
+  border:0px;
+}
+#listings-search-btn i{
+  line-height: unset;
+}
+#listings-add-holder{
+  width: 20%;
+  height:100%;
+  float:left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#route-profile-btn{
+  float: left;
+  height: 100%;
+  padding-left: 2px;
+  padding-right: 2px;
+  color: $soft-white;
+  justify-content:  center;
+  align-items: center;
+  width: 20%;
+}
+#listings-add-holder a{
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  color: $soft-white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#listings-add-holder a:visited{
+  color: $soft-white;
+}
+.switch label{
+  color: $soft-white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 50px;
+}
+.switch label a{
+  color: $soft-white;
+}
+.switch label .lever{
+  vertical-align: super;
+}
+.fill{
+  height: 100%;
+  width: 100%;
+}
+.flex-column{
+  flex-direction: column;
+}
+.flex-row{
+  flex-direction: row;
+}
+.header-margin{
+  margin-top: 6rem;
 }

@@ -9,9 +9,9 @@ class Businesses extends Component {
   }
   render() {
     return (
-      <div>
-        <h1>BUSINESSES</h1>
+      <div className="flex fill flex-column">
         <Header />
+        <h1>BUSINESSES</h1>
       </div>
     );
   }
