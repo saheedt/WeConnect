@@ -84,7 +84,7 @@ export default class userController extends baseController {
         compare(req.body.password, user.dataValues.password, (err, resp) => {
           // handle incorrect password
           if (!resp || err) {
-            return res.status(400).send({
+            return res.status(404).send({
               message: 'wrong email or password'
             });
           }
