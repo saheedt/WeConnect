@@ -63,3 +63,11 @@ export function fetchBusinesses() {
       });
   };
 }
+/**
+ * @return {Function} dispatch closure
+ */
+export function clearBusinessesError() {
+  return (dispatch) => {
+    dispatch(clearGetBusinessesError());
+  };
+}
