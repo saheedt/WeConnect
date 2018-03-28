@@ -1,21 +1,25 @@
 import express from 'express';
 
-import businessController from '../controllers/businessController';
+import BusinessController from '../controllers/BusinessController';
 
 const businessRoutes = express.Router();
 
 // business endpoint(s)
 // chain endpoints with multiple method calls
 businessRoutes.route('/api/v1/businesses')
-  .post(businessController.isAuthorized, businessController.create)
-  .get(businessController.filter, businessController.fetchAll);
+  .post(
+    BusinessController.validateBusinessCreate,
+    BusinessController.isAuthorized,
+    BusinessController.create
+  )
+  .get(BusinessController.filter, BusinessController.fetchAll);
 businessRoutes.route('/api/v1/businesses/:businessId')
-  .put(businessController.isAuthorized, businessController.update)
-  .delete(businessController.isAuthorized, businessController.delete)
-  .get(businessController.fetch);
+  .put(BusinessController.isAuthorized, BusinessController.update)
+  .delete(BusinessController.isAuthorized, BusinessController.delete)
+  .get(BusinessController.fetch);
 businessRoutes.route('/api/v1/businesses/:businessId/reviews')
-  .post(businessController.reviewBusiness);
+  .post(BusinessController.reviewBusiness);
 businessRoutes.route('/api/v1/businesses/:businessId/reviews')
-  .get(businessController.fetchBusinessReviews);
+  .get(BusinessController.fetchBusinessReviews);
 
 export default businessRoutes;

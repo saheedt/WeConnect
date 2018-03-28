@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import logger from 'morgan';
 import { log } from 'util';
 import path from 'path';
+import cors from 'cors';
 
 // import all api routes
 import routes from './routes';
@@ -16,6 +17,20 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8011;
+app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, authorization'
+  );
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.set('port', port);
 app.use(logger('dev'));

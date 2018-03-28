@@ -1,7 +1,7 @@
 import { hash, compare } from 'bcrypt';
 import sendGrid from '@sendgrid/mail';
 
-import baseController from './baseController';
+import BaseHelper from '../helper/BaseHelper';
 import { User } from '../models';
 
 const saltRounds = 10;
@@ -9,53 +9,58 @@ const saltRounds = 10;
 /**
  * @description Contains all user related functionalities
  * @export
- * @class userController
+ * @class UserController
  */
-export default class userController extends baseController {
+export default class UserController extends BaseHelper {
   /**
     * @description Allows user signup
     * @static
     * @param {object} req client request
     * @param {object} res erver response
     * @returns {Object} server response object
-    * @memberof userController
+    * @memberof UserController
     */
   static create(req, res) {
-    if (userController.isEmptyOrNull(req.body.email)) {
+    if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
       });
     }
-    return User.findOne({
-      where: {
-        email: req.body.email
-      }
-    }).then((user) => {
-      if (!userController.emailExists(req, res, user) &&
-      userController.isPasswordValid(req, res, req.body.password)) {
-        hash(req.body.password, saltRounds, (err, encrypted) => {
-          return User.create({
-            email: req.body.email,
-            password: encrypted
-          }).then((createduser) => {
-            delete createduser.dataValues.password;
-            delete createduser.dataValues.updatedAt;
-            delete createduser.dataValues.createdAt;
-            const token = userController.sign({
-              id: createduser.dataValues.id,
-              email: createduser.dataValues.email
-            });
-            res.status(201).send({
-              message: 'user registered successfully',
-              user: createduser,
-              token
-            });
-          }).catch(createdUserError =>
-            userController.formatError(req, res, createdUserError.toString()));
-        });
-      }
-    }).catch(findUserError =>
-      userController.formatError(req, res, findUserError.toString()));
+    if (UserController.isPasswordValid(req, res, req.body.password)) {
+      return User.findOne({
+        where: {
+          email: req.body.email
+        }
+      }).then((user) => {
+        if (!UserController.emailExists(req, res, user)) {
+          hash(req.body.password, saltRounds, (err, encrypted) => {
+            return User.create({
+              email: req.body.email,
+              password: encrypted
+            }).then((createduser) => {
+              delete createduser.dataValues.password;
+              delete createduser.dataValues.updatedAt;
+              delete createduser.dataValues.createdAt;
+              const token = UserController.sign({
+                id: createduser.dataValues.id,
+                email: createduser.dataValues.email
+              });
+              res.status(201).send({
+                message: 'user registered successfully',
+                user: createduser,
+                token
+              });
+            }).catch(createdUserError =>
+              UserController.formatError(
+                req,
+                res,
+                createdUserError.toString()
+              ));
+          });
+        }
+      }).catch(findUserError =>
+        UserController.formatError(req, res, findUserError.toString()));
+    }
   }
   /**
    * @description Allows registered users sign in
@@ -63,11 +68,11 @@ export default class userController extends baseController {
    * @param {object} req client request
    * @param {object} res server Response
    * @returns {object} server response object
-   * @memberof userController
+   * @memberof UserController
    */
   static login(req, res) {
     // check if email is sent with the request
-    if (userController.isEmptyOrNull(req.body.email)) {
+    if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
       });
@@ -80,7 +85,7 @@ export default class userController extends baseController {
         excludes: ['createdAt', 'updatedAt']
       }
     }).then((user) => {
-      if (userController.isUser(req, res, user)) {
+      if (UserController.isUser(req, res, user)) {
         compare(req.body.password, user.dataValues.password, (err, resp) => {
           // handle incorrect password
           if (!resp || err) {
@@ -89,7 +94,7 @@ export default class userController extends baseController {
             });
           }
           // make a JWT (JSON web token) with id and email
-          const token = userController.sign({
+          const token = UserController.sign({
             id: user.dataValues.id,
             email: user.dataValues.email
           });
@@ -109,7 +114,7 @@ export default class userController extends baseController {
         });
       }
     }).catch(loginError =>
-      userController.formatError(req, res, loginError.toString()));
+      UserController.formatError(req, res, loginError.toString()));
   }
   /**
    * @description Allows registered reset password
@@ -117,10 +122,10 @@ export default class userController extends baseController {
    * @param {object} req client request
    * @param {object} res server Response
    * @returns {object} server response object
-   * @memberof userController
+   * @memberof UserController
    */
   static reset(req, res) {
-    if (userController.isEmptyOrNull(req.body.email)) {
+    if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'invalid identity supplied'
       });
@@ -135,8 +140,8 @@ export default class userController extends baseController {
           message: 'no user found with this identity'
         });
       }
-      const emailEncode = userController.sign({ email: user.dataValues.email });
-      const idEncode = userController.sign({ id: user.dataValues.id });
+      const emailEncode = UserController.sign({ email: user.dataValues.email });
+      const idEncode = UserController.sign({ id: user.dataValues.id });
       const location = req.get('host');
       const resetLink = `${location}/reset/${emailEncode}_nioj_${idEncode}`;
       sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
@@ -160,6 +165,6 @@ export default class userController extends baseController {
         }
       });
     }).catch(resetError =>
-      userController.formatError(req, res, resetError.toString()));
+      UserController.formatError(req, res, resetError.toString()));
   }
 }

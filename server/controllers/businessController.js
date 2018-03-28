@@ -1,19 +1,19 @@
-import baseController from './baseController';
+import BaseHelper from '../helper/BaseHelper';
 import { Business, Review } from '../models';
 
 /**
  * @description Contains all business related functionalities
  * @export
- * @class businessController
+ * @class BusinessController
  */
-export default class businessController extends baseController {
+export default class BusinessController extends BaseHelper {
   /**
     * @description Allows user register business
     * @static
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static create(req, res) {
     return Business.create({
@@ -35,7 +35,7 @@ export default class businessController extends baseController {
         business: regBusiness
       });
     }).catch(businessError =>
-      businessController.formatError(req, res, businessError.toString()));
+      BusinessController.formatError(req, res, businessError.toString()));
   }
   /**
     * @description Allow user update business details
@@ -43,7 +43,7 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static update(req, res) {
     return Business.findOne({
@@ -79,13 +79,13 @@ export default class businessController extends baseController {
               business: business.dataValues
             });
           }).catch(updateError =>
-            businessController.formatError(req, res, updateError.toString()));
+            BusinessController.formatError(req, res, updateError.toString()));
       }
       return res.status(401).send({
         message: 'unathorized, business belongs to another user'
       });
     }).catch(updateFindError =>
-      businessController.formatError(re, res, updateFindError.toString()));
+      BusinessController.formatError(re, res, updateFindError.toString()));
   }
   /**
     * @description Allow user delete business details
@@ -93,7 +93,7 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static delete(req, res) {
     return Business
@@ -112,14 +112,14 @@ export default class businessController extends baseController {
               message: 'business sucessfully deleted'
             }))
             .catch(deleteError =>
-              businessController.formatError(req, res, deleteError.toString()));
+              BusinessController.formatError(req, res, deleteError.toString()));
         }
         res.status(401).send({
           message: 'unauthorized, business belongs to another user'
         });
       })
       .catch(deleteFindError =>
-        businessController.formatError(req, res, deleteFindError.toString()));
+        BusinessController.formatError(req, res, deleteFindError.toString()));
   }
   /**
     * @description Allow user get a business details
@@ -127,7 +127,7 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static fetch(req, res) {
     return Business
@@ -143,7 +143,7 @@ export default class businessController extends baseController {
           business: business.dataValues
         });
       }).catch(bizFetchError =>
-        businessController.formatError(req, res, bizFetchError.toString()));
+        BusinessController.formatError(req, res, bizFetchError.toString()));
   }
   /**
     * @description Allow user filter all businesses
@@ -152,17 +152,17 @@ export default class businessController extends baseController {
     * @param {object} res server response
     * @param {Function} next next controller
     * @returns {Object} server response object or next controller
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static filter(req, res, next) {
     if (JSON.stringify(req.query) !== '{}') {
       const { location, category } = req.query;
       if (location) {
-        return businessController
+        return BusinessController
           .queryBy(req, res, Business, { location });
       }
       if (category) {
-        return businessController
+        return BusinessController
           .queryBy(req, res, Business, { category });
       }
       return res.status(400).send({
@@ -177,7 +177,7 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static fetchAll(req, res) {
     return Business.findAll()
@@ -196,7 +196,7 @@ export default class businessController extends baseController {
           business: businesses
         });
       }).catch(fetchAllError =>
-        businessController.formatError(req, res, fetchAllError.toString()));
+        BusinessController.formatError(req, res, fetchAllError.toString()));
   }
   /**
     * @description Allow user review a business
@@ -204,15 +204,15 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static reviewBusiness(req, res) {
-    if (businessController.isEmptyOrNull(req.body.review)) {
+    if (BusinessController.isEmptyOrNull(req.body.review)) {
       return res.status(401).send({
         message: 'review cannot be empty'
       });
     }
-    if (businessController.isEmptyOrNull(req.params.businessId)) {
+    if (BusinessController.isEmptyOrNull(req.params.businessId)) {
       return res.status(401).send({
         message: 'business identity cannot be empty'
       });
@@ -241,9 +241,9 @@ export default class businessController extends baseController {
             review: review.dataValues
           });
         }).catch(reviewError =>
-          businessController.formatError(req, res, reviewError.toString()));
+          BusinessController.formatError(req, res, reviewError.toString()));
       }).catch(bizFetchError =>
-        businessController.formatError(req, res, bizFetchError.toString()));
+        BusinessController.formatError(req, res, bizFetchError.toString()));
   }
   /**
     * @description Allow user retrieve reviews of a business
@@ -251,7 +251,7 @@ export default class businessController extends baseController {
     * @param {object} req client request
     * @param {object} res server response
     * @returns {Object} server response object
-    * @memberof businessController
+    * @memberof BusinessController
     */
   static fetchBusinessReviews(req, res) {
     return Business
@@ -285,8 +285,8 @@ export default class businessController extends baseController {
             reviews: fetchedReviews
           });
         }).catch(revFetchError =>
-          businessController.formatError(req, res, revFetchError.toString()));
+          BusinessController.formatError(req, res, revFetchError.toString()));
       }).catch(bizFetchError =>
-        businessController.formatError(req, res, bizFetchError.toString()));
+        BusinessController.formatError(req, res, bizFetchError.toString()));
   }
 }

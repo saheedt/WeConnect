@@ -1,12 +1,13 @@
 import jwt from 'jsonwebtoken';
 
 import { User } from '../models';
+
 /**
  * @description Contains all helper Functions
  * @export
- * @class baseController
+ * @class BaseHelper
 */
-export default class baseController {
+export default class BaseHelper {
   /**
      * @description Checks if User exists
      * @static
@@ -14,7 +15,7 @@ export default class baseController {
      * @param {Object} res Server response
      * @param {Object} user User details
      * @returns {boolean} true or false
-     * @memberof baseController
+     * @memberof BaseHelper
      */
   static isUser(req, res, user) {
     if (!user) {
@@ -34,7 +35,7 @@ export default class baseController {
      * @param {Object} res Server response
      * @param {Object} user User details
      * @param {Function} proceed calls next controller
-     * @memberof baseController
+     * @memberof BaseHelper
      */
   static userExistsInDb(req, res, user, proceed) {
     const { id, email } = user;
@@ -54,7 +55,7 @@ export default class baseController {
       return res.status(404).send({
         message: 'user does not exist'
       });
-    }).catch(error => baseController.formatError(req, res, error.toString()));
+    }).catch(error => BaseHelper.formatError(req, res, error.toString()));
   }
   /**
    * @description jwt sign function
@@ -76,20 +77,21 @@ export default class baseController {
    * @returns {Object} response object
    */
   static isAuthorized(req, res, next) {
-    if (!req.headers.authorization) {
+    const headerAuth = req.headers.authorization || req.headers.Authorization;
+    if (!headerAuth) {
       return res.status(403).send({
         message: 'unauthorized user'
       });
     }
     jwt.verify(
-      req.headers.authorization,
+      headerAuth,
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
           return res.status(403).send({ message: 'invalid token' });
         }
         if (decoded) {
-          baseController.userExistsInDb(req, res, decoded, next);
+          BaseHelper.userExistsInDb(req, res, decoded, next);
         }
       }
     );
@@ -101,7 +103,7 @@ export default class baseController {
    * @param {object} res Server response
    * @param {object} user User details
    * @returns {boolean} true or false
-   * @memberof baseController
+   * @memberof BaseHelper
    */
   static emailExists(req, res, user) {
     if (user) {
@@ -117,10 +119,58 @@ export default class baseController {
    * @static
    * @param {string} str string to check
    * @returns {boolean} true or false
-   * @memberof baseController
+   * @memberof BaseHelper
    */
   static isEmptyOrNull(str) {
     return (!str || /^\s*$/.test(str));
+  }
+  /**
+   * @description validate request
+   * @static
+   * @param {Object} req req
+   * @param {Object} res res
+   * @returns {Obeject} response object
+   * @param {Function} next calls appropriate controller
+   * @memberof BaseHelper
+   */
+  static validateBusinessCreate(req, res, next) {
+    const {
+      name,
+      phonenumber,
+      address,
+      location,
+      employees,
+      category
+    } = req.body;
+    if (!name || BaseHelper.isEmptyOrNull(name)) {
+      return res.status(400).send({ message: 'business name is required' });
+    }
+    if (!phonenumber || BaseHelper.isEmptyOrNull(phonenumber)) {
+      return res.status(400).send({
+        message: 'business phone number is required'
+      });
+    }
+    if (!address || BaseHelper.isEmptyOrNull(address)) {
+      return res.status(400).send({
+        message: 'business address name is required'
+      });
+    }
+    if (!location || BaseHelper.isEmptyOrNull(location)) {
+      return res.status(400).send({
+        message: 'business location is required'
+      });
+    }
+    if (!employees || BaseHelper.isEmptyOrNull(employees)) {
+      return res.status(400).send({
+        message: 'employee number is required'
+      });
+    }
+    if (!category || BaseHelper.isEmptyOrNull(category)) {
+      return res.status(400).send({
+        message: 'category is required'
+      });
+    }
+    next();
   }
   /**
    * @description Checks if password is valid
@@ -129,10 +179,10 @@ export default class baseController {
    * @param {object} res Server response
    * @param {object} password password
    * @returns {boolean} true or false
-   * @memberof baseController
+   * @memberof BaseHelper
    */
   static isPasswordValid(req, res, password) {
-    if (baseController.isEmptyOrNull(password)) {
+    if (BaseHelper.isEmptyOrNull(password)) {
       res.status(400).send({
         message: 'password can not be empty or null'
       });
@@ -154,7 +204,7 @@ export default class baseController {
    * @param {Object} model sequelize model
    * @param {object} queryParams query parameters
    * @returns {Function} Promise
-   * @memberof baseController
+   * @memberof BaseHelper
    */
   static queryBy(req, res, model, queryParams) {
     return model.findAll({
@@ -175,7 +225,7 @@ export default class baseController {
           business: querried
         });
       }).catch(queryError =>
-        baseController.formatError(req, res, queryError.toString()));
+        BaseHelper.formatError(req, res, queryError.toString()));
   }
   /**
      * @description formats sequelize error
@@ -184,7 +234,7 @@ export default class baseController {
      * @param {Object} res Server response
      * @param {Function} errorMsg Sequelize error message
      * @return {Function} response object
-     * @memberof baseController
+     * @memberof BaseHelper
      */
   static formatError(req, res, errorMsg) {
     const error = errorMsg.split(':')[0];
