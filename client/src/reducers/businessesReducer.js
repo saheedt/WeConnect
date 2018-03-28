@@ -28,7 +28,7 @@ export default function businessesReducer(state = {}, action) {
     return {
       ...state,
       isFetching: false,
-      error: ation.error
+      error: action.error
     };
   case CLEAR_BUSINESSES_ERROR:
     return {

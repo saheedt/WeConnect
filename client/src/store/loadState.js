@@ -13,7 +13,7 @@ export const loadState = () => {
 export const saveState = (state) => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('dt_st', serializedState);
+    localStorage.setItem('wc_st', serializedState);
   } catch (err) {
     // TODO: save state error notification
   }

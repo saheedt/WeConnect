@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-// import { Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+
 import Header from '../components/Header';
+import Listings from '../components/Listings';
 
 class Businesses extends Component {
   constructor(props) {
@@ -11,7 +13,7 @@ class Businesses extends Component {
     return (
       <div className="flex fill flex-column">
         <Header />
-        <h1>BUSINESSES</h1>
+        <Listings />
       </div>
     );
   }
