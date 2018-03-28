@@ -443,6 +443,156 @@ describe('businesses endpoint', () => {
           done();
         });
     });
+    it(
+      'should not successfully add a business if name is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: '',
+            address: '123, gaga',
+            location: 'ogun',
+            phonenumber: 122424552,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'business name is required'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if phonenumber is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'xyz',
+            address: '123, gaga',
+            location: 'ogun',
+            phonenumber: '',
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'business phone number is required'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if address is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'xyz',
+            address: '',
+            location: 'ogun',
+            phonenumber: 1357579759,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'business address is required'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if location is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'xyz',
+            address: 'zdckhabkdkbca',
+            location: null,
+            phonenumber: 1357579759,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'business location is required'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if employee is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'xyz',
+            address: 'dkahdhka',
+            location: 'ahjsh nxn',
+            phonenumber: 1357579759,
+            employees: null,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'employee number is required'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if category is not provided',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'xyz',
+            address: 'skgjhsjd',
+            location: 'ahjsh nxn',
+            phonenumber: 1357579759,
+            employees: 66,
+            category: ''
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'category is required'
+            );
+            done();
+          });
+      }
+    );
   });
   /** */
   /** */

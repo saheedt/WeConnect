@@ -152,7 +152,7 @@ export default class BaseHelper {
     }
     if (!address || BaseHelper.isEmptyOrNull(address)) {
       return res.status(400).send({
-        message: 'business address name is required'
+        message: 'business address is required'
       });
     }
     if (!location || BaseHelper.isEmptyOrNull(location)) {
