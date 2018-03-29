@@ -6,18 +6,9 @@ const webpack = require('webpack');
 
 DotEnv.config({ path: `${__dirname}/.env` });
 
-// const extractPlugin = new ExtractTextPlugin({
-//   filename: 'styles.css'
-// });
-// use: extractPlugin.extract({
-//   fallback: 'style-loader',
-//   use: ['css-loader', 'sass-loader']
-// })
-console.log(process.env.BASE_URL);
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
     BASE_URL: JSON.stringify(process.env.BASE_URL),
-    // PORT: process.env.PORT
   }
 });
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
