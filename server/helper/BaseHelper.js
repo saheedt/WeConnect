@@ -107,7 +107,7 @@ export default class BaseHelper {
    */
   static emailExists(req, res, user) {
     if (user) {
-      res.status(400).send({
+      res.status(409).send({
         message: 'email already exists',
       });
       return true;
