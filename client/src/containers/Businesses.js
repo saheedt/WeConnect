@@ -12,6 +12,7 @@ class Businesses extends Component {
   }
   render() {
     return (
+
       <div className="flex flex-column">
         <Header path={this.props.match.url}/>
         <Switch>
