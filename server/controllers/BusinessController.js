@@ -193,7 +193,7 @@ export default class BusinessController extends BaseHelper {
         }
         return res.status(200).send({
           message: 'businesses successfully fetched',
-          business: businesses
+          businesses
         });
       }).catch(fetchAllError =>
         BusinessController.formatError(req, res, fetchAllError.toString()));
