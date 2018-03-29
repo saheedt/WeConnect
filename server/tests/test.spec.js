@@ -209,7 +209,7 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(resp.status, 409);
             assert.deepEqual(
               resp.body.message,
               'email already exists'
@@ -758,11 +758,11 @@ describe('businesses endpoint', () => {
               'businesses successfully fetched'
             );
             assert.deepEqual(
-              resp.body.business[0].name,
+              resp.body.businesses[0].name,
               'specimen b',
             );
             assert.deepEqual(
-              resp.body.business[0].id,
+              resp.body.businesses[0].id,
               businessId
             );
             done();
