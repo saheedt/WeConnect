@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      display: 'none'
+    };
     this.listingsSwitchInput = null;
     this.toggleHandler = (e) => {
       const listingsLocationInput =
@@ -30,6 +32,13 @@ class Header extends Component {
       }
     }
   }
+  componentWillMount() {
+    if (window.location.pathname !== '/businesses') {
+      this.setState({ display: 'block' });
+      return;
+    }
+    this.setState({ display: 'none' });
+  }
   componentDidMount() {
     this.listingsSwitchInput = document.getElementById('listings-switch-input');
     if (this.listingsSwitchInput) {
@@ -42,15 +51,26 @@ class Header extends Component {
         .removeEventListener('change', this.toggleHandler);
     }
   }
+  componentWillReceiveProps() {
+    if (window.location.pathname !== '/businesses') {
+      this.setState({ display: 'block' });
+      return;
+    }
+    this.setState({ display: 'none' });
+  }
   render() {
+    const { display } = this.state;
     return (
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first" style={{}}>
-          {/* <div className="wc-header-back-btn-holder flex">
-            <a href="listings.html">
+          <div style={{ display }} className="wc-header-back-btn-holder flex">
+            <a onClick={(e) => {
+              e.preventDefault();
+              window.history.back();
+            }} href="#">
               <i className="material-icons">arrow_back</i>
             </a>
-          </div> */}
+          </div>
         </div>
         <div id="listenings-header-holder-right">
           <div id="listings-search-holder-gen" className="flex">

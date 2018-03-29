@@ -215,3 +215,102 @@ body{
 .flex{
   display: flex
 }
+.bold {
+  font-weight: bold;
+}
+.vertical-after-header{
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1rem;
+}
+#business-profile{
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
+  flex-direction: column
+}
+#business-profile hr {
+  width: 100%
+}
+#business-profile-details{
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.profile-grouping{
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 5rem;
+  width: 100%;
+  border-top: 0.5px solid grey;
+}
+.profile-grouping .title{
+  height: 100%;
+  width: 30%;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid grey;
+}
+.profile-grouping .detail{
+  height: 100%;
+  width: 70%;
+  justify-content: center;
+  align-items: center;
+}
+.holder-60-shadow{
+  width: 60vw;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  max-width: 630px;
+  margin-bottom: 1rem;
+}
+.padding-20{
+  padding: 20px;
+}
+.profile-reviews-maker-holder{
+  background-color: #f7f7f7;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.holder-60{
+  width: 60vw;
+  max-width: 630px;
+  margin-bottom: 1rem;
+}
+.header-title{
+  width: 100%;
+  height: 5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.profile-review{
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  background-color: #FFF;
+  margin-bottom: 1rem;
+  width: 100%
+}
+.review-date-time{
+  height: 1rem;
+  width: 100%;
+}
+.reviewer{
+  width: 100%;
+}
+.reviewer ul li {
+  display: flex;
+  align-items: center
+}
+
+.reviewer .collection .collection-item.avatar{
+  min-height: unset !important;
+}
+.collection{
+  border: 0 !important;
+}

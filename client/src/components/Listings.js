@@ -14,9 +14,10 @@ class Listings extends Component {
   componentWillMount() {
     this.props.fetchBusinesses();
   }
-  componentWillReceiveProps() {
-    if (Array.isArray(this.props.businesses)) {
-      this.genListing(this.props.businesses);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.businesses &&
+        nextProps.businesses !== this.props.businesses) {
+      this.genListing(nextProps.businesses);
     }
   }
   genListing(listings) {
@@ -30,7 +31,7 @@ class Listings extends Component {
             </div>
             <div className="listings-list-groupings-items-right">
               <h4>
-                <Link to="/businesses">
+                <Link to={`businesses/${listing.id}`}>
                   <span className="title">{listing.name}</span>
                 </Link>
               </h4>
