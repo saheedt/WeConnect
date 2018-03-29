@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 import Businesses from './Businesses';
 
@@ -13,6 +13,7 @@ class Main extends Component {
       <section id="entry">
         <Route path="/businesses" render={props =>
           (<Businesses {...props}/>)} />
+        <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
       </section>
     );
   }
