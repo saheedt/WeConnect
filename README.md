@@ -58,6 +58,9 @@ This project is divided into three parts:
   - To view the API docs with dummy data, please click this link [WeConnect API docs (dummy data)](https://weconnect-saheed.herokuapp.com)
   - To view the API docs with database data, please click this link [WeConnect API docs (database data)](https://weconnect-saheed-updated.herokuapp.com)
 
+* The client folder holds the React App, hosted on heroku.
+  - To view the app, please click this link [WeConnect React](https://weconnect-react-redux.herokuapp.com/)
+
 ### Prerequisites
 * To view the UI Template and API docs, please use a web browser, preferably, [Google Chrome](https://www.google.com/chrome).
 * To run the app, you need to have [NODE JS](https://nodejs.org/en/) installed
