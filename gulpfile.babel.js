@@ -10,8 +10,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// process.env.NODE_ENV = 'test';
-
 gulp.task('nodemon', () => {
   nodemon({
     script: 'build/server.js',
