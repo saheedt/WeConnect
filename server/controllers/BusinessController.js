@@ -16,10 +16,10 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static create(req, res) {
-    console.log('body: ', req.body);
-    console.log('raw: ', req.rawBody);
-    return;
-    const body = req.body || req.rawBody
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     return Business.create({
       name: req.body.name,
       address: req.body.address,
@@ -50,6 +50,10 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static update(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     return Business.findOne({
       where: {
         id: parseInt(req.params.businessId, 10)
@@ -100,6 +104,10 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static delete(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
@@ -211,6 +219,10 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static reviewBusiness(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     if (BusinessController.isEmptyOrNull(req.body.review)) {
       return res.status(401).send({
         message: 'review cannot be empty'

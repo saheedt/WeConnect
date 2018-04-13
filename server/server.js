@@ -40,8 +40,8 @@ app.use(logger('dev'));
 app.disable('x-powered-by');
 
 // parse api request body into JSON
-app.use(bodyParser.json(/*{ verify: BaseHelper.handleRaw }*/));
-app.use(bodyParser.urlencoded({ /*verify: BaseHelper.handleRaw,*/ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw({ verify: BaseHelper.handleRaw, type: '*/*' }));
 
 // expose a static directory
