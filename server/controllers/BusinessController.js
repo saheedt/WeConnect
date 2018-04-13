@@ -16,6 +16,10 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static create(req, res) {
+    console.log('body: ', req.body);
+    console.log('raw: ', req.rawBody);
+    return;
+    const body = req.body || req.rawBody
     return Business.create({
       name: req.body.name,
       address: req.body.address,

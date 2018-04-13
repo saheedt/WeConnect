@@ -21,6 +21,10 @@ export default class UserController extends BaseHelper {
     * @memberof UserController
     */
   static create(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'

@@ -29,6 +29,44 @@ export default class BaseHelper {
     return true;
   }
   /**
+   * @description handles raw requests
+   * @param {Object} req 
+   * @param {Object} res 
+   * @param {Buffer} buf 
+   * @param {String} encoding 
+   */
+  static handleRaw(req, res, buf, encoding) {
+    if (buf && buf.length) {
+      let bufToString = buf.toString(encoding || 'utf8');
+      let toJson, parsed;      
+      if (bufToString.includes('{') && bufToString.includes(':') &&
+          bufToString.includes(',') && bufToString.includes('}')) {
+          bufToString = {'data': bufToString};
+          toJson = JSON.stringify(bufToString);
+          parsed = JSON.parse(toJson);
+          req.rawBody = parsed.data;
+          req.isRaw = true;
+          return;
+      }
+     req.rawDataError = true; 
+    }
+  }
+  /**
+   * @description middleware to write parsed raw data on req.body
+   * @param {*} req request object
+   * @param {*} res response object
+   * @param {*} next next controller
+   */
+  static processBody(req, res, next) {
+    console.log('req.rawBody: ', req.rawBody)
+    console.log('req.isRaw', req.isRaw)
+    if (req.isRaw && req.rawBody) {
+      req.body = req.rawBody;
+      return next();
+    }
+    next();
+  }
+  /**
      * @description Checks if User exists
      * @static
      * @param {Object} req Client request
