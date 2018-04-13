@@ -170,12 +170,22 @@ export default class BusinessController extends BaseHelper {
     if (JSON.stringify(req.query) !== '{}') {
       const { location, category } = req.query;
       if (location) {
+        const locationQuery = {
+          location: {
+            $like: `%${location}%`
+          }
+        };
         return BusinessController
-          .queryBy(req, res, Business, { location });
+          .queryBy(req, res, Business, locationQuery);
       }
       if (category) {
+        const categoryQuery = {
+          category: {
+            $like: `%${category}%`
+          }
+        };
         return BusinessController
-          .queryBy(req, res, Business, { category });
+          .queryBy(req, res, Business, categoryQuery);
       }
       return res.status(400).send({
         message: 'invalid query'

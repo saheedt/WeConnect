@@ -58,10 +58,9 @@ export default class BaseHelper {
    * @param {*} next next controller
    */
   static processBody(req, res, next) {
-    console.log('req.rawBody: ', req.rawBody)
-    console.log('req.isRaw', req.isRaw)
     if (req.isRaw && req.rawBody) {
-      req.body = req.rawBody;
+      let parse = JSON.parse(req.rawBody);
+      req.body = parse;
       return next();
     }
     next();
