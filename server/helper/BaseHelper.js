@@ -52,7 +52,7 @@ export default class BaseHelper {
     }
   }
   /**
-   * @description middleware to write parsed raw data on req.body
+   * @description middleware to write parsed raw data to the request body
    * @param {*} req request object
    * @param {*} res response object
    * @param {*} next next controller
