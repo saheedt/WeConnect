@@ -29,6 +29,31 @@ export default class BaseHelper {
     return true;
   }
   /**
+   * @descriptioniness name validates bus
+   * @param {Object} req request object
+   * @param {Object} res response object
+   * @param {Object} model business model
+   * @return {Boolean} true or false
+   */
+  static isBusinessNameValid(req, res, model) {
+    if (!isNaN(parseInt(req.body.name))) {
+      res.status(400)
+        .send({message: 'invalid, business name can\'t be only numbers'});
+        return false;
+    }
+    return model.findOne({
+      where: {
+        name: req.body.name
+      }
+    }).then((business) => {
+      if (business) {
+        res.status(409).send({message: 'business name already exists'});
+        return false;
+      }
+      return true;
+    }).catch((error) => BaseHelper.formatError(req, res, error.toString()));
+  }
+  /**
    * @description handles raw requests
    * @param {Object} req 
    * @param {Object} res 

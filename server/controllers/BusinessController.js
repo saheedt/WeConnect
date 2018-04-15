@@ -20,26 +20,28 @@ export default class BusinessController extends BaseHelper {
       return res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
     }
-    return Business.create({
-      name: req.body.name,
-      address: req.body.address,
-      location: req.body.location,
-      phonenumber: parseInt(req.body.phonenumber, 10),
-      employees: parseInt(req.body.employees, 10),
-      category: req.body.category,
-      userId: parseInt(req.authenticatedUser.id, 10)
-    }).then((regBusiness) => {
-      if (!regBusiness) {
-        return res.status(400).send({
-          message: 'registeration error, verify all fields and try again'
+    if (BusinessController.isBusinessNameValid(req, res, Business)) {
+      return Business.create({
+        name: req.body.name,
+        address: req.body.address,
+        location: req.body.location,
+        phonenumber: parseInt(req.body.phonenumber, 10),
+        employees: parseInt(req.body.employees, 10),
+        category: req.body.category,
+        userId: parseInt(req.authenticatedUser.id, 10)
+      }).then((regBusiness) => {
+        if (!regBusiness) {
+          return res.status(400).send({
+            message: 'registeration error, verify all fields and try again'
+          });
+        }
+        res.status(201).send({
+          message: 'business successfully added',
+          business: regBusiness
         });
-      }
-      res.status(201).send({
-        message: 'business successfully added',
-        business: regBusiness
-      });
-    }).catch(businessError =>
-      BusinessController.formatError(req, res, businessError.toString()));
+      }).catch(businessError =>
+        BusinessController.formatError(req, res, businessError.toString()));
+    }
   }
   /**
     * @description Allow user update business details
