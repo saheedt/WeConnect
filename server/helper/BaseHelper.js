@@ -299,6 +299,7 @@ export default class BaseHelper {
      * @memberof BaseHelper
      */
   static formatError(req, res, errorMsg) {
+    console.log(errorMsg);
     const error = errorMsg.split(':')[0];
 
     switch (error) {

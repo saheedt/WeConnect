@@ -183,7 +183,7 @@ export default class BusinessController extends BaseHelper {
       if (category) {
         const categoryQuery = {
           category: {
-            $like: `%${category}%`
+              $like: `%${category}%`
           }
         };
         return BusinessController
