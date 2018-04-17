@@ -17,8 +17,9 @@ export default class BusinessController extends BaseHelper {
     */
   static create(req, res) {
     if (req.rawDataError) {
-      return res.status(400)
+      res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
     }
     if (BusinessController.isBusinessNameValid(req, res, Business)) {
       return Business.create({
@@ -62,9 +63,10 @@ export default class BusinessController extends BaseHelper {
       }
     }).then((business) => {
       if (!business) {
-        return res.status(404).send({
+        res.status(404).send({
           message: 'no business to update, register business first'
         });
+        return;
       }
       if (business.dataValues.userId
         === parseInt(req.authenticatedUser.id, 10)) {
@@ -80,9 +82,10 @@ export default class BusinessController extends BaseHelper {
             category: req.body.category || business.dataValues.category
           }).then((updatedBusiness) => {
             if (!updatedBusiness) {
-              return res.status(417).send({
+              res.status(417).send({
                 message: 'update failed, try again'
               });
+              return;
             }
             res.status(200).send({
               message: 'business successfully updated',
@@ -91,9 +94,10 @@ export default class BusinessController extends BaseHelper {
           }).catch(updateError =>
             BusinessController.formatError(req, res, updateError.toString()));
       }
-      return res.status(401).send({
+      res.status(401).send({
         message: 'unathorized, business belongs to another user'
       });
+      return
     }).catch(updateFindError =>
       BusinessController.formatError(re, res, updateFindError.toString()));
   }
@@ -107,16 +111,18 @@ export default class BusinessController extends BaseHelper {
     */
   static delete(req, res) {
     if (req.rawDataError) {
-      return res.status(400)
+      res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
+      return
     }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         if (business.dataValues.userId ===
           parseInt(req.authenticatedUser.id, 10)) {
@@ -148,9 +154,10 @@ export default class BusinessController extends BaseHelper {
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+        return;
         }
         return res.status(200).send({
           message: 'business sucessfully fetched',
@@ -211,9 +218,10 @@ export default class BusinessController extends BaseHelper {
           businesses = business.map(biz => biz.dataValues);
         }
         if (businesses.length <= 0) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'no businesses found'
           });
+          return;
         }
         return res.status(200).send({
           message: 'businesses successfully fetched',
@@ -232,26 +240,30 @@ export default class BusinessController extends BaseHelper {
     */
   static reviewBusiness(req, res) {
     if (req.rawDataError) {
-      return res.status(400)
+      res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
     }
     if (BusinessController.isEmptyOrNull(req.body.review)) {
-      return res.status(401).send({
+      res.status(401).send({
         message: 'review cannot be empty'
       });
+      return;
     }
     if (BusinessController.isEmptyOrNull(req.params.businessId)) {
-      return res.status(401).send({
+      res.status(401).send({
         message: 'business identity cannot be empty'
       });
+      return;
     }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         return Review.create({
           name: req.body.name || 'anonymous',
@@ -259,9 +271,10 @@ export default class BusinessController extends BaseHelper {
           businessId: parseInt(req.params.businessId, 10)
         }).then((review) => {
           if (!review) {
-            return res.status(400).send({
+            res.status(400).send({
               message: 'error reviewing business, verify fields and try again'
             });
+            return;
           }
           delete review.dataValues.businessId;
           return res.status(201).send({
@@ -286,9 +299,10 @@ export default class BusinessController extends BaseHelper {
       .findById(req.params.businessId)
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         return Review.findAll({
           where: {
@@ -304,9 +318,10 @@ export default class BusinessController extends BaseHelper {
             fetchedReviews = reviews.map(revs => revs.dataValues);
           }
           if (fetchedReviews.length <= 0) {
-            return res.status(404).send({
+            res.status(404).send({
               message: 'no reviews found',
             });
+            return;
           }
           return res.status(200).send({
             message: 'reviews successfully retrieved',

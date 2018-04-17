@@ -194,6 +194,7 @@ describe('user endpoints', () => {
               resp.body.user.email,
               process.env.TESTEMAIL1
             );
+            console.log('testToken :', testToken1);
             done();
           });
       }
@@ -443,6 +444,50 @@ describe('businesses endpoint', () => {
           done();
         });
     });
+    it('should not successfully add a business if business name already exists', (done) => {
+      request(server)
+        .post('/api/v1/businesses')
+        .set('authorization', testToken1)
+        .send({
+          name: 'test business',
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
+          employees: 8,
+          category: 'ride sharing services'
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 409);
+          assert.deepEqual(
+            resp.body.message,
+            'business name already exists'
+          );
+          done();
+        });
+    });
+    it('should not successfully add a business if business name is numbers only', (done) => {
+      request(server)
+        .post('/api/v1/businesses')
+        .set('authorization', testToken1)
+        .send({
+          name: '12347578855',
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
+          employees: 8,
+          category: 'ride sharing services'
+        })
+        .expect('Content-Type', /json/)
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 400);
+          assert.deepEqual(
+            resp.body.message,
+            'invalid, business name can\'t be only numbers'
+          );
+          done();
+        });
+    });
     it(
       'should not successfully add a business if name is not provided',
       (done) => {
@@ -637,6 +682,7 @@ describe('businesses endpoint', () => {
         .send({
           name: 'specimen b',
           employees: 16
+
         })
         .end((err, resp) => {
           assert.deepEqual(resp.status, 200);

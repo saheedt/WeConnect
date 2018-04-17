@@ -37,11 +37,10 @@ export default class BaseHelper {
    */
   static isBusinessNameValid(req, res, model) {
     if (!isNaN(parseInt(req.body.name))) {
-      res.status(400)
+      return res.status(400)
         .send({message: 'invalid, business name can\'t be only numbers'});
-        return false;
     }
-    return model.findOne({
+    model.findOne({
       where: {
         name: req.body.name
       }
@@ -111,12 +110,14 @@ export default class BaseHelper {
         if (foundUser.dataValues.id === id &&
           foundUser.dataValues.email === email) {
           req.authenticatedUser = user;
-          return proceed();
+          proceed();
+          return;
         }
       }
-      return res.status(404).send({
+      res.status(404).send({
         message: 'user does not exist'
       });
+      return;
     }).catch(error => BaseHelper.formatError(req, res, error.toString()));
   }
   /**
@@ -125,11 +126,12 @@ export default class BaseHelper {
    * @returns {object} encoded token
    */
   static sign(data) {
-    return jwt.sign(
+    jwt.sign(
       data,
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
+    return;
   }
   /**
    * @description Middleware to check authorization status
@@ -141,16 +143,18 @@ export default class BaseHelper {
   static isAuthorized(req, res, next) {
     const headerAuth = req.headers.authorization || req.headers.Authorization;
     if (!headerAuth) {
-      return res.status(403).send({
+      res.status(403).send({
         message: 'unauthorized user'
       });
+      return;
     }
     jwt.verify(
       headerAuth,
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
-          return res.status(403).send({ message: 'invalid token' });
+          res.status(403).send({ message: 'invalid token' });
+          return;
         }
         if (decoded) {
           BaseHelper.userExistsInDb(req, res, decoded, next);
@@ -205,32 +209,38 @@ export default class BaseHelper {
       category
     } = req.body;
     if (!name || BaseHelper.isEmptyOrNull(name)) {
-      return res.status(400).send({ message: 'business name is required' });
+      res.status(400).send({ message: 'business name is required' });
+      return;
     }
     if (!phonenumber || BaseHelper.isEmptyOrNull(phonenumber)) {
-      return res.status(400).send({
+      res.status(400).send({
         message: 'business phone number is required'
       });
+      return;
     }
     if (!address || BaseHelper.isEmptyOrNull(address)) {
-      return res.status(400).send({
+      res.status(400).send({
         message: 'business address is required'
       });
+      return;
     }
     if (!location || BaseHelper.isEmptyOrNull(location)) {
-      return res.status(400).send({
+      res.status(400).send({
         message: 'business location is required'
       });
+      return;
     }
     if (!employees || BaseHelper.isEmptyOrNull(employees)) {
-      return res.status(400).send({
+      res.status(400).send({
         message: 'employee number is required'
       });
+      return;
     }
     if (!category || BaseHelper.isEmptyOrNull(category)) {
-      return res.status(400).send({
+      res.status(400).send({
         message: 'category is required'
       });
+      return;
     }
     next();
   }
@@ -269,7 +279,7 @@ export default class BaseHelper {
    * @memberof BaseHelper
    */
   static queryBy(req, res, model, queryParams) {
-    return model.findAll({
+    model.findAll({
       where: queryParams
     })
       .then((query) => {
@@ -278,14 +288,16 @@ export default class BaseHelper {
           querried = query.map(quarryData => quarryData.dataValues);
         }
         if (querried.length <= 0) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'no businesses found'
           });
+          return;
         }
-        return res.status(200).send({
+        res.status(200).send({
           message: 'business successfully filtered',
           business: querried
         });
+        return;
       }).catch(queryError =>
         BaseHelper.formatError(req, res, queryError.toString()));
   }
