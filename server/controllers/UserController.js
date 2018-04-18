@@ -21,6 +21,10 @@ export default class UserController extends BaseHelper {
     * @memberof UserController
     */
   static create(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'email cannot be empty or null'
@@ -71,6 +75,10 @@ export default class UserController extends BaseHelper {
    * @memberof UserController
    */
   static login(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     // check if email is sent with the request
     if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
@@ -125,6 +133,10 @@ export default class UserController extends BaseHelper {
    * @memberof UserController
    */
   static reset(req, res) {
+    if (req.rawDataError) {
+      return res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+    }
     if (UserController.isEmptyOrNull(req.body.email)) {
       return res.status(400).send({
         message: 'invalid identity supplied'

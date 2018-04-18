@@ -16,26 +16,35 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static create(req, res) {
-    return Business.create({
-      name: req.body.name,
-      address: req.body.address,
-      location: req.body.location,
-      phonenumber: parseInt(req.body.phonenumber, 10),
-      employees: parseInt(req.body.employees, 10),
-      category: req.body.category,
-      userId: parseInt(req.authenticatedUser.id, 10)
-    }).then((regBusiness) => {
-      if (!regBusiness) {
-        return res.status(400).send({
-          message: 'registeration error, verify all fields and try again'
+    if (req.rawDataError === true) {
+      res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
+    }
+    // if (BusinessController.isBusinessNameValid(req, res, Business) === true) {
+      return Business.create({
+        name: req.body.name,
+        address: req.body.address,
+        location: req.body.location,
+        phonenumber: parseInt(req.body.phonenumber, 10),
+        employees: parseInt(req.body.employees, 10),
+        category: req.body.category,
+        userId: parseInt(req.authenticatedUser.id, 10)
+      }).then((regBusiness) => {
+        if (!regBusiness) {
+          res.status(400).send({
+            message: 'registeration error, verify all fields and try again'
+          });
+          return;
+        }
+        res.status(201).send({
+          message: 'business successfully added',
+          business: regBusiness
         });
-      }
-      res.status(201).send({
-        message: 'business successfully added',
-        business: regBusiness
-      });
-    }).catch(businessError =>
-      BusinessController.formatError(req, res, businessError.toString()));
+        return;
+      }).catch(businessError =>
+        BusinessController.formatError(req, res, businessError.toString()));
+    // }
   }
   /**
     * @description Allow user update business details
@@ -46,15 +55,21 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static update(req, res) {
+    if (req.rawDataError) {
+      res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
+    }
     return Business.findOne({
       where: {
         id: parseInt(req.params.businessId, 10)
       }
     }).then((business) => {
       if (!business) {
-        return res.status(404).send({
+        res.status(404).send({
           message: 'no business to update, register business first'
         });
+        return;
       }
       if (business.dataValues.userId
         === parseInt(req.authenticatedUser.id, 10)) {
@@ -70,22 +85,25 @@ export default class BusinessController extends BaseHelper {
             category: req.body.category || business.dataValues.category
           }).then((updatedBusiness) => {
             if (!updatedBusiness) {
-              return res.status(417).send({
+              res.status(417).send({
                 message: 'update failed, try again'
               });
+              return;
             }
             res.status(200).send({
               message: 'business successfully updated',
               business: business.dataValues
             });
+            return;
           }).catch(updateError =>
             BusinessController.formatError(req, res, updateError.toString()));
       }
-      return res.status(401).send({
+      res.status(401).send({
         message: 'unathorized, business belongs to another user'
       });
+      return
     }).catch(updateFindError =>
-      BusinessController.formatError(re, res, updateFindError.toString()));
+      BusinessController.formatError(req, res, updateFindError.toString()));
   }
   /**
     * @description Allow user delete business details
@@ -96,13 +114,19 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static delete(req, res) {
+    if (req.rawDataError) {
+      res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+      return
+    }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         if (business.dataValues.userId ===
           parseInt(req.authenticatedUser.id, 10)) {
@@ -117,6 +141,7 @@ export default class BusinessController extends BaseHelper {
         res.status(401).send({
           message: 'unauthorized, business belongs to another user'
         });
+        return;
       })
       .catch(deleteFindError =>
         BusinessController.formatError(req, res, deleteFindError.toString()));
@@ -134,14 +159,16 @@ export default class BusinessController extends BaseHelper {
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
-        return res.status(200).send({
+        res.status(200).send({
           message: 'business sucessfully fetched',
           business: business.dataValues
         });
+        return
       }).catch(bizFetchError =>
         BusinessController.formatError(req, res, bizFetchError.toString()));
   }
@@ -158,18 +185,32 @@ export default class BusinessController extends BaseHelper {
     if (JSON.stringify(req.query) !== '{}') {
       const { location, category } = req.query;
       if (location) {
-        return BusinessController
-          .queryBy(req, res, Business, { location });
+        const locationQuery = {
+          location: {
+            $like: `%${location}%`
+          }
+        };
+        BusinessController
+          .queryBy(req, res, Business, locationQuery);
+        return;
       }
       if (category) {
-        return BusinessController
-          .queryBy(req, res, Business, { category });
+        const categoryQuery = {
+          category: {
+              $like: `%${category}%`
+          }
+        };
+        BusinessController
+          .queryBy(req, res, Business, categoryQuery);
+        return;
       }
-      return res.status(400).send({
+      res.status(400).send({
         message: 'invalid query'
       });
+      return;
     }
-    return next();
+    next();
+    return;
   }
   /**
     * @description Allow user get all businesses
@@ -187,14 +228,16 @@ export default class BusinessController extends BaseHelper {
           businesses = business.map(biz => biz.dataValues);
         }
         if (businesses.length <= 0) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'no businesses found'
           });
+          return;
         }
-        return res.status(200).send({
+        res.status(200).send({
           message: 'businesses successfully fetched',
           businesses
         });
+        return;
       }).catch(fetchAllError =>
         BusinessController.formatError(req, res, fetchAllError.toString()));
   }
@@ -207,23 +250,31 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static reviewBusiness(req, res) {
+    if (req.rawDataError) {
+      res.status(400)
+        .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
+    }
     if (BusinessController.isEmptyOrNull(req.body.review)) {
-      return res.status(401).send({
+      res.status(401).send({
         message: 'review cannot be empty'
       });
+      return;
     }
     if (BusinessController.isEmptyOrNull(req.params.businessId)) {
-      return res.status(401).send({
+      res.status(401).send({
         message: 'business identity cannot be empty'
       });
+      return;
     }
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         return Review.create({
           name: req.body.name || 'anonymous',
@@ -231,15 +282,17 @@ export default class BusinessController extends BaseHelper {
           businessId: parseInt(req.params.businessId, 10)
         }).then((review) => {
           if (!review) {
-            return res.status(400).send({
+            res.status(400).send({
               message: 'error reviewing business, verify fields and try again'
             });
+            return;
           }
           delete review.dataValues.businessId;
-          return res.status(201).send({
+          res.status(201).send({
             message: 'business sucessfully reviewed',
             review: review.dataValues
           });
+          return;
         }).catch(reviewError =>
           BusinessController.formatError(req, res, reviewError.toString()));
       }).catch(bizFetchError =>
@@ -258,9 +311,10 @@ export default class BusinessController extends BaseHelper {
       .findById(req.params.businessId)
       .then((business) => {
         if (!business) {
-          return res.status(404).send({
+          res.status(404).send({
             message: 'business not found'
           });
+          return;
         }
         return Review.findAll({
           where: {
@@ -276,14 +330,16 @@ export default class BusinessController extends BaseHelper {
             fetchedReviews = reviews.map(revs => revs.dataValues);
           }
           if (fetchedReviews.length <= 0) {
-            return res.status(404).send({
+            res.status(404).send({
               message: 'no reviews found',
             });
+            return;
           }
-          return res.status(200).send({
+          res.status(200).send({
             message: 'reviews successfully retrieved',
             reviews: fetchedReviews
           });
+          return;
         }).catch(revFetchError =>
           BusinessController.formatError(req, res, revFetchError.toString()));
       }).catch(bizFetchError =>

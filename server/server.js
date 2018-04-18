@@ -10,6 +10,8 @@ import cors from 'cors';
 // import all api routes
 import routes from './routes';
 
+import BaseHelper from './helper/BaseHelper'
+
 const { businessRoutes, userRoutes } = routes;
 
 // load environment variables into proccess.env method
@@ -17,6 +19,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8011;
+
 app.use(cors());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -39,6 +42,7 @@ app.disable('x-powered-by');
 // parse api request body into JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.raw({ verify: BaseHelper.handleRaw, type: '*/*' }));
 
 // expose a static directory
 app.use(express.static(path.resolve(__dirname, './public')));
