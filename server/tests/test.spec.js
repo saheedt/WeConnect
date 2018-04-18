@@ -741,7 +741,7 @@ describe('businesses endpoint', () => {
         .put(`/api/v1/businesses/${businessId}`)
         .set('authorization', testToken2)
         .send({
-          name: 'specimen b',
+          name: 'specimen xx',
           employees: 16
         })
         .end((err, resp) => {
@@ -799,7 +799,6 @@ describe('businesses endpoint', () => {
         request(server)
           .get('/api/v1/businesses')
           .end((err, resp) => {
-            console.log('query: ', resp.body)
             assert.deepEqual(resp.status, 200);
             assert.deepEqual(
               resp.body.message,
@@ -807,10 +806,10 @@ describe('businesses endpoint', () => {
             );
             assert.deepEqual(
               resp.body.businesses[0].name,
-              'test business',
+              'specimen b',
             );
             assert.deepEqual(
-              resp.body.businesses[1].id,
+              resp.body.businesses[0].id,
               businessId
             );
             done();

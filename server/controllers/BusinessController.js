@@ -21,7 +21,7 @@ export default class BusinessController extends BaseHelper {
         .send({message: 'data object invalid, \'key:value\' pair required'});
       return;
     }
-    if (BusinessController.isBusinessNameValid(req, res, Business) === true) {
+    // if (BusinessController.isBusinessNameValid(req, res, Business) === true) {
       return Business.create({
         name: req.body.name,
         address: req.body.address,
@@ -44,7 +44,7 @@ export default class BusinessController extends BaseHelper {
         return;
       }).catch(businessError =>
         BusinessController.formatError(req, res, businessError.toString()));
-    }
+    // }
   }
   /**
     * @description Allow user update business details

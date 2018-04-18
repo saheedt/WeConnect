@@ -10,6 +10,7 @@ businessRoutes.route('/api/v1/businesses')
   .post(
     BusinessController.processBody,
     BusinessController.validateBusinessCreate,
+    BusinessController.isBusinessNameValid,
     BusinessController.isAuthorized,
     BusinessController.create
   )
@@ -17,6 +18,7 @@ businessRoutes.route('/api/v1/businesses')
 businessRoutes.route('/api/v1/businesses/:businessId')
   .put(
     BusinessController.processBody,
+    BusinessController.isBusinessNameValid,
     BusinessController.isAuthorized,
     BusinessController.update
   )

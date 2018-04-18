@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { User } from '../models';
+import { User, Business } from '../models';
 
 /**
  * @description Contains all helper Functions
@@ -35,22 +35,20 @@ export default class BaseHelper {
    * @param {Object} model business model
    * @return {Boolean} true or false
    */
-  static isBusinessNameValid(req, res, model) {
+  static isBusinessNameValid(req, res, next) {
     if (!isNaN(parseInt(req.body.name))) {
-      res.status(400)
+      return res.status(400)
         .send({message: 'invalid, business name can\'t be only numbers'});
-      return false;
     }
-    return model.findOne({
+    return Business.findOne({
       where: {
         name: req.body.name
       }
     }).then((business) => {
       if (business) {
-        res.status(409).send({message: 'business name already exists'});
-        return false;
+        return res.status(409).send({message: 'business name already exists'});
       }
-      return true;
+      return next();
     }).catch((error) => BaseHelper.formatError(req, res, error.toString()));
   }
   /**
