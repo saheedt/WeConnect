@@ -16,12 +16,12 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static create(req, res) {
-    if (req.rawDataError) {
+    if (req.rawDataError === true) {
       res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
       return;
     }
-    if (BusinessController.isBusinessNameValid(req, res, Business)) {
+    if (BusinessController.isBusinessNameValid(req, res, Business) === true) {
       return Business.create({
         name: req.body.name,
         address: req.body.address,
@@ -32,14 +32,16 @@ export default class BusinessController extends BaseHelper {
         userId: parseInt(req.authenticatedUser.id, 10)
       }).then((regBusiness) => {
         if (!regBusiness) {
-          return res.status(400).send({
+          res.status(400).send({
             message: 'registeration error, verify all fields and try again'
           });
+          return;
         }
         res.status(201).send({
           message: 'business successfully added',
           business: regBusiness
         });
+        return;
       }).catch(businessError =>
         BusinessController.formatError(req, res, businessError.toString()));
     }
@@ -54,8 +56,9 @@ export default class BusinessController extends BaseHelper {
     */
   static update(req, res) {
     if (req.rawDataError) {
-      return res.status(400)
+      res.status(400)
         .send({message: 'data object invalid, \'key:value\' pair required'});
+      return;
     }
     return Business.findOne({
       where: {
@@ -91,6 +94,7 @@ export default class BusinessController extends BaseHelper {
               message: 'business successfully updated',
               business: business.dataValues
             });
+            return;
           }).catch(updateError =>
             BusinessController.formatError(req, res, updateError.toString()));
       }
@@ -99,7 +103,7 @@ export default class BusinessController extends BaseHelper {
       });
       return
     }).catch(updateFindError =>
-      BusinessController.formatError(re, res, updateFindError.toString()));
+      BusinessController.formatError(req, res, updateFindError.toString()));
   }
   /**
     * @description Allow user delete business details
@@ -137,6 +141,7 @@ export default class BusinessController extends BaseHelper {
         res.status(401).send({
           message: 'unauthorized, business belongs to another user'
         });
+        return;
       })
       .catch(deleteFindError =>
         BusinessController.formatError(req, res, deleteFindError.toString()));
@@ -157,12 +162,13 @@ export default class BusinessController extends BaseHelper {
           res.status(404).send({
             message: 'business not found'
           });
-        return;
+          return;
         }
-        return res.status(200).send({
+        res.status(200).send({
           message: 'business sucessfully fetched',
           business: business.dataValues
         });
+        return
       }).catch(bizFetchError =>
         BusinessController.formatError(req, res, bizFetchError.toString()));
   }
@@ -184,8 +190,9 @@ export default class BusinessController extends BaseHelper {
             $like: `%${location}%`
           }
         };
-        return BusinessController
+        BusinessController
           .queryBy(req, res, Business, locationQuery);
+        return;
       }
       if (category) {
         const categoryQuery = {
@@ -193,14 +200,17 @@ export default class BusinessController extends BaseHelper {
               $like: `%${category}%`
           }
         };
-        return BusinessController
+        BusinessController
           .queryBy(req, res, Business, categoryQuery);
+        return;
       }
-      return res.status(400).send({
+      res.status(400).send({
         message: 'invalid query'
       });
+      return;
     }
-    return next();
+    next();
+    return;
   }
   /**
     * @description Allow user get all businesses
@@ -223,10 +233,11 @@ export default class BusinessController extends BaseHelper {
           });
           return;
         }
-        return res.status(200).send({
+        res.status(200).send({
           message: 'businesses successfully fetched',
           businesses
         });
+        return;
       }).catch(fetchAllError =>
         BusinessController.formatError(req, res, fetchAllError.toString()));
   }
@@ -277,10 +288,11 @@ export default class BusinessController extends BaseHelper {
             return;
           }
           delete review.dataValues.businessId;
-          return res.status(201).send({
+          res.status(201).send({
             message: 'business sucessfully reviewed',
             review: review.dataValues
           });
+          return;
         }).catch(reviewError =>
           BusinessController.formatError(req, res, reviewError.toString()));
       }).catch(bizFetchError =>
@@ -323,10 +335,11 @@ export default class BusinessController extends BaseHelper {
             });
             return;
           }
-          return res.status(200).send({
+          res.status(200).send({
             message: 'reviews successfully retrieved',
             reviews: fetchedReviews
           });
+          return;
         }).catch(revFetchError =>
           BusinessController.formatError(req, res, revFetchError.toString()));
       }).catch(bizFetchError =>

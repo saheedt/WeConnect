@@ -194,7 +194,6 @@ describe('user endpoints', () => {
               resp.body.user.email,
               process.env.TESTEMAIL1
             );
-            console.log('testToken :', testToken1);
             done();
           });
       }
@@ -444,6 +443,7 @@ describe('businesses endpoint', () => {
           done();
         });
     });
+    // cut out //
     it('should not successfully add a business if business name already exists', (done) => {
       request(server)
         .post('/api/v1/businesses')
@@ -638,6 +638,8 @@ describe('businesses endpoint', () => {
           });
       }
     );
+
+    // cut out //
   });
   /** */
   /** */
@@ -681,8 +683,7 @@ describe('businesses endpoint', () => {
         .set('authorization', testToken1)
         .send({
           name: 'specimen b',
-          employees: 16
-
+          employees: 16,
         })
         .end((err, resp) => {
           assert.deepEqual(resp.status, 200);
@@ -798,6 +799,7 @@ describe('businesses endpoint', () => {
         request(server)
           .get('/api/v1/businesses')
           .end((err, resp) => {
+            console.log('query: ', resp.body)
             assert.deepEqual(resp.status, 200);
             assert.deepEqual(
               resp.body.message,
@@ -805,10 +807,10 @@ describe('businesses endpoint', () => {
             );
             assert.deepEqual(
               resp.body.businesses[0].name,
-              'specimen b',
+              'test business',
             );
             assert.deepEqual(
-              resp.body.businesses[0].id,
+              resp.body.businesses[1].id,
               businessId
             );
             done();

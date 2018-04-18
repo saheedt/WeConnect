@@ -29,7 +29,7 @@ export default class BaseHelper {
     return true;
   }
   /**
-   * @descriptioniness name validates bus
+   * @description name validates bus
    * @param {Object} req request object
    * @param {Object} res response object
    * @param {Object} model business model
@@ -37,10 +37,11 @@ export default class BaseHelper {
    */
   static isBusinessNameValid(req, res, model) {
     if (!isNaN(parseInt(req.body.name))) {
-      return res.status(400)
+      res.status(400)
         .send({message: 'invalid, business name can\'t be only numbers'});
+      return false;
     }
-    model.findOne({
+    return model.findOne({
       where: {
         name: req.body.name
       }
@@ -72,6 +73,7 @@ export default class BaseHelper {
           req.isRaw = true;
           return;
       }
+      console.log('handling as raw...')
      req.rawDataError = true; 
     }
   }
@@ -85,9 +87,11 @@ export default class BaseHelper {
     if (req.isRaw && req.rawBody) {
       let parse = JSON.parse(req.rawBody);
       req.body = parse;
-      return next();
+      next();
+      return;
     }
     next();
+    return;
   }
   /**
      * @description Checks if User exists
@@ -100,7 +104,7 @@ export default class BaseHelper {
      */
   static userExistsInDb(req, res, user, proceed) {
     const { id, email } = user;
-    User.findOne({
+    return User.findOne({
       where: {
         id: parseInt(id, 10),
         email
@@ -126,12 +130,11 @@ export default class BaseHelper {
    * @returns {object} encoded token
    */
   static sign(data) {
-    jwt.sign(
+    return jwt.sign(
       data,
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
-    return;
   }
   /**
    * @description Middleware to check authorization status
@@ -279,7 +282,7 @@ export default class BaseHelper {
    * @memberof BaseHelper
    */
   static queryBy(req, res, model, queryParams) {
-    model.findAll({
+    return model.findAll({
       where: queryParams
     })
       .then((query) => {
@@ -311,9 +314,7 @@ export default class BaseHelper {
      * @memberof BaseHelper
      */
   static formatError(req, res, errorMsg) {
-    console.log(errorMsg);
     const error = errorMsg.split(':')[0];
-
     switch (error) {
     case 'SequelizeValidationError':
       return res.status(400).send({
