@@ -122,7 +122,7 @@ export function fetchBusinesses() {
           dispatch(getBusinessesError(businesses.data.error));
           return;
         }
-        dispatch(getBusinessesSuccess(businesses.data.business));
+        dispatch(getBusinessesSuccess(businesses.data.businesses));
       }).catch(() => {
         dispatch(getBusinessesError('network error, please try later'));
       });

@@ -14,6 +14,7 @@ const persistedState = loadState();
 const store = configureStore(persistedState);
 
 store.subscribe(() => {
+  // console.log('store state: ', store.getState());
   saveState(store.getState());
 });
 

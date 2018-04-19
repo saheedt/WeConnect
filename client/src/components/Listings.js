@@ -12,12 +12,16 @@ class Listings extends Component {
     };
   }
   componentWillMount() {
-    this.props.fetchBusinesses();
+    const { businesses } = this.props;
+    if (businesses) {
+      return this.genListing(businesses);
+    }
+    return this.props.fetchBusinesses();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.businesses &&
         nextProps.businesses !== this.props.businesses) {
-      this.genListing(nextProps.businesses);
+      return this.genListing(nextProps.businesses);
     }
   }
   genListing(listings) {
@@ -58,13 +62,13 @@ class Listings extends Component {
         </li>
       );
     });
-    this.setState({ businesses: dom });
+    this.setState({ display: dom });
   }
   render() {
     return (
       <section id="listings" className="header-margin">
         <ul id="listings-list" className="collection max630">
-          {this.state.businesses}
+          {this.state.display}
         </ul>
       </section>
     );
