@@ -60,4 +60,7 @@ typings/
 # gulp build folder
 build/
 
+# react build folder
+dist/
+
 .DS_Store
