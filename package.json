@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack -d && webpack-dev-server --content-base client/src/ --inline --hot --history-api-fallback",
     "start": "node ./dist/server.js",
-    "postinstall": "webpack -p && cp client/src/server.js dist/server.js"
+    "postinstall": "webpack -p && cp client/src/server.js dist/server.js",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
