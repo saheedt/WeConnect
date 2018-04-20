@@ -8,7 +8,11 @@ import {
   FETCHING_BUSINESS_ERROR,
   FETCHING_BUSINESS_REVIEWS,
   FETCHING_BUSINESS_REVIEWS_SUCCESS,
-  FETCHING_BUSINESS_REVIEWS_ERROR
+  FETCHING_BUSINESS_REVIEWS_ERROR,
+  QUERY_BUSINESS,
+  QUERY_BUSINESS_SUCCESS,
+  QUERY_BUSINESS_ERROR,
+  CLEAR_QUERY_ERROR
 } from './actionTypes';
 
 import API from '../axiosInstance/api';
@@ -110,6 +114,44 @@ export function clearGetBusinessesError() {
   };
 }
 /**
+ * @returns {Object} QUERY_BUSINESS
+ */
+export function queryBusinesses() {
+  return {
+    type: QUERY_BUSINESS
+  }
+}
+/**
+ * 
+ * @param {*} businesses queried businesses
+ * @returns {Object} QUERY_BUSINESS_SUCCESS & businesses
+ */
+export function queryBusinessesSuccess(businesses) {
+  return {
+    type: QUERY_BUSINESS_SUCCESS,
+    businesses
+  }
+}
+/**
+ * @param {*} error query error
+ * @returns {Object} QUERY_BUSNESS_ERROR & error
+ */
+export function queryBusinessesError(error) {
+  return {
+    type: QUERY_BUSINESS_ERROR,
+    error
+  }
+}
+/**
+ * @returns {Object} CLEAR_QUERY_ERROR
+ */
+export function clearQueryError() {
+  return {
+    type: CLEAR_QUERY_ERROR
+  };
+}
+
+/**
  *@returns {Function} dispatch closure
 */
 export function fetchBusinesses() {
@@ -164,7 +206,6 @@ export function fetchReviews(businessId) {
     dispatch(getBusinessReviews());
     return API.get(`/api/v1/businesses/${businessId}/reviews`)
       .then((reviews) => {
-        console.log('reviews.data ', reviews.data)
         if (reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
           return;
@@ -185,4 +226,15 @@ export function clearBusinessesError() {
   return (dispatch) => {
     dispatch(clearGetBusinessesError());
   };
+}
+
+export function query(by, queryData) {
+  return (dispatch) => {
+    dispatch(clearQueryError())
+    dispatch(queryBusinesses())
+    return API.get(`/api/v1/businesses?${by}=${queryData}`)
+      .then((filtered) => {
+        
+      }).catch()
+  }
 }

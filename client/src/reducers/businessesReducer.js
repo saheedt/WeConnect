@@ -57,7 +57,10 @@ export default function businessesReducer(state = {}, action) {
   case CLEAR_BUSINESSES_ERROR:
     return {
       ...state,
-      error: null
+      error: null,
+      reviews: {
+        error: null
+      }
     };
   case FETCHING_BUSINESS_REVIEWS:
     return {
