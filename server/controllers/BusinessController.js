@@ -308,7 +308,7 @@ export default class BusinessController extends BaseHelper {
     */
   static fetchBusinessReviews(req, res) {
     return Business
-      .findById(req.params.businessId)
+      .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
         if (!business) {
           res.status(404).send({

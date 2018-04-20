@@ -62,20 +62,26 @@ export default function businessesReducer(state = {}, action) {
   case FETCHING_BUSINESS_REVIEWS:
     return {
       ...state,
-      isFetching: true,
-      reviews: null
+      reviews: {
+        isFetching: true,
+        reviews: null
+      }
     };
   case FETCHING_BUSINESS_REVIEWS_SUCCESS:
     return {
       ...state,
-      isFetching: false,
-      reviews: action.reviews
+      reviews: {
+        isFetching: false,
+        reviews: action.reviews
+      }
     };
   case FETCHING_BUSINESS_REVIEWS_ERROR:
     return {
       ...state,
-      isFetching: false,
-      error: action.error
+      reviews: {
+        isFetching: false,
+        error: action.error
+      }
     };
   default:
     return state;

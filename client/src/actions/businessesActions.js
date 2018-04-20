@@ -123,8 +123,11 @@ export function fetchBusinesses() {
           return;
         }
         dispatch(getBusinessesSuccess(businesses.data.businesses));
-      }).catch(() => {
-        dispatch(getBusinessesError('network error, please try later'));
+      }).catch((error) => {
+        if (error.response.data.message) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
+        dispatch(getBusinessReviewsError('network error, please try later'));
       });
   };
 }
@@ -143,8 +146,11 @@ export function fetchBusiness(businessId) {
           return;
         }
         dispatch(getBusinessSuccess(business.data.business));
-      }).catch(() => {
-        dispatch(getBusinessError('network error, please try later'));
+      }).catch((error) => {
+        if (error.response.data.message) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
+        dispatch(getBusinessReviewsError('network error, please try later'));
       });
   };
 }
@@ -158,12 +164,16 @@ export function fetchReviews(businessId) {
     dispatch(getBusinessReviews());
     return API.get(`/api/v1/businesses/${businessId}/reviews`)
       .then((reviews) => {
+        console.log('reviews.data ', reviews.data)
         if (reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
           return;
         }
         dispatch(getBusinessReviewsSuccess(reviews.data.reviews));
-      }).catch(() => {
+      }).catch((error) => {
+        if (error.response.data.message) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
         dispatch(getBusinessReviewsError('network error, please try later'));
       });
   };

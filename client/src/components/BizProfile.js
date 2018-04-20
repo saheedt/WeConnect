@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Loader from 'react-loader'
+
+import Error from './Error';
+import Review from './Review';
+
 import { fetchBusiness, fetchReviews } from '../actions/businessesActions';
 
 class BizProfile extends Component {
@@ -10,6 +15,27 @@ class BizProfile extends Component {
       business: null,
       reviews: null
     };
+    this.options = {
+      lines: 13,
+      length: 20,
+      width: 10,
+      radius: 30,
+      scale: 1.00,
+      corners: 1,
+      color: '#fff',
+      opacity: 0.25,
+      rotate: 0,
+      direction: 1,
+      speed: 1,
+      trail: 60,
+      fps: 20,
+      zIndex: 2e9,
+      top: '50%',
+      left: '50%',
+      shadow: false,
+      hwaccel: false,
+      position: 'absolute'
+    }
   }
   componentWillMount() {
     const { businessId } = this.props.match.params;
@@ -20,8 +46,9 @@ class BizProfile extends Component {
     if (nextProps.business && nextProps.business !== this.props.business) {
       this.setState({ business: this.generateProfile(nextProps.business) });
     }
-    if (nextProps.reviews && nextProps.reviews !== this.props.reviews) {
-      this.genReviews(nextProps.reviews);
+    if (nextProps.reviews.reviews &&
+        nextProps.reviews.reviews !== this.props.reviews.reviews) {
+      this.genReviews(nextProps.reviews.reviews);
     }
   }
   generateProfile(profile) {
@@ -62,36 +89,26 @@ class BizProfile extends Component {
     const bizReviews = reviews.map((review, index) => {
       const unique = `${index}--${index}`;
       return (
-        <div key={unique} className="profile-review flex padding-20">
-          <div className="review-date-time">
-            <span className="right">{review.createdAt.split('T')[0]}</span>
-          </div>
-          <div className="reviewer">
-            <ul className="collection">
-              <li className="collection-item avatar">
-                <i className="material-icons circle">contacts</i>
-                <h5>{review.name}</h5>
-              </li>
-            </ul>
-          </div>
-          <div className="review padding-left-20">
-            {review.review}
-          </div>
-        </div>
+        <Review key={unique} createdAt={review.createdAt}
+             name={review.name} review={review.review}/>
       );
     });
     this.setState({ reviews: bizReviews });
   }
   render() {
+    const { isFetching } = this.props;
     return (
-      <div className="flex vertical-after-header">
-        {this.state.business}
-        <section
-          className="profile-reviews-maker-holder holder-60 padding-20 flex">
-          <div className="header-title"><h3>Reviews</h3></div>
-          {this.state.reviews}
-        </section>
-      </div>
+      <Loader loaded={!isFetching} options={this.options}>
+        <div className="flex vertical-after-header">
+          {this.state.business}
+          <section
+            className="profile-reviews-maker-holder holder-60 padding-20 flex">
+            <div className="header-title"><h3>Reviews</h3></div>
+            <Error background={"#FFF"} color={"#000"} error={this.props.reviews.error} />
+            {this.state.reviews}
+          </section>
+        </div>
+      </Loader>
     );
   }
 }

@@ -71,7 +71,6 @@ export default class BaseHelper {
           req.isRaw = true;
           return;
       }
-      console.log('handling as raw...')
      req.rawDataError = true; 
     }
   }
