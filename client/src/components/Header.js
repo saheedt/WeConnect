@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux';
+
+import { query } from '../actions/businessesActions';
+import Helper from '../helper/Helper';
 
 class Header extends Component {
   constructor(props) {
@@ -7,6 +12,8 @@ class Header extends Component {
       display: 'none'
     };
     this.listingsSwitchInput = null;
+    this.categoryInput = null;
+    this.locationInput = null;
     this.toggleHandler = (e) => {
       const listingsLocationInput =
         document.querySelector('#listings-location-input');
@@ -32,6 +39,24 @@ class Header extends Component {
       }
     }
   }
+  doFilter(e) {
+    if ((e.keyCode === 13 || e.key === "Enter")) {
+      if (!Helper.isEmptyOrNull(e.srcElement.value)) {
+        const { queryBusinesses } = this.props;
+        if (e.srcElement.id === 'listings-category-input') {
+          queryBusinesses('category', e.srcElement.value)
+          return this.props.history.push('/businesses/filter')
+        }
+        if (e.srcElement.id === 'listings-location-input') {
+          queryBusinesses('location', e.srcElement.value)
+          console.log('listings-location-input querys made.. should redirect')
+          return this.props.history.push('/businesses/filter')
+        }
+      }
+      // TODO: show input empty validation error
+      return;
+    }
+  }
   componentWillMount() {
     if (window.location.pathname !== '/businesses') {
       this.setState({ display: 'block' });
@@ -41,14 +66,30 @@ class Header extends Component {
   }
   componentDidMount() {
     this.listingsSwitchInput = document.getElementById('listings-switch-input');
+    this.categoryInput = document.getElementById('listings-category-input');
+    this.locationInput = document.getElementById('listings-location-input');
     if (this.listingsSwitchInput) {
       this.listingsSwitchInput.addEventListener('change', this.toggleHandler);
+    }
+    if (this.categoryInput) {
+      this.categoryInput.addEventListener('keyup', this.doFilter.bind(this));
+    }
+    if (this.locationInput) {
+      this.locationInput.addEventListener('keyup', this.doFilter.bind(this));
     }
   }
   componentWillUnmount() {
     if (this.listingsSwitchInput) {
       this.listingsSwitchInput
         .removeEventListener('change', this.toggleHandler);
+    }
+    if (this.categoryInput) {
+      this.categoryInput
+        .removeEventListener('keyup', this.doCategoryFilter)
+    }
+    if (this.locationInput) {
+      this.locationInput
+        .removeEventListener('keyup', this.doLocationFilter)
     }
   }
   componentWillReceiveProps() {
@@ -58,16 +99,17 @@ class Header extends Component {
     }
     this.setState({ display: 'none' });
   }
+  goBack(e) {
+    e.preventDefault();
+    window.history.back();
+  }
   render() {
     const { display } = this.state;
     return (
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first" style={{}}>
           <div style={{ display }} className="wc-header-back-btn-holder flex">
-            <a onClick={(e) => {
-              e.preventDefault();
-              window.history.back();
-            }} href="#">
+            <a onClick={this.goBack.bind(this)} href="#">
               <i className="material-icons">arrow_back</i>
             </a>
           </div>
@@ -111,4 +153,19 @@ class Header extends Component {
   }
 }
 
-export default Header;
+// export default Header;
+// const mapStateToProps = (state) => {
+//   return {
+//     ...state.businesses.queries
+//   };
+// };
+const mapDispatchedToProps = (dispatch) => {
+    return {
+        queryBusinesses: (by, queryData) => dispatch(query(by, queryData))
+    };
+};
+export default connect(
+  null,
+  mapDispatchedToProps
+)(Header);
+

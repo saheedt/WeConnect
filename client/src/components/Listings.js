@@ -35,7 +35,7 @@ class Listings extends Component {
             </div>
             <div className="listings-list-groupings-items-right">
               <h4>
-                <Link to={`businesses/${listing.id}`}>
+                <Link to={`/businesses/${listing.id}`}>
                   <span className="title">{listing.name}</span>
                 </Link>
               </h4>

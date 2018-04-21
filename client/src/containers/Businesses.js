@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Header from '../components/Header';
 import Listings from '../components/Listings';
 import BizProfile from '../components/BizProfile';
+import Query from '../components/Query';
 
 class Businesses extends Component {
   constructor(props) {
@@ -11,14 +12,17 @@ class Businesses extends Component {
     this.state = {};
   }
   render() {
+    const { url } = this.props.match;
     return (
 
       <div className="flex flex-column">
-        <Header path={this.props.match.url}/>
+      <Route render={props => <Header {...props}/>}/>
         <Switch>
-          <Route exact path={`${this.props.match.url}/:businessId`}
+          <Route exact path={`${url}/filter`}
+            render={props => (<Query {...props}/>)}/>
+          <Route path={`${url}/:businessId`}
             render={props => (<BizProfile {...props}/>)}/>
-          <Route exact path={`${this.props.match.url}`}
+          <Route exact path={`${url}`}
             render={props => (<Listings {...props}/>)}/>
         </Switch>
       </div>
