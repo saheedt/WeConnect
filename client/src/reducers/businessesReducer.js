@@ -8,8 +8,12 @@ import {
   FETCHING_BUSINESS_ERROR,
   FETCHING_BUSINESS_REVIEWS,
   FETCHING_BUSINESS_REVIEWS_SUCCESS,
-  FETCHING_BUSINESS_REVIEWS_ERROR
+  FETCHING_BUSINESS_REVIEWS_ERROR,
+  QUERY_BUSINESS,
+  QUERY_BUSINESS_SUCCESS,
+  QUERY_BUSINESS_ERROR
 } from '../actions/actionTypes';
+import { queryBusinesses } from '../actions/businessesActions';
 
 /**
  * @param {Object} state curent application data state
@@ -86,6 +90,30 @@ export default function businessesReducer(state = {}, action) {
         error: action.error
       }
     };
+  case QUERY_BUSINESS:
+    return {
+      ...state,
+      queries: {
+        isFetching: true,
+        businesses: null
+      }
+    }
+  case QUERY_BUSINESS_SUCCESS:
+    return {
+      ...state,
+      queries: {
+        isFetching: false,
+        businesses: action.businesses
+      }
+    }
+    case QUERY_BUSINESS_ERROR:
+      return {
+        ...state,
+        queries: {
+          isfetching: false,
+          error: action.error
+        }
+      }
   default:
     return state;
   }

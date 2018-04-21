@@ -116,7 +116,7 @@ export function clearGetBusinessesError() {
 /**
  * @returns {Object} QUERY_BUSINESS
  */
-export function queryBusinesses() {
+export function queryBusiness() {
   return {
     type: QUERY_BUSINESS
   }
@@ -126,7 +126,7 @@ export function queryBusinesses() {
  * @param {*} businesses queried businesses
  * @returns {Object} QUERY_BUSINESS_SUCCESS & businesses
  */
-export function queryBusinessesSuccess(businesses) {
+export function queryBusinessSuccess(businesses) {
   return {
     type: QUERY_BUSINESS_SUCCESS,
     businesses
@@ -136,7 +136,7 @@ export function queryBusinessesSuccess(businesses) {
  * @param {*} error query error
  * @returns {Object} QUERY_BUSNESS_ERROR & error
  */
-export function queryBusinessesError(error) {
+export function queryBusinessError(error) {
   return {
     type: QUERY_BUSINESS_ERROR,
     error
@@ -231,10 +231,19 @@ export function clearBusinessesError() {
 export function query(by, queryData) {
   return (dispatch) => {
     dispatch(clearQueryError())
-    dispatch(queryBusinesses())
+    dispatch(queryBusiness())
     return API.get(`/api/v1/businesses?${by}=${queryData}`)
       .then((filtered) => {
-        
-      }).catch()
+        if (filtered.data.error) {
+          return dispatch(queryBusinessError(filtered.data.error))
+        }
+        dispatch(queryBusinessSuccess(filtered.data.business))
+      })
+      .catch((error) => {
+        if (error.response.data.message) {
+          return dispatch(queryBusinessError(error.response.data.message));
+        }
+        dispatch(queryBusinessError('network error, please try later'));
+      })
   }
 }
