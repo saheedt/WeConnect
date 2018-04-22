@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import Loader from 'react-loader'
 
+import Error from './Error';
+
 class Query extends Component {
     constructor(props) {
         super(props);
@@ -11,25 +13,25 @@ class Query extends Component {
           queries: null
         }
         this.options = {
-            lines: 13,
-            length: 20,
-            width: 10,
-            radius: 30,
-            scale: 1.00,
-            corners: 1,
-            color: '#fff',
-            opacity: 0.25,
-            rotate: 0,
-            direction: 1,
-            speed: 1,
-            trail: 60,
-            fps: 20,
-            zIndex: 2e9,
-            top: '50%',
-            left: '50%',
-            shadow: false,
-            hwaccel: false,
-            position: 'absolute'
+          lines: 13,
+          length: 20,
+          width: 10,
+          radius: 30,
+          scale: 1.00,
+          corners: 1,
+          color: '#fff',
+          opacity: 0.25,
+          rotate: 0,
+          direction: 1,
+          speed: 1,
+          trail: 60,
+          fps: 20,
+          zIndex: 2e9,
+          top: '50%',
+          left: '50%',
+          shadow: false,
+          hwaccel: false,
+          position: 'absolute'
         }
     }
     componentWillMount() {
@@ -85,15 +87,20 @@ class Query extends Component {
         this.setState({ queries });
       }
     render() {
-        const { isFetching } = this.props;
+        const { isFetching, error } = this.props;
+        const display = error ? 'none': 'block';
+        
       return (
         <Loader loaded={true} options={this.options}>
-            <section id="listings" className="header-margin">
-                <div className="header-title"><h3 className="padding-15">Result</h3></div>
-                <ul id="listings-list" className="collection max630">
-                {this.state.queries}
-                </ul>
-            </section>
+          <section id="listings" className="header-margin">
+            <center><Error error={error} /></center>
+            <div style={{display}} className="header-title">
+              <h3 className="padding-15">Result</h3>
+            </div>
+            <ul id="listings-list" className="collection max630">
+              {this.state.queries}
+            </ul>
+          </section>
         </Loader>
       );
     }

@@ -95,7 +95,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       queries: {
         isFetching: true,
-        businesses: null
+        businesses: null,
+        error: null
       }
     }
   case QUERY_BUSINESS_SUCCESS:
@@ -103,7 +104,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       queries: {
         isFetching: false,
-        businesses: action.businesses
+        businesses: action.businesses,
+        error: null
       }
     }
     case QUERY_BUSINESS_ERROR:
