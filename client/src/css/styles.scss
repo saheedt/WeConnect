@@ -337,6 +337,39 @@ body{
 .padding-20{
   padding: 20px
 }
+#landing-section-b{
+  height: 100vh !important;
+  width: 100vw !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: auto !important;
+  /* margin: auto auto; */
+}
+#landing-login-wrapper{
+  width: 100%;
+}
+#login-btn{
+  border: 0px;
+  height: 3rem;
+  margin-bottom: 20px;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+#review-input-holder .row form .row .input-field textarea.materialize-textarea{
+  padding: 0 !important
+}
+
+
+
+
+
+
+
 /*.loader {
   border: 16px solid $light-grey; 
   border-top: 16px solid $light-blue; 
