@@ -8,18 +8,23 @@ import Header from '../components/Header';
 import Listings from '../components/Listings';
 import BizProfile from '../components/BizProfile';
 import Query from '../components/Query';
-// import Login from '../components/Login';
 
 class Businesses extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
-  openLogin() {
-    JwModal.open('user-login')
+  // openLogin() {
+  //   JwModal.open('user-login')
+  // }
+  closeLogin(event) {
+    return JwModal.close('user-login')(event)
   }
-  closeLogin() {
-    JwModal.close('user-login')
+  openSignUp(event) {
+    return JwModal.open('user-sign-up')(event)
+  }
+  closeSignUp() {
+    JwModal.close('user-sign-up')
   }
   render() {
     const { url } = this.props.match;
@@ -27,7 +32,8 @@ class Businesses extends Component {
       <div className="flex flex-column">
       <Route render={props => <Header {...props}
         openLogin={event => JwModal.open('user-login')(event)}
-        closeLogin={this.closeLogin.bind(this)}
+        // closeLogin={event => JwModal.close('user-login')(event)}
+        // openSignUp={event => JwModal.open('user-sign-up')(event)}
       />}
       />
         <Switch>
@@ -38,12 +44,11 @@ class Businesses extends Component {
           <Route exact path={`${url}`}
             render={props => (<Listings {...props}/>)}/>
         </Switch>
-        {/* <Route render={props =>
-          <JwModal id={"user-login"}>
-            <Login />
-          </JwModal>
-        }/> */}
-        <Route render={props => Users.showLogin(JwModal)}/>
+        <Route render={props => Users.showLogin(JwModal,
+          this.closeLogin.bind(this),
+          this.openSignUp.bind(this)
+          )}/>
+        <Route render={props => Users.showSignUp(JwModal)}/>
       </div>
     );
   }

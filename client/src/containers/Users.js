@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 
 import Login from '../components/Login';
+import SignUp from '../components/SignUp';
 
 class Users extends Component {
-    static showLogin = (JwModal) => {
+    static showLogin = (JwModal, closeLogin, openSignUp) => {
         return(
             <JwModal id="user-login">
-                <Login />
+                <Login closeLogin={closeLogin} openSignUp={openSignUp}/>
             </JwModal>
         );
     }
-    static showSignUp = () => {
+    static showSignUp = (JwModal) => {
         return(
-            <JwModal id="user-sign-up">
-            </JwModal>
+          <JwModal id="user-sign-up">
+            <SignUp  />
+          </JwModal>
         );
     }
 }
