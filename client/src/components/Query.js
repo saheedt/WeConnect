@@ -91,7 +91,7 @@ class Query extends Component {
         const display = error ? 'none': 'block';
         
       return (
-        <Loader loaded={true} options={this.options}>
+        <Loader loaded={!isFetching} options={this.options}>
           <section id="listings" className="header-margin">
             <center><Error error={error} /></center>
             <div style={{display}} className="header-title">

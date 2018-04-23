@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
+import Users from '../containers/Users'
+
 import { query } from '../actions/businessesActions';
 import Helper from '../helper/Helper';
 
@@ -99,6 +101,9 @@ class Header extends Component {
     }
     this.setState({ display: 'none' });
   }
+  updateProfileHandler(e) {
+    this.props.openLogin(e);
+  }
   goBack(e) {
     e.preventDefault();
     window.history.back();
@@ -145,8 +150,10 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
-          <a id="route-profile-btn" className="flex"
-            href="updatebusinessprofile.html">Update profile</a>
+          <a id="route-profile-btn" href="#" className="flex"
+            onClick={this.updateProfileHandler.bind(this)}>
+            Update profile
+          </a>
         </div>
       </header>
     );

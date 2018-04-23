@@ -338,12 +338,13 @@ body{
   padding: 20px
 }
 #landing-section-b{
-  height: 100vh !important;
-  width: 100vw !important;
+  height: 100% !important;
+  width: 100% !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  overflow: auto !important;
+  padding: 10%
+  // overflow: auto !important;
   /* margin: auto auto; */
 }
 #landing-login-wrapper{
@@ -356,6 +357,7 @@ body{
   color: #fff;
   justify-content: center;
   align-items: center;
+  width: 100%
 }
 
 

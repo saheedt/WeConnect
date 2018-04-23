@@ -19,7 +19,7 @@ class Login extends Component {
                         </div>
                         <div className="input-field col s12 m12 l12">
                         <input id="password" type="text" className="validate"/>
-                        <label htmlFor="password::">Password</label>
+                        <label htmlFor="password">Password</label>
                         </div>
                     </div>
                     <button id="login-btn" className="teal flex">Sign in</button>

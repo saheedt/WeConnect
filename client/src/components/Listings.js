@@ -18,6 +18,9 @@ class Listings extends Component {
     }
     return this.props.fetchBusinesses();
   }
+  componentDidMount() {
+    console.log(this.element);
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.businesses &&
         nextProps.businesses !== this.props.businesses) {
