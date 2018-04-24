@@ -152,7 +152,7 @@ export function clearQueryError() {
 }
 
 /**
- *@returns {Function} dispatch closure
+ *@returns {Function} dispatch function
 */
 export function fetchBusinesses() {
   return (dispatch) => {
@@ -175,7 +175,7 @@ export function fetchBusinesses() {
   };
 }
 /**
- * @returns {Function} dispatch closure
+ * @returns {Function} dispatch function
  * @param {Int} businessId
 */
 export function fetchBusiness(businessId) {
@@ -199,7 +199,7 @@ export function fetchBusiness(businessId) {
   };
 }
 /**
- * @returns {Function} dispatch closure
+ * @returns {Function} dispatch function
  * @param {Int} businessId
 */
 export function fetchReviews(businessId) {
@@ -222,7 +222,7 @@ export function fetchReviews(businessId) {
   };
 }
 /**
- * @return {Function} dispatch closure
+ * @return {Function} dispatch function
  */
 export function clearBusinessesError() {
   return (dispatch) => {

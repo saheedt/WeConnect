@@ -12,6 +12,7 @@ export const USER_LOGIN_ERROR = 'USER_LOGIN_ERROR';
 export const USER_SIGNUP_ERROR = 'USER_SIGNUP_ERROR';
 
 export const CLEAR_USER_TOKEN = 'CLEAR_USER_TOKEN';
+export const CLEAR_USER_ERROR = 'CLEAR_USER_ERROR';
 
 /**
  * Businesses Action Types
