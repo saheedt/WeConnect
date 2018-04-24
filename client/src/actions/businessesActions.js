@@ -160,13 +160,14 @@ export function fetchBusinesses() {
     dispatch(getBusinesses());
     return API.get('/api/v1/businesses')
       .then((businesses) => {
-        if (businesses.data.error) {
+        if (businesses.data && businesses.data.error) {
           dispatch(getBusinessesError(businesses.data.error));
           return;
         }
         dispatch(getBusinessesSuccess(businesses.data.businesses));
-      }).catch((error) => {
-        if (error.response.data.message) {
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
           return dispatch(getBusinessReviewsError(error.response.data.message));
         }
         dispatch(getBusinessReviewsError('network error, please try later'));
@@ -183,13 +184,14 @@ export function fetchBusiness(businessId) {
     dispatch(getBusiness());
     return API.get(`/api/v1/businesses/${businessId}`)
       .then((business) => {
-        if (business.data.error) {
+        if (business.data && business.data.error) {
           dispatch(getBusinessError(business.data.error));
           return;
         }
         dispatch(getBusinessSuccess(business.data.business));
-      }).catch((error) => {
-        if (error.response.data.message) {
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
           return dispatch(getBusinessReviewsError(error.response.data.message));
         }
         dispatch(getBusinessReviewsError('network error, please try later'));
@@ -206,13 +208,13 @@ export function fetchReviews(businessId) {
     dispatch(getBusinessReviews());
     return API.get(`/api/v1/businesses/${businessId}/reviews`)
       .then((reviews) => {
-        if (reviews.data.error) {
+        if (reviews.data && reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
           return;
         }
         dispatch(getBusinessReviewsSuccess(reviews.data.reviews));
       }).catch((error) => {
-        if (error.response.data.message) {
+        if (error.response && error.response.data.message) {
           return dispatch(getBusinessReviewsError(error.response.data.message));
         }
         dispatch(getBusinessReviewsError('network error, please try later'));
@@ -234,13 +236,13 @@ export function query(by, queryData) {
     dispatch(queryBusiness())
     return API.get(`/api/v1/businesses?${by}=${queryData}`)
       .then((filtered) => {
-        if (filtered.data.error) {
+        if (filtered.data && filtered.data.error) {
           return dispatch(queryBusinessError(filtered.data.error))
         }
         dispatch(queryBusinessSuccess(filtered.data.business))
       })
       .catch((error) => {
-        if (error.response.data.message) {
+        if (error.response && error.response.data.message) {
           return dispatch(queryBusinessError(error.response.data.message));
         }
         dispatch(queryBusinessError('network error, please try later'));

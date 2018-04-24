@@ -1,6 +1,5 @@
 const DotEnv = require('dotenv');
 const path = require('path');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
@@ -46,17 +45,11 @@ const config = {
         test: /\.(png|jpg|gif|svg|jpeg)$/,
         exclude: /node_modules/,
         loader: 'url-loader'
-      },
-      {
-        test: /\.html$/,
-        exclude: /node_modules/,
-        use: 'html-loader'
       }
     ]
   },
   plugins: [
     dotEnv,
-    // extractPlugin,
     htmlWebpackPlugin
   ]
 };

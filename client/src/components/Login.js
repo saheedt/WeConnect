@@ -6,13 +6,14 @@ class Login extends Component {
         super(props);
     }
     onSignUpClick(event){
+      event.preventDefault();
       this.props.closeLogin(event)
       this.props.openSignUp(event)
     }
     render() {
       return(
-        <section id="landing-section-b">
-          <div id="landing-login-wrapper">
+        <section id="login" className="auth flex">
+          <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
           <center><h3>sign in</h3></center>
           <div className="row">
             <form className="col s12 m12 l12">
@@ -25,13 +26,9 @@ class Login extends Component {
                   <input id="password" type="text" className="validate"/>
                   <label htmlFor="password">Password</label>
                 </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="password" type="text" className="validate"/>
-                  <label htmlFor="password">Password</label>
-                </div>
               </div>
               <button id="login-btn" className="teal flex">Sign in</button>
-              <center><a onClick={this.onSignUpClick.bind(this)} id="landing-reg-btn">Sign up</a></center>
+              <center><a href="#" onClick={this.onSignUpClick.bind(this)} id="landing-reg-btn">Sign up</a></center>
             </form>
         </div>
         </div>

@@ -4,7 +4,7 @@
   "description": "WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack -d && webpack-dev-server --content-base client/src/ --inline --hot --history-api-fallback",
+    "dev": "webpack-dev-server --content-base client/src/ --inline --hot --history-api-fallback",
     "start": "node ./dist/server.js",
     "postinstall": "webpack -p && cp client/src/server.js dist/server.js",
     "test": "gulp test"

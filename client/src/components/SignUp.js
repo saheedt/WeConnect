@@ -5,10 +5,15 @@ class SignUp extends Component {
     constructor(props) {
         super(props)
     }
+    onLoginClick(event) {
+      event.preventDefault();
+      this.props.closeSignUp(event)
+      this.props.openLogin(event)
+    }
     render() {
       return(
-        <section id="register-modal" className="generic-modal flex">
-          <div className="generic-modal-content">
+        <section id="sign-up" className="auth flex">
+          <div className="max480 auth-raise white-bg">
                 {/* <span id="close-register-modal"><i className="material-icons">close</i></span> */}
             <center><h3>sign up</h3></center>
             <div className="row">
@@ -28,7 +33,7 @@ class SignUp extends Component {
                    </div>
                 </div>
                 <button id="signup-btn" className="teal col s12 m12">Sign up</button>
-                <center><a href="#" id="landing-reg-btn">Login</a></center>
+                <center><a href="#" onClick={this.onLoginClick.bind(this)} id="landing-reg-btn">Login</a></center>
               </form>
             </div>
            </div>          

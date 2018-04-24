@@ -82,6 +82,9 @@ body{
 .max630{
   max-width: 630px;
 }
+.max480{
+  max-width: 480px;
+}
 .flex{
   display: flex
 }
@@ -337,15 +340,30 @@ body{
 .padding-20{
   padding: 20px
 }
-#landing-section-b{
+.white-bg{
+  background-color: $soft-white;
+}
+.jw-modal{
+  display: flex
+}
+.jw-modal-body{
+  background-color: unset !important;
+  padding: 0 !important;
+  margin: auto !important;
+  max-width: 480px
+}
+.auth{
   height: 100% !important;
   width: 100% !important;
-  display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 10%
-  // overflow: auto !important;
-  /* margin: auto auto; */
+  // padding: 10%;
+  margin: auto
+}
+.auth-raise{
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  padding: 20px
 }
 #landing-login-wrapper{
   width: 100%;
@@ -354,31 +372,17 @@ body{
   border: 0px;
   height: 3rem;
   margin-bottom: 20px;
-  color: #fff;
+  color: $soft-white;
   justify-content: center;
   align-items: center;
   width: 100%
 }
 
-.generic-modal {
-  /* display: none; */
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  /* background-color: rgb(0,0,0); */
-  /*background-color: rgba(0,0,0,0.4);*/
-}
 #signup-btn{
   border: 0px;
   height: 3rem;
   margin-bottom: 20px;
-  color: #fff;
+  color:$soft-white;
 }
 
 #review-input-holder .row form .row .input-field textarea.materialize-textarea{
