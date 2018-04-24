@@ -33,7 +33,7 @@ class SignUp extends Component {
                    </div>
                 </div>
                 <button id="signup-btn" className="teal col s12 m12">Sign up</button>
-                <center><a href="#" onClick={this.onLoginClick.bind(this)} id="landing-reg-btn">Login</a></center>
+                <center><a className="pointer-cursor" onClick={this.onLoginClick.bind(this)} id="signup-login-btn">Login</a></center>
               </form>
             </div>
            </div>          

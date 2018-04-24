@@ -28,7 +28,7 @@ class Login extends Component {
                 </div>
               </div>
               <button id="login-btn" className="teal flex">Sign in</button>
-              <center><a href="#" onClick={this.onSignUpClick.bind(this)} id="landing-reg-btn">Sign up</a></center>
+              <center><a className="pointer-cursor" onClick={this.onSignUpClick.bind(this)} id="login-signup-btn">Sign up</a></center>
             </form>
         </div>
         </div>

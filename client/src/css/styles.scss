@@ -377,7 +377,14 @@ body{
   align-items: center;
   width: 100%
 }
-
+.add-btn-float{
+  position: fixed;
+  left: 80%;
+  top: 75%
+}
+.pointer-cursor{
+  cursor: pointer;
+}
 #signup-btn{
   border: 0px;
   height: 3rem;
@@ -388,8 +395,32 @@ body{
 #review-input-holder .row form .row .input-field textarea.materialize-textarea{
   padding: 0 !important
 }
-
-
+.vertical-after-header{
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6rem;
+}
+#add-business-container{
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
+}
+.holder-60-shadow{
+  width: 60vw;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  max-width: 630px;
+  margin-bottom: 1rem;
+}
+#add-business-btn{
+  border: 0px;
+  height: 4rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
 
 
 

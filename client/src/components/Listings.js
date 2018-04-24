@@ -10,6 +10,7 @@ class Listings extends Component {
     this.state = {
       businesses: null
     };
+    this.onAddBtnClick = this.onAddBtnClick.bind(this)
   }
   componentWillMount() {
     const { businesses } = this.props;
@@ -23,6 +24,9 @@ class Listings extends Component {
         nextProps.businesses !== this.props.businesses) {
       return this.genListing(nextProps.businesses);
     }
+  }
+  onAddBtnClick(event) {
+    return this.props.history.push('/businesses/add')
   }
   genListing(listings) {
     const dom = listings.map((listing, index) => {
@@ -70,6 +74,11 @@ class Listings extends Component {
         <ul id="listings-list" className="collection max630">
           {this.state.display}
         </ul>
+        <div className="add-btn-float">
+          <a onClick={this.onAddBtnClick} className="btn-floating btn-large waves-effect waves-light">
+          <i className="material-icons">add</i>
+          </a>
+        </div>
       </section>
     );
   }
