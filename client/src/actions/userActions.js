@@ -28,6 +28,7 @@ export function userLogin() {
  * @returns {Object} USER_LOGIN_SUCCESS
  */
 export function userLoginSuccess(userData) {
+  console.log('user action userLoginSuccess: ', userData);
   return {
     type: USER_LOGIN_SUCCESS,
     user: userData
@@ -101,6 +102,7 @@ export function clearUserError() {
 export function doLogin(userData) {
     return (dispatch) => {
         dispatch(clearUserError())
+        dispatch(clearUserToken())
         dispatch(userLogin())
         return API.post(
             '/api/v1/auth/login',
@@ -123,4 +125,60 @@ export function doLogin(userData) {
             dispatch(userLoginError('network error, please try later'));
           });
     }
+}
+/**
+ * 
+ * @param {Object} signupData
+ * @return {Function} dispatch function
+ */
+export function doSignup(signupData){
+  return (dispatch) => {
+    dispatch(clearUserError())
+    dispatch(clearUserToken())
+    dispatch(userSignup())
+    return API.post(
+      '/api/v1/auth/signup',
+      querystring.stringify(signupData)
+    ).then((user) => {
+      if (user.data &&
+        user.data.message === 'user registered successfully') {
+          const userData = {
+            user: user.data.user,
+            token: user.data.token
+          };
+          dispatch(userSignupSuccess(userData))
+        }
+    }).catch((error) => {
+      if (error.response && error.response.data.message) {
+        return dispatch(userSignupError(error.response.data.message));
+      }
+      dispatch(userSignupError('network error, please try later'));
+    })
+  }
+}
+/**
+ * @returns {Function} dispatch function
+*/
+export function loginError(error) {
+  return (dispatch) => {
+    dispatch(userLoginError(error));
+  }
+}
+
+/**
+ * @returns {Function} dispatch function
+*/
+export function signupError(error) {
+  return (dispatch) => {
+    dispatch(userSignupError(error));
+  }
+}
+
+/**
+ * @returns {Function} dispatch function
+*/
+export function wipeUserError() {
+  return (dispatch) => {
+    dispatch(clearUserError());
+  }
 }

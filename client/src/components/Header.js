@@ -23,6 +23,7 @@ class Header extends Component {
         document.querySelector('#listings-category-input');
       this.toggleSearchType(e, listingsLocationInput, listingsCategoryInput);
     };
+    this.goBack = this.goBack.bind(this)
   }
   toggleSearchType(e, location, category) {
     if (e.target.checked) {
@@ -101,8 +102,8 @@ class Header extends Component {
     }
     this.setState({ display: 'none' });
   }
-  updateProfileHandler(e) {
-    this.props.openLogin(e);
+  showMenuHandler(e) {
+    // this.props.openLogin(e);
   }
   goBack(e) {
     e.preventDefault();
@@ -110,11 +111,18 @@ class Header extends Component {
   }
   render() {
     const { display } = this.state;
+    const { token } = this.state.users;
+    let show;
+    if (token) {
+      show = 'block'
+    } else {
+      show = 'none'
+    }
     return (
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first" style={{}}>
           <div style={{ display }} className="wc-header-back-btn-holder flex">
-            <a onClick={this.goBack.bind(this)} href="#">
+            <a onClick={this.goBack} href="#">
               <i className="material-icons">arrow_back</i>
             </a>
           </div>
@@ -150,9 +158,9 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
-          <a id="route-profile-btn" href="#" className="flex"
-            onClick={this.updateProfileHandler.bind(this)}>
-            Update profile
+          <a style={{display: show}} id="route-profile-btn" className="flex pointer-cursor"
+            onClick={this.showMenuHandler.bind(this)}>
+            <i className="material-icons">menu</i>
           </a>
         </div>
       </header>
@@ -160,19 +168,18 @@ class Header extends Component {
   }
 }
 
-// export default Header;
-// const mapStateToProps = (state) => {
-//   return {
-//     ...state.businesses.queries
-//   };
-// };
+
+const mapStateToProps = (state) => {
+  return {
+    ...state.users
+  };
+};
 const mapDispatchedToProps = (dispatch) => {
-    return {
-        queryBusinesses: (by, queryData) => dispatch(query(by, queryData))
-    };
+  return {
+    queryBusinesses: (by, queryData) => dispatch(query(by, queryData))
+  };
 };
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchedToProps
 )(Header);
-

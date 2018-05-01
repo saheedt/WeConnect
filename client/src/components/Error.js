@@ -6,24 +6,23 @@ export default class Error extends Component {
             this.props.error === undefined) {
             return null;
         }
-        let containerStyles = {
+        const containerStyles = {
             width: '40%',
 	        padding: '10px',
-	        height: '3rem',
+	        marginBottom: '0.5rem',
 	        backgroundColor: (this.props.background ? this.props.background : 'rgb(254, 241, 241)'),
 	        borderColor: (this.props.background ? null : 'rgb(226, 168, 167)'),
-        },
-        errorStyles = {
+        };
+        const errorStyles = {
             fontSize: '1rem',
             fontWeight: 'bold', 
-	        color: (this.props.color ? this.props.color : 'rgb(213, 109, 109)'),
+            color: (this.props.color ? this.props.color : 'rgb(213, 109, 109)'),
+            textAlign: 'center'
         };
 
         return (
             <div id="error-container" style={containerStyles}>
-                <center>
-                  <span style={errorStyles}>{this.props.error}</span>
-                </center>
+                <div style={errorStyles}>{this.props.error}</div>
             </div>
         )
     }

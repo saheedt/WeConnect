@@ -23,12 +23,26 @@ class Businesses extends Component {
         <Switch>
           <Route exact path={`${url}/filter`}
             render={props => (<Query {...props}/>)} />
+
           <Route exact path={`${url}/add`}
-            render={props => (<Add {...props}/>)} />
+            render={props => {
+              return(
+                <Add {...props}
+                  openLogin={this.props.openLogin}
+                  closeLogin={this.props.closeLogin}
+                  openSignUp={this.props.openSignUp}
+                  closeSignUp={this.props.closeSignUp}
+                />
+              )
+            }
+            }/>
+
           <Route path={`${url}/:businessId`}
             render={props => (<BizProfile {...props}/>)} />
+
           <Route exact path={`${url}`}
             render={props => (<Listings {...props}/>)} />
+
         </Switch>
       </div>
     );

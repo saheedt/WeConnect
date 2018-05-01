@@ -1,4 +1,7 @@
 import {
+  ADDING_BUSINESS,
+  ADDING_BUSINESS_SUCCESS,
+  ADDING_BUSINESS_ERROR,
   FETCHING_BUSINESSES,
   FETCHING_BUSINESSES_SUCCESS,
   FETCHING_BUSINESSES_ERROR,
@@ -13,7 +16,6 @@ import {
   QUERY_BUSINESS_SUCCESS,
   QUERY_BUSINESS_ERROR
 } from '../actions/actionTypes';
-import { queryBusinesses } from '../actions/businessesActions';
 
 /**
  * @param {Object} state curent application data state
@@ -22,6 +24,33 @@ import { queryBusinesses } from '../actions/businessesActions';
  */
 export default function businessesReducer(state = {}, action) {
   switch (action.type) {
+  case ADDING_BUSINESS:
+    return {
+      ...state,
+      add: {
+        isFetching: true,
+        business: null,
+        error: null
+      }
+    }
+  case ADDING_BUSINESS_SUCCESS:
+    return {
+      ...state,
+      add: {
+        isFetching: false,
+        business: action.business,
+        error: null
+      }
+    }
+  case ADDING_BUSINESS_ERROR:
+    return {
+      ...state,
+      add: {
+        isFetching: false,
+        business: null,
+        error: action.error
+      }
+    }
   case FETCHING_BUSINESSES:
     return {
       ...state,
@@ -63,6 +92,12 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       error: null,
       reviews: {
+        error: null
+      },
+      queries: {
+        error: null
+      },
+      add: {
         error: null
       }
     };
@@ -112,7 +147,7 @@ export default function businessesReducer(state = {}, action) {
       return {
         ...state,
         queries: {
-          isfetching: false,
+          isFetching: false,
           error: action.error
         }
       }

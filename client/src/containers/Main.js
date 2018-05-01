@@ -11,6 +11,10 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.openLogin = this.openLogin.bind(this);
+    this.closeLogin = this.closeLogin.bind(this);
+    this.openSignUp = this.openSignUp.bind(this);
+    this.closeSignUp = this.closeSignUp.bind(this)
   }
   openLogin(event) {
     return JwModal.open('user-login')(event)
@@ -34,10 +38,10 @@ class Main extends Component {
           return(
             <Businesses
               {...props}
-              openLogin={this.openLogin.bind(this)}
-              closeLogin={this.closeLogin.bind(this)}
-              openSignUp={this.openSignUp.bind(this)}
-              closeSignUp={this.closeSignUp.bind(this)}
+              openLogin={this.openLogin}
+              closeLogin={this.closeLogin}
+              openSignUp={this.openSignUp}
+              closeSignUp={this.closeSignUp}
             />
           )
         }
@@ -48,8 +52,8 @@ class Main extends Component {
            return(
             Users.showLogin(
               JwModal,
-              this.closeLogin.bind(this),
-              this.openSignUp.bind(this)
+              this.closeLogin,
+              this.openSignUp
             )
            )}
           }
@@ -59,8 +63,8 @@ class Main extends Component {
            return(
             Users.showSignUp(
               JwModal,
-              this.closeSignUp.bind(this),
-              this.openLogin.bind(this)
+              this.closeSignUp,
+              this.openLogin
             )
            )}
           }
