@@ -98,7 +98,7 @@ class SignUp extends Component {
     render() {
       return(
         <section id="sign-up" className="auth flex">
-          <Error error={this.props.users.error} />
+          <Error error={this.props.error} />
           <div className="max480 auth-raise white-bg">
                 {/* <span id="close-register-modal"><i className="material-icons">close</i></span> */}
             <center><h3>sign up</h3></center>

@@ -2,6 +2,9 @@ import {
   ADDING_BUSINESS,
   ADDING_BUSINESS_SUCCESS,
   ADDING_BUSINESS_ERROR,
+  UPDATE_BUSINESS,
+  UPDATE_BUSINESS_SUCCESS,
+  UPDATE_BUSINESS_ERROR,
   FETCHING_BUSINESSES,
   FETCHING_BUSINESSES_SUCCESS,
   FETCHING_BUSINESSES_ERROR,
@@ -51,6 +54,33 @@ export default function businessesReducer(state = {}, action) {
         error: action.error
       }
     }
+  case UPDATE_BUSINESS:
+   return {
+     ...state,
+     update: {
+       isFetching: true,
+       business: null,
+       error: null
+     }
+   }
+  case UPDATE_BUSINESS_SUCCESS:
+   return {
+     ...state,
+     update: {
+       isFetching: false,
+       business: action.business,
+       error: null
+     }
+   }
+  case UPDATE_BUSINESS_ERROR:
+   return {
+     ...state,
+     update: {
+       isFetching: false,
+       business: null,
+       error: action.error
+     }
+   }
   case FETCHING_BUSINESSES:
     return {
       ...state,
@@ -98,6 +128,9 @@ export default function businessesReducer(state = {}, action) {
         error: null
       },
       add: {
+        error: null
+      },
+      update: {
         error: null
       }
     };

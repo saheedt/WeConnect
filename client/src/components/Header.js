@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
-import Users from '../containers/Users'
+import Menu from './Menu';
 
 import { query } from '../actions/businessesActions';
 import Helper from '../helper/Helper';
@@ -111,7 +111,8 @@ class Header extends Component {
   }
   render() {
     const { display } = this.state;
-    const { token } = this.state.users;
+    const { token } = this.props.users;
+    const { email } = this.props.users.user;
     let show;
     if (token) {
       show = 'block'
@@ -158,10 +159,11 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
-          <a style={{display: show}} id="route-profile-btn" className="flex pointer-cursor"
-            onClick={this.showMenuHandler.bind(this)}>
-            <i className="material-icons">menu</i>
-          </a>
+          <div style={{display: show}} id="route-profile-btn" className="flex pointer-cursor"
+            >
+            {/* <i className="material-icons">menu</i>  pointer-cursor*/}
+            <Menu details={email}/>
+          </div>
         </div>
       </header>
     );

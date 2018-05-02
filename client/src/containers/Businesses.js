@@ -5,7 +5,8 @@ import Header from '../components/Header';
 import Listings from '../components/Listings';
 import BizProfile from '../components/BizProfile';
 import Query from '../components/Query';
-import Add from '../components/Add'
+import Add from '../components/Add';
+import Update from '../components/Update';
 
 class Businesses extends Component {
   constructor(props) {
@@ -23,6 +24,9 @@ class Businesses extends Component {
         <Switch>
           <Route exact path={`${url}/filter`}
             render={props => (<Query {...props}/>)} />
+          
+          <Route exact path={`${url}/update/:businessId`}
+            render={props => (<Update {...props}/>)} />
 
           <Route exact path={`${url}/add`}
             render={props => {
