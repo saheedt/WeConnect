@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import Loader from 'react-loader'
+
+import Helper from '../helper/Helper';
+
 import { fetchBusinesses } from '../actions/businessesActions';
 
 class Listings extends Component {
@@ -13,10 +17,6 @@ class Listings extends Component {
     this.onAddBtnClick = this.onAddBtnClick.bind(this)
   }
   componentWillMount() {
-    const { businesses } = this.props;
-    if (businesses) {
-      return this.genListing(businesses);
-    }
     return this.props.fetchBusinesses();
   }
   componentWillReceiveProps(nextProps) {
@@ -69,7 +69,9 @@ class Listings extends Component {
     this.setState({ display: dom });
   }
   render() {
+    const { isFetching } = this.props;
     return (
+      <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
       <section id="listings" className="header-margin">
         <ul id="listings-list" className="collection max630">
           {this.state.display}
@@ -80,6 +82,7 @@ class Listings extends Component {
           </a>
         </div>
       </section>
+      </Loader>
     );
   }
 }

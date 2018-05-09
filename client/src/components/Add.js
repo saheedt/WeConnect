@@ -2,16 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Error from './Error';
+import Success from './Success'
 
 import { addBusiness, clearAllBusinessesError } from '../actions/businessesActions';
 import { wipeUserError, loginError } from '../actions/userActions';
 class Add extends Component {
   constructor(props) {
       super(props)
+      this.state = {}
       this.registerBusiness = this.registerBusiness.bind(this)
   }
+  componentWillMount() {
+    this.props.clearBusinessErrors();
+  }
   componentDidMount() {
-    this.addBusinessBtn = document.getElementById('add-business-btn');
+    // this.addBusinessBtn = document.getElementById('add-business-btn');
 
     this.businessName = document.getElementById('company-name');
     this.businessAddress = document.getElementById('address');
@@ -23,8 +28,24 @@ class Add extends Component {
   componentWillReceiveProps(nextProps) {
     console.log(nextProps)
       if (nextProps.token) {
-        return nextProps.closeLogin(this.state.cachedEvent)
+        if (nextProps.error &&
+          (nextProps.error === 'invalid token'
+            || nextProps.error === 'unauthorized user')) {
+              nextProps.loginError(nextProps.error);
+              return nextProps.openLogin(this.cachedEvent);
+        }
+        if (nextProps.business) {
+          console.log('created..')
+          this.setState({
+            successMsg: 'business profile successfully added'
+          },
+          () => setTimeout(()=> this.props.history.push('/businesses'), 3000)
+          );
+        }
+        return nextProps.closeLogin(this.cachedEvent)
       }
+      // TODO: Scenario for no token with unauth
+      // return nextProps.closeLogin(this.cachedEvent)
   }
   registerBusiness(event) {
     event.persist()
@@ -45,19 +66,19 @@ class Add extends Component {
       employees: this.staffStrength.value,
       category: this.businessCategory.value
     };
-
     if (!token) {
-      loginError('sign in to create business profile')
-      this.setState({cachedEvent: event})
-      openLogin(event);
-      return
+      loginError('sign in to create business profile');
+      this.cachedEvent = event;
+      return setTimeout(() => openLogin(event), 100);
     }
-    return doAddBusiness(businessDetails, token);
+    this.cachedEvent = event;
+    return setTimeout(() => doAddBusiness(businessDetails, token), 100);
   }
   render() {
       return(
         <div className="flex vertical-after-header">
         <Error error={this.props.error} />
+        <Success message={this.state.successMsg} />
           <section id="add-business-container" className="flex holder-60-shadow padding-20">
             <div className="row">
               <form className="col s12 m12 l12">
@@ -103,7 +124,7 @@ class Add extends Component {
 const mapStateToProps = (state) => {
   console.log(state)
   return {
-    token: state.users.users,
+    token: state.users.token,
     ...state.businesses.add
   };
 };

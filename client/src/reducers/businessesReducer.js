@@ -46,31 +46,31 @@ export default function businessesReducer(state = {}, action) {
       }
     }
   case ADDING_BUSINESS_ERROR:
-    return {
-      ...state,
-      add: {
-        isFetching: false,
-        business: null,
-        error: action.error
-      }
+   return {
+    ...state,
+    add: {
+      isFetching: false,
+      business: null,
+      error: action.error
     }
+   }
   case UPDATE_BUSINESS:
    return {
-     ...state,
-     update: {
-       isFetching: true,
-       business: null,
-       error: null
-     }
+    ...state,
+    update: {
+      isFetching: true,
+      business: null,
+      error: null
+    }
    }
   case UPDATE_BUSINESS_SUCCESS:
    return {
-     ...state,
-     update: {
-       isFetching: false,
-       business: action.business,
-       error: null
-     }
+    ...state,
+    update: {
+      isFetching: false,
+      business: action.business,
+      error: null
+    }
    }
   case UPDATE_BUSINESS_ERROR:
    return {

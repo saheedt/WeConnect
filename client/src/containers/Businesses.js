@@ -26,7 +26,17 @@ class Businesses extends Component {
             render={props => (<Query {...props}/>)} />
           
           <Route exact path={`${url}/update/:businessId`}
-            render={props => (<Update {...props}/>)} />
+            render={props => {
+              return (
+                <Update {...props}
+                  openLogin={this.props.openLogin}
+                  closeLogin={this.props.closeLogin}
+                  openSignUp={this.props.openSignUp}
+                  closeSignUp={this.props.closeSignUp}
+                />
+              )
+            }
+           }/>
 
           <Route exact path={`${url}/add`}
             render={props => {

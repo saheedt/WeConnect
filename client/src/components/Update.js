@@ -5,14 +5,19 @@ import Error from './Error';
 
 import { clearAllBusinessesError, businessUpdate } from '../actions/businessesActions';
 import { wipeUserError, loginError } from '../actions/userActions';
+
 class Update extends Component {
   constructor(props) {
     super(props)
-    this.updateBusiness = this.updateBusiness.bind(this)  
+    this.updateBusiness = this.updateBusiness.bind(this)
+    this.goBack = this.goBack.bind(this)
+  }
+  componentWillMount() {
+    this.props.clearBusinessErrors();
   }
   componentDidMount() {
-    this.updateBusinessBtn = document.getElementById('update-business-btn');
-    this.updateBusinessCancelBtn = document.getElementById('update-business-cancel-btn');
+    // this.updateBusinessBtn = document.getElementById('update-business-btn');
+    // this.updateBusinessCancelBtn = document.getElementById('update-business-cancel-btn');
 
     this.businessName = document.getElementById('company-name');
     this.businessAddress = document.getElementById('address');
@@ -23,10 +28,50 @@ class Update extends Component {
   }
   componentWillReceiveProps(nextProps) {
     console.log(nextProps)
+    if (nextProps.token) {
+      return nextProps.closeLogin(this.cachedEvent)
+    }
+    if (nextProps.error &&
+      (nextProps.error === 'invalid token'
+        || nextProps.error === 'unauthorized user')) {
+        nextProps.loginError(nextProps.error);
+        return openLogin(this.cachedEvent);
+    }
+  }
+  goBack(event) {
+    event.preventDefault()
+    window.history.back();
   }
   updateBusiness(event) {
-      event.persist()
-      event.preventDefault()
+    event.persist()
+    event.preventDefault()
+
+    const {
+      token,
+      openLogin,
+      doBusinessUpdate,
+      clearUserError,
+      loginError
+    } = this.props;
+    const { businessId } = this.props.match.params;
+    clearUserError();
+
+    const updateDetails = {
+      name: this.businessName.value,
+      address: this.businessAddress.value,
+      location: this.businessLocation.value,
+      phonenumber: this.businessPhoneNumber.value,
+      employees: this.staffStrength.value,
+      category: this.businessCategory.value
+    };
+
+    if (!token) {
+      loginError('sign in to update business profile');
+      this.cachedEvent = event;
+      return openLogin(event);
+    }
+    this.cachedEvent = event;
+    return doBusinessUpdate(businessId, updateDetails, token);
   }
   render() {
     return(
@@ -65,8 +110,8 @@ class Update extends Component {
                         <label forhtml="phone-number">Phone number</label>
                     </div>
                     </div>
-                    <button id="update-business-btn" className="teal col s12 ">Update Business Profile</button>
-                    <button id="update-business-cancel-btn" className="teal col s12 ">cancel</button>
+                    <button onClick={this.updateBusiness} id="update-business-btn" className="teal col s12 ">Update Business Profile</button>
+                    <button onClick={this.goBack} id="update-business-cancel-btn" className="teal col s12 ">cancel</button>
                 </form>
             </div>
         </section>
@@ -80,7 +125,7 @@ class Update extends Component {
 const mapStateToProps = (state) => {
   console.log(state)
   return {
-    token: state.users.users,
+    token: state.users.token,
     ...state.businesses.update
   };
 };

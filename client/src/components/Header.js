@@ -110,9 +110,14 @@ class Header extends Component {
     window.history.back();
   }
   render() {
+    // let token;
+    let email;
     const { display } = this.state;
-    const { token } = this.props.users;
-    const { email } = this.props.users.user;
+    const token = this.props.token;
+    // const email = this.props.user.email ? this.props.user.email : null;
+    if (this.props.user && this.props.user.email) {
+      email = this.props.user.email
+    }
     let show;
     if (token) {
       show = 'block'
@@ -173,7 +178,7 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ...state.users
+    ...state.users.users
   };
 };
 const mapDispatchedToProps = (dispatch) => {

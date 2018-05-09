@@ -5,6 +5,7 @@ import Loader from 'react-loader'
 
 import Error from './Error';
 import Review from './Review';
+import Helper from '../helper/Helper';
 
 import { fetchBusiness, fetchReviews } from '../actions/businessesActions';
 
@@ -15,27 +16,6 @@ class BizProfile extends Component {
       business: null,
       reviews: null
     };
-    this.options = {
-      lines: 13,
-      length: 20,
-      width: 10,
-      radius: 30,
-      scale: 1.00,
-      corners: 1,
-      color: '#fff',
-      opacity: 0.25,
-      rotate: 0,
-      direction: 1,
-      speed: 1,
-      trail: 60,
-      fps: 20,
-      zIndex: 2e9,
-      top: '50%',
-      left: '50%',
-      shadow: false,
-      hwaccel: false,
-      position: 'absolute'
-    }
   }
   componentWillMount() {
     const { businessId } = this.props.match.params;
@@ -90,7 +70,7 @@ class BizProfile extends Component {
       const unique = `${index}--${index}`;
       return (
         <Review key={unique} createdAt={review.createdAt}
-             name={review.name} review={review.review}/>
+          name={review.name} review={review.review}/>
       );
     });
     this.setState({ reviews: bizReviews });
@@ -98,7 +78,7 @@ class BizProfile extends Component {
   render() {
     const { isFetching } = this.props;
     return (
-      <Loader loaded={!isFetching} options={this.options}>
+      <Loader loaded={!isFetching} options={Helper.loaderOptions()}>
         <div className="flex vertical-after-header">
           {this.state.business}
           <section

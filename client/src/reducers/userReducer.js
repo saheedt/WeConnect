@@ -20,72 +20,58 @@ import {
     case USER_LOGIN:
       return {
         ...state,
-        users: {
-          isFetching: true,
-          error: null
-        }
+        isFetching: true,
+        error: null
       }
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
-        users: {
-          isFetching: false,
-          user: action.user.user,
-          token: action.user.token,
-          error: null
-        }
+        isFetching: false,
+        user: action.user.user,
+        token: action.user.token,
+        error: null
       }
     case USER_LOGIN_ERROR:
       return {
         ...state,
-        users: {
-          isFetching: false,
-          error: action.error,
-          user: null,
-          token: null
-        }
+        isFetching: false,
+        error: action.error,
+        user: null,
+        token: null
       }
     case USER_SIGNUP:
       return {
         ...state,
-        users: {
-          isFetching: true,
-          error: null
-        }
+        isFetching: true,
+        error: null
       }
     case USER_SIGNUP_SUCCESS:
       return {
         ...state,
-        users: {
-          isFetching: false,
-          error: null,
-          user: action.user.user,
-          token: action.user.token
-        }
+        isFetching: false,
+        error: null,
+        user: action.user.user,
+        token: action.user.token
       }
     case USER_SIGNUP_ERROR:
       return {
         ...state,
-        users: {
-          isFetching: false,
-          error: action.error,
-          user: null,
-          token: null
-        }
+        isFetching: false,
+        error: action.error,
+        user: null,
+        token: null
       }
     case CLEAR_USER_ERROR:
+    console.log('clear user error state: ', state)
       return {
         ...state,
-        users: {
-          error: null
-        }
+        error: null
       }
     case CLEAR_USER_TOKEN:
       return {
         ...state,
-        users: {
-          token: null
-        }
+        token: null,
+        user: null
       }
     default:
       return state

@@ -242,7 +242,8 @@ export function addBusiness(businessDetails, token) {
     .then((business) => {
       if (business.data &&
         business.data.message === 'business successfully added') {
-          const businessDetails = business.business
+          console.log('business add: ', business)
+          const businessDetails = business.data.business
           return dispatch(addingBusinessSuccess(businessDetails))
         }
     })
