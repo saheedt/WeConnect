@@ -90,9 +90,11 @@ export function clearUserToken() {
 /**
  * @returns {Object} CLEAR_USER_ERROR
  */
-export function clearUserError() {
+export function clearUserError(token) {
+  console.log('token as of user error wipe: ', token);
   return {
-    type: CLEAR_USER_ERROR
+    type: CLEAR_USER_ERROR,
+    token
   };
 }
 
@@ -177,8 +179,8 @@ export function signupError(error) {
 /**
  * @returns {Function} dispatch function
 */
-export function wipeUserError() {
+export function wipeUserError(token) {
   return (dispatch) => {
-    dispatch(clearUserError());
+    dispatch(clearUserError(token));
   }
 }

@@ -6,6 +6,8 @@ import Success from './Success'
 
 import { addBusiness, clearAllBusinessesError } from '../actions/businessesActions';
 import { wipeUserError, loginError } from '../actions/userActions';
+import Helper from '../helper/Helper';
+
 class Add extends Component {
   constructor(props) {
       super(props)
@@ -14,6 +16,7 @@ class Add extends Component {
   }
   componentWillMount() {
     this.props.clearBusinessErrors();
+    // this.setState({successMsg: 'Game message..'})
   }
   componentDidMount() {
     // this.addBusinessBtn = document.getElementById('add-business-btn');
@@ -29,14 +32,18 @@ class Add extends Component {
     console.log(nextProps)
       if (nextProps.token) {
         if (nextProps.error &&
-          (nextProps.error === 'invalid token'
-            || nextProps.error === 'unauthorized user')) {
-              nextProps.loginError(nextProps.error);
-              return nextProps.openLogin(this.cachedEvent);
+          nextProps.error === 'invalid token') {
+            nextProps.loginError('access token expired, kindly re-authenticate');
+            return nextProps.openLogin(this.cachedEvent);
+        }
+        if (nextProps.token &&
+          nextProps.error === 'unauthorized user') {
+            nextProps.loginError('you are not authorized to perform this action, sign-in/sign-up');
+            return nextProps.openLogin(this.cachedEvent);
         }
         if (nextProps.business) {
-          console.log('created..')
-          this.setState({
+          Helper.clearInputs({isAuth: false})
+          return this.setState({
             successMsg: 'business profile successfully added'
           },
           () => setTimeout(()=> this.props.history.push('/businesses'), 3000)
@@ -44,8 +51,22 @@ class Add extends Component {
         }
         return nextProps.closeLogin(this.cachedEvent)
       }
-      // TODO: Scenario for no token with unauth
-      // return nextProps.closeLogin(this.cachedEvent)
+      if (!nextProps.token) {
+        if (nextProps.error &&
+          nextProps.error === 'invalid token') {
+            nextProps.loginError('you appear offline, kindly sign-in/sign-up');
+            return nextProps.openLogin(this.cachedEvent);
+        }
+        if (nextProps.error &&
+          nextProps.error === 'unauthorized user') {
+            nextProps.loginError('you appear offline, kindly sign-in/sign-up');
+            return nextProps.openLogin(this.cachedEvent);
+        }
+        if (nextProps.business) {
+          nextProps.loginError('you appear offline, kindly sign-in/sign-up');
+          return nextProps.openLogin(this.cachedEvent);
+        }
+      }
   }
   registerBusiness(event) {
     event.persist()
@@ -57,7 +78,7 @@ class Add extends Component {
       clearUserError,
       loginError
     } = this.props;
-    clearUserError()
+    clearUserError(token)
     const businessDetails = {
       name: this.businessName.value,
       address: this.businessAddress.value,
@@ -132,7 +153,7 @@ const mapDispatchedToProps = (dispatch) => {
   return {
     doAddBusiness: (details, token) => dispatch(addBusiness(details, token)),
     clearBusinessErrors: () => dispatch(clearAllBusinessesError()),
-    clearUserError: () => dispatch(wipeUserError()),
+    clearUserError: (token) => dispatch(wipeUserError(token)),
     loginError: (errorMessage) => dispatch(loginError(errorMessage))
   };
 };

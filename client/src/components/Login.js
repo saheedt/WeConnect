@@ -41,7 +41,7 @@ class Login extends Component {
     // }
   }
   onSignUpClick(event) {
-    event.preventDefault();
+    event.preventDefault(null);
     this.props.wipeUserError();
     this.props.closeLogin(event)
     this.props.openSignUp(event)
@@ -105,7 +105,7 @@ const mapDispatchedToProps = (dispatch) => {
   return {
     doLogin: (userData) => dispatch(doLogin(userData)),
     loginError: (error) => dispatch(loginError(error)),
-    wipeUserError: () => dispatch(wipeUserError())
+    wipeUserError: (token) => dispatch(wipeUserError(token))
   };
 };
 

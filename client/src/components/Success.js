@@ -9,9 +9,9 @@ export default class Success extends Component {
         const containerStyles = {
             width: '40%',
 	        padding: '10px',
-	        marginBottom: '0.5rem',
+	        marginTop: '0.5rem',
 	        backgroundColor: (this.props.background ? this.props.background : 'teal'),
-	        borderColor: (this.props.background ? null : 'rgb(226, 168, 167)'),
+	        borderColor: (this.props.border ? this.props.border : null),
         };
         const successStyles = {
             fontSize: '1rem',
