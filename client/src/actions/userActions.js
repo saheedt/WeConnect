@@ -28,7 +28,6 @@ export function userLogin() {
  * @returns {Object} USER_LOGIN_SUCCESS
  */
 export function userLoginSuccess(userData) {
-  console.log('user action userLoginSuccess: ', userData);
   return {
     type: USER_LOGIN_SUCCESS,
     user: userData
@@ -90,22 +89,25 @@ export function clearUserToken() {
 /**
  * @returns {Object} CLEAR_USER_ERROR
  */
-export function clearUserError(token) {
-  console.log('token as of user error wipe: ', token);
+export function clearUserError(userDetails) {
   return {
     type: CLEAR_USER_ERROR,
-    token
+    token: userDetails.token,
+    user: userDetails.user
   };
 }
+
+/**
+ * Action creators
+ */
 
 /**
  * @returns {Function} dispatch function
 */
 export function doLogin(userData) {
     return (dispatch) => {
-        dispatch(clearUserError())
-        dispatch(clearUserToken())
-        dispatch(userLogin())
+        dispatch(clearUserToken());
+        dispatch(userLogin());
         return API.post(
             '/api/v1/auth/login',
             querystring.stringify(userData)
@@ -135,7 +137,6 @@ export function doLogin(userData) {
  */
 export function doSignup(signupData){
   return (dispatch) => {
-    dispatch(clearUserError())
     dispatch(clearUserToken())
     dispatch(userSignup())
     return API.post(
@@ -179,8 +180,8 @@ export function signupError(error) {
 /**
  * @returns {Function} dispatch function
 */
-export function wipeUserError(token) {
+export function wipeUserError(userDetails) {
   return (dispatch) => {
-    dispatch(clearUserError(token));
+    dispatch(clearUserError(userDetails));
   }
 }

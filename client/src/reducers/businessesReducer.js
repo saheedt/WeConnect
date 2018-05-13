@@ -35,7 +35,7 @@ export default function businessesReducer(state = {}, action) {
         business: null,
         error: null
       }
-    }
+    };
   case ADDING_BUSINESS_SUCCESS:
     return {
       ...state,
@@ -44,77 +44,83 @@ export default function businessesReducer(state = {}, action) {
         business: action.business,
         error: null
       }
-    }
+    };
   case ADDING_BUSINESS_ERROR:
-   return {
-    ...state,
-    add: {
-      isFetching: false,
-      business: null,
-      error: action.error
-    }
-   }
+    return {
+      ...state,
+      add: {
+        isFetching: false,
+        business: null,
+        error: action.error
+      }
+    };
   case UPDATE_BUSINESS:
-   return {
-    ...state,
-    update: {
-      isFetching: true,
-      business: null,
-      error: null
-    }
-   }
+    return {
+      ...state,
+      update: {
+        isFetching: true,
+        business: null,
+        error: null
+      }
+    };
   case UPDATE_BUSINESS_SUCCESS:
-   return {
-    ...state,
-    update: {
-      isFetching: false,
-      business: action.business,
-      error: null
-    }
-   }
+    return {
+      ...state,
+      update: {
+        isFetching: false,
+        business: action.business,
+        error: null
+      }
+    };
   case UPDATE_BUSINESS_ERROR:
-   return {
-     ...state,
-     update: {
-       isFetching: false,
-       business: null,
-       error: action.error
-     }
-   }
+    return {
+      ...state,
+      update: {
+        isFetching: false,
+        business: null,
+        error: action.error
+      }
+    };
   case FETCHING_BUSINESSES:
     return {
       ...state,
       isFetching: true,
-      businesses: null
+      businesses: null,
+      error: null
     };
   case FETCHING_BUSINESS:
     return {
       ...state,
       isFetching: true,
-      business: null
+      business: null,
+      error: null
     };
   case FETCHING_BUSINESSES_SUCCESS:
     return {
       ...state,
       isFetching: false,
-      businesses: action.businesses
+      businesses: action.businesses,
+      error: null
     };
   case FETCHING_BUSINESS_SUCCESS:
     return {
       ...state,
       isFetching: false,
-      business: action.business
+      business: action.business,
+      error: null
     };
   case FETCHING_BUSINESSES_ERROR:
     return {
       ...state,
       isFetching: false,
+      businesses: false,
       error: action.error
     };
   case FETCHING_BUSINESS_ERROR:
     return {
       ...state,
       isFetching: false,
+      business: false,
       error: action.error
     };
   case CLEAR_BUSINESSES_ERROR:
@@ -139,7 +145,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       reviews: {
         isFetching: true,
-        reviews: null
+        reviews: null,
+        error: null
       }
     };
   case FETCHING_BUSINESS_REVIEWS_SUCCESS:
@@ -147,7 +154,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       reviews: {
         isFetching: false,
-        reviews: action.reviews
+        reviews: action.reviews,
+        error: null
       }
     };
   case FETCHING_BUSINESS_REVIEWS_ERROR:
@@ -155,6 +163,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       reviews: {
         isFetching: false,
+        reviews: null,
         error: action.error
       }
     };
@@ -166,7 +175,7 @@ export default function businessesReducer(state = {}, action) {
         businesses: null,
         error: null
       }
-    }
+    };
   case QUERY_BUSINESS_SUCCESS:
     return {
       ...state,
@@ -175,15 +184,16 @@ export default function businessesReducer(state = {}, action) {
         businesses: action.businesses,
         error: null
       }
-    }
-    case QUERY_BUSINESS_ERROR:
-      return {
-        ...state,
-        queries: {
-          isFetching: false,
-          error: action.error
-        }
+    };
+  case QUERY_BUSINESS_ERROR:
+    return {
+      ...state,
+      queries: {
+        isFetching: false,
+        businesses: null,
+        error: action.error
       }
+    };
   default:
     return state;
   }

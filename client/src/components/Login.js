@@ -19,13 +19,13 @@ class Login extends Component {
     this.loginBtn = document.getElementById('login-btn');
   }
   componentWillReceiveProps(nextProps) {
-    console.log('login receive props: ', nextProps)
     if (nextProps.isFetching === true) {
       this.emailInput.disabled = true;
       this.passwordInput.disabled = true;
       this.loginBtn.disabled = true;
       if (this.loginBtn.classList.contains('teal')) {
         this.loginBtn.classList.remove('teal')
+        console.log(this.loginBtn.style.color)
       }
     }
     if (nextProps.isFetching === false) {
@@ -36,30 +36,42 @@ class Login extends Component {
         this.loginBtn.classList.add('teal')
       }
     }
-    // if (nextProps.token) {
-    //   nextProps.closeLogin();
-    // }
   }
   onSignUpClick(event) {
-    event.preventDefault(null);
-    this.props.wipeUserError();
-    this.props.closeLogin(event)
-    this.props.openSignUp(event)
+    event.preventDefault();
+    const {
+      clearUserError,
+      closeLogin,
+      openSignUp
+    } = this.props;
+    clearUserError({
+      token: null,
+      user: null
+    });
+    closeLogin(event);
+    openSignUp(event);
   }
   onLoginClick(event) {
     event.preventDefault();
-    const { loginError, doLogin } = this.props;
+    const {
+      loginError,
+      doLogin,
+      clearUserError,
+      token,
+      user
+    } = this.props;
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
     if (Helper.isEmptyOrNull(email)) {
-      return loginError('email cannot be empty or null')
+      return loginError('email cannot be empty or null');
     }
     if (!Helper.isEmail(email)) {
       return loginError('email address is invalid');
     }
     if (!Helper.isPasswordValid(password)) {
-      return loginError('password should be 6 characters or longer')
+      return loginError('password should be 6 characters or longer');
     }
+    clearUserError({token, user});
     const userData = {
       email,
       password
@@ -68,7 +80,6 @@ class Login extends Component {
   }
   render() {
     return(
-      // <Loader loaded={!isFetching} options={this.options}>
         <section id="login" className="auth flex">
         <Error error={this.props.error} />
           <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
@@ -91,7 +102,6 @@ class Login extends Component {
         </div>
         </div>
         </section>
-      // </Loader> 
     )
   }
 }
@@ -105,7 +115,7 @@ const mapDispatchedToProps = (dispatch) => {
   return {
     doLogin: (userData) => dispatch(doLogin(userData)),
     loginError: (error) => dispatch(loginError(error)),
-    wipeUserError: (token) => dispatch(wipeUserError(token))
+    clearUserError: (userDetails) => dispatch(wipeUserError(userDetails))
   };
 };
 

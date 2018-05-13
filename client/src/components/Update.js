@@ -2,22 +2,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Error from './Error';
+import Success from './Success';
 
-import { clearAllBusinessesError, businessUpdate } from '../actions/businessesActions';
-import { wipeUserError, loginError } from '../actions/userActions';
+import {
+  clearAllBusinessesError,
+  businessUpdate
+} from '../actions/businessesActions';
+import {
+  wipeUserError,
+  loginError
+} from '../actions/userActions';
 
 class Update extends Component {
   constructor(props) {
-    super(props)
-    this.updateBusiness = this.updateBusiness.bind(this)
-    this.goBack = this.goBack.bind(this)
-  }
-  componentWillMount() {
-    this.props.clearBusinessErrors();
+    super(props);
+    this.updateBusiness = this.updateBusiness.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
   componentDidMount() {
     // this.updateBusinessBtn = document.getElementById('update-business-btn');
-    // this.updateBusinessCancelBtn = document.getElementById('update-business-cancel-btn');
+    /* this.updateBusinessCancelBtn =
+    document.getElementById('update-business-cancel-btn'); */
 
     this.businessName = document.getElementById('company-name');
     this.businessAddress = document.getElementById('address');
@@ -27,35 +32,65 @@ class Update extends Component {
     this.businessPhoneNumber = document.getElementById('phone-number');
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
     if (nextProps.token) {
-      return nextProps.closeLogin(this.cachedEvent)
+      if (nextProps.error &&
+        nextProps.error === 'invalid token') {
+        nextProps.doLoginError('access token expired, kindly re-authenticate');
+        return nextProps.openLogin(this.cachedEvent);
+      }
+      if (nextProps.token &&
+          nextProps.error === 'unauthorized user') {
+        nextProps
+          .doLoginError('un-authorized to perform action, sign-in/sign-up');
+        return nextProps.openLogin(this.cachedEvent);
+      }
+      if (nextProps.business) {
+        Helper.clearInputs({ isAuth: false });
+        return this.setState(
+          {
+            updateSuccessMsg: 'business profile successfully updated'
+          },
+          () => setTimeout(() => this.props.history.push('/user/profile'), 3000)
+        );
+      }
+      return nextProps.closeLogin(this.cachedEvent);
     }
-    if (nextProps.error &&
-      (nextProps.error === 'invalid token'
-        || nextProps.error === 'unauthorized user')) {
-        nextProps.loginError(nextProps.error);
-        return openLogin(this.cachedEvent);
+    if (!nextProps.token) {
+      if (nextProps.error &&
+        nextProps.error === 'invalid token') {
+        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
+        return nextProps.openLogin(this.cachedEvent);
+      }
+      if (nextProps.error &&
+        nextProps.error === 'unauthorized user') {
+        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
+        return nextProps.openLogin(this.cachedEvent);
+      }
+      if (nextProps.business) {
+        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
+        return nextProps.openLogin(this.cachedEvent);
+      }
     }
   }
   goBack(event) {
-    event.preventDefault()
+    event.preventDefault();
     window.history.back();
   }
   updateBusiness(event) {
-    event.persist()
-    event.preventDefault()
-
+    event.persist();
+    event.preventDefault();
     const {
       token,
+      user,
       openLogin,
       doBusinessUpdate,
       clearUserError,
-      loginError
+      doLoginError
     } = this.props;
     const { businessId } = this.props.match.params;
-    clearUserError();
-
+    if (token) {
+      clearUserError({ token, user });
+    }
     const updateDetails = {
       name: this.businessName.value,
       address: this.businessAddress.value,
@@ -64,81 +99,83 @@ class Update extends Component {
       employees: this.staffStrength.value,
       category: this.businessCategory.value
     };
-
     if (!token) {
-      loginError('sign in to update business profile');
+      doLoginError('sign in to update business profile');
       this.cachedEvent = event;
-      return openLogin(event);
+      return setTimeout(() => openLogin(event), 100);
     }
     this.cachedEvent = event;
-    return doBusinessUpdate(businessId, updateDetails, token);
+    return setTimeout(() => doBusinessUpdate(businessId, updateDetails, token));
   }
   render() {
-    return(
-        <div className="flex vertical-after-header">
+    return (
+      <div className="flex vertical-after-header">
         <Error error={this.props.error} />
-        <section id="update-business-container" className="flex holder-60-shadow padding-20">
-            <div className="row">
-                <form className="col s12 ">
-                    <div className="row">
-                    <div className="input-field col s12 ">
-                        <input id="company-name" type="text" className="validate" />
-                        <label forhtml="company-name">Company name</label>
-                    </div>
-                    <div className="input-field col s12  ">
-                        <input id="address" type="text" className="validate" />
-                        <label forhtml="address">Address</label>
-                    </div>
-                    <div className="input-field col s12  ">
-                        <input id="state" type="text" className="validate" />
-                        <label forhtml="state">State</label>
-                    </div>
-                    <div className="input-field col s12 ">
-                        <input id="employees" type="number" className="validate" />
-                        <label forhtml="employees">Employees</label>
-                    </div>
-                    {/* <div className="input-field col s12 ">
-                        <input id="description" type="text" className="validate" />
-                        <label forhtml="description">Short description</label>
-                    </div> */}
-                    <div className="input-field col s12 ">
-                        <input id="category" type="text" className="validate" />
-                        <label forhtml="category">Category</label>
-                    </div>
-                    <div className="input-field col s12 ">
-                        <input id="phone-number" type="number" className="validate" />
-                        <label forhtml="phone-number">Phone number</label>
-                    </div>
-                    </div>
-                    <button onClick={this.updateBusiness} id="update-business-btn" className="teal col s12 ">Update Business Profile</button>
-                    <button onClick={this.goBack} id="update-business-cancel-btn" className="teal col s12 ">cancel</button>
-                </form>
-            </div>
+        <Success message={this.state.updateSuccessMsg} />
+        <section id="update-business-container"
+          className="flex holder-60-shadow padding-20">
+          <div className="row">
+            <form className="col s12 ">
+              <div className="row">
+                <div className="input-field col s12 ">
+                  <input id="company-name" type="text" className="validate" />
+                  <label forhtml="company-name">Company name</label>
+                </div>
+                <div className="input-field col s12  ">
+                  <input id="address" type="text" className="validate" />
+                  <label forhtml="address">Address</label>
+                </div>
+                <div className="input-field col s12  ">
+                  <input id="state" type="text" className="validate" />
+                  <label forhtml="state">State</label>
+                </div>
+                <div className="input-field col s12 ">
+                  <input id="employees" type="number" className="validate" />
+                  <label forhtml="employees">Employees</label>
+                </div>
+                <div className="input-field col s12 ">
+                  <input id="category" type="text" className="validate" />
+                  <label forhtml="category">Category</label>
+                </div>
+                <div className="input-field col s12 ">
+                  <input id="phone-number" type="number" className="validate" />
+                  <label forhtml="phone-number">Phone number</label>
+                </div>
+              </div>
+              <button onClick={this.updateBusiness} id="update-business-btn"
+                className="teal col s12 ">
+              Update Business Profile
+              </button>
+              <button onClick={this.goBack} id="update-business-cancel-btn"
+                className="teal col s12 ">
+                cancel
+              </button>
+            </form>
+          </div>
         </section>
       </div>
-    
-          
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     token: state.users.token,
+    user: state.users.user,
     ...state.businesses.update
   };
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    doBusinessUpdate: (businessId, updateDetails, token) => dispatch(businessUpdate(businessId, updateDetails, token)),
+    doBusinessUpdate: (businessId, updateDetails, token) =>
+      dispatch(businessUpdate(businessId, updateDetails, token)),
     clearBusinessErrors: () => dispatch(clearAllBusinessesError()),
-    clearUserError: () => dispatch(wipeUserError()),
-    loginError: (errorMessage) => dispatch(loginError(errorMessage))
+    clearUserError: token => dispatch(wipeUserError(token)),
+    doLoginError: errorMessage => dispatch(loginError(errorMessage))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchedToProps
-)(Update)
+)(Update);

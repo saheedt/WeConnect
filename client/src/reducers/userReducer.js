@@ -62,10 +62,11 @@ import {
         token: null
       }
     case CLEAR_USER_ERROR:
-    console.log('clear user error state: ', state)
       return {
         ...state,
-        error: null
+        error: null,
+        token: action.token,
+        user: action.user
       }
     case CLEAR_USER_TOKEN:
       return {
