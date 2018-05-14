@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Error from './Error';
+import Error from './Error.jsx';
 import Helper from '../helper/Helper';
 import { signupError, wipeUserError, doSignup } from '../actions/userActions';
 
@@ -11,27 +11,6 @@ class SignUp extends Component {
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignupClick = this.onSignupClick.bind(this);
     this.checkPasswordMatch = this.checkPasswordMatch.bind(this);
-    this.options = {
-      lines: 13,
-      length: 20,
-      width: 10,
-      radius: 30,
-      scale: 1.00,
-      corners: 1,
-      color: '#fff',
-      opacity: 0.25,
-      rotate: 0,
-      direction: 1,
-      speed: 1,
-      trail: 60,
-      fps: 20,
-      zIndex: 2e9,
-      top: '50%',
-      left: '50%',
-      shadow: false,
-      hwaccel: false,
-      position: 'absolute'
-    };
   }
   onLoginClick(event) {
     event.preventDefault();

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Error from '../components/Error';
+import Error from '../components/Error.jsx';
 
 import { doLogin, loginError, wipeUserError } from '../actions/userActions';
 import Helper from '../helper/Helper';

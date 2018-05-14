@@ -1,28 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Error from './Error';
-import Success from './Success';
+import Error from './Error.jsx';
+import Success from './Success.jsx';
 
 import {
-  addBusiness,
-  clearAllBusinessesError
+  clearAllBusinessesError,
+  businessUpdate
 } from '../actions/businessesActions';
 import {
   wipeUserError,
   loginError
 } from '../actions/userActions';
-import Helper from '../helper/Helper';
 
-class Add extends Component {
+class Update extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.registerBusiness = this.registerBusiness.bind(this);
+    this.updateBusiness = this.updateBusiness.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
   componentDidMount() {
-    // this.addBusinessBtn = document.getElementById('add-business-btn');
-
     this.businessName = document.getElementById('company-name');
     this.businessAddress = document.getElementById('address');
     this.businessLocation = document.getElementById('state');
@@ -47,9 +44,9 @@ class Add extends Component {
         Helper.clearInputs({ isAuth: false });
         return this.setState(
           {
-            addSuccessMsg: 'business profile successfully added'
+            updateSuccessMsg: 'business profile successfully updated'
           },
-          () => setTimeout(() => this.props.history.push('/businesses'), 3000)
+          () => setTimeout(() => this.props.history.push('/user/profile'), 3000)
         );
       }
       return nextProps.closeLogin(this.cachedEvent);
@@ -71,21 +68,26 @@ class Add extends Component {
       }
     }
   }
-  registerBusiness(event) {
+  goBack(event) {
+    event.preventDefault();
+    window.history.back();
+  }
+  updateBusiness(event) {
     event.persist();
     event.preventDefault();
     const {
       token,
+      user,
       openLogin,
-      doAddBusiness,
+      doBusinessUpdate,
       clearUserError,
-      doLoginError,
-      user
+      doLoginError
     } = this.props;
+    const { businessId } = this.props.match.params;
     if (token) {
       clearUserError({ token, user });
     }
-    const businessDetails = {
+    const updateDetails = {
       name: this.businessName.value,
       address: this.businessAddress.value,
       location: this.businessLocation.value,
@@ -94,51 +96,55 @@ class Add extends Component {
       category: this.businessCategory.value
     };
     if (!token) {
-      doLoginError('sign in to create business profile');
+      doLoginError('sign in to update business profile');
       this.cachedEvent = event;
       return setTimeout(() => openLogin(event), 100);
     }
     this.cachedEvent = event;
-    return setTimeout(() => doAddBusiness(businessDetails, token), 100);
+    return setTimeout(() => doBusinessUpdate(businessId, updateDetails, token));
   }
   render() {
     return (
       <div className="flex vertical-after-header">
         <Error error={this.props.error} />
-        <Success message={this.state.addSuccessMsg} />
-        <section id="add-business-container"
+        <Success message={this.state.updateSuccessMsg} />
+        <section id="update-business-container"
           className="flex holder-60-shadow padding-20">
           <div className="row">
-            <form className="col s12 m12 l12">
+            <form className="col s12 ">
               <div className="row">
-                <div className="input-field col s12 m12 l12">
+                <div className="input-field col s12 ">
                   <input id="company-name" type="text" className="validate" />
                   <label forhtml="company-name">Company name</label>
                 </div>
-                <div className="input-field col s12 m12 l12 ">
-                  <input id="address" type="text" className="validate"/>
+                <div className="input-field col s12  ">
+                  <input id="address" type="text" className="validate" />
                   <label forhtml="address">Address</label>
                 </div>
-                <div className="input-field col s12 m12 l12 ">
-                  <input id="state" type="text" className="validate"/>
+                <div className="input-field col s12  ">
+                  <input id="state" type="text" className="validate" />
                   <label forhtml="state">State</label>
                 </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="employees" type="number" className="validate"/>
+                <div className="input-field col s12 ">
+                  <input id="employees" type="number" className="validate" />
                   <label forhtml="employees">Employees</label>
                 </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="category" type="text" className="validate"/>
+                <div className="input-field col s12 ">
+                  <input id="category" type="text" className="validate" />
                   <label forhtml="category">Category</label>
                 </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="phone-number" type="number" className="validate"/>
+                <div className="input-field col s12 ">
+                  <input id="phone-number" type="number" className="validate" />
                   <label forhtml="phone-number">Phone number</label>
                 </div>
               </div>
-              <button onClick={this.registerBusiness} id="add-business-btn"
-                className="teal col s12 pointer-cursor">
-                Register Business
+              <button onClick={this.updateBusiness} id="update-business-btn"
+                className="teal col s12 ">
+              Update Business Profile
+              </button>
+              <button onClick={this.goBack} id="update-business-cancel-btn"
+                className="teal col s12 ">
+                cancel
               </button>
             </form>
           </div>
@@ -152,14 +158,15 @@ const mapStateToProps = (state) => {
   return {
     token: state.users.token,
     user: state.users.user,
-    ...state.businesses.add
+    ...state.businesses.update
   };
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    doAddBusiness: (details, token) => dispatch(addBusiness(details, token)),
+    doBusinessUpdate: (businessId, updateDetails, token) =>
+      dispatch(businessUpdate(businessId, updateDetails, token)),
     clearBusinessErrors: () => dispatch(clearAllBusinessesError()),
-    clearUserError: userDetails => dispatch(wipeUserError(userDetails)),
+    clearUserError: token => dispatch(wipeUserError(token)),
     doLoginError: errorMessage => dispatch(loginError(errorMessage))
   };
 };
@@ -167,4 +174,4 @@ const mapDispatchedToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchedToProps
-)(Add);
+)(Update);

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 
-import Error from './Error';
+import Error from './Error.jsx';
 import Helper from '../helper/Helper';
 
 class Query extends Component {

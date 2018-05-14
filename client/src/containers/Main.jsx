@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import JwModal from 'jw-react-modal';
 
-import Users from '../containers/Users';
-import Businesses from './Businesses';
-import Login from '../components/Login'
-import SignUp from '../components/SignUp'
+import Users from '../containers/Users.jsx';
+import Businesses from './Businesses.jsx';
+// import Login from '../components/Login.jsx';
+// import SignUp from '../components/SignUp.jsx';
 
 class Main extends Component {
   constructor(props) {
@@ -14,19 +14,19 @@ class Main extends Component {
     this.openLogin = this.openLogin.bind(this);
     this.closeLogin = this.closeLogin.bind(this);
     this.openSignUp = this.openSignUp.bind(this);
-    this.closeSignUp = this.closeSignUp.bind(this)
+    this.closeSignUp = this.closeSignUp.bind(this);
   }
   openLogin(event) {
-    return JwModal.open('user-login')(event)
+    return JwModal.open('user-login')(event);
   }
   closeLogin(event) {
-    return JwModal.close('user-login')(event)
+    return JwModal.close('user-login')(event);
   }
   openSignUp(event) {
-    return JwModal.open('user-sign-up')(event)
+    return JwModal.open('user-sign-up')(event);
   }
   closeSignUp(event) {
-    return JwModal.close('user-sign-up')(event)
+    return JwModal.close('user-sign-up')(event);
   }
   render() {
     return (
@@ -35,7 +35,7 @@ class Main extends Component {
           (<Login />)} />
         <Route exact path="/signup" render={pros => <SignUp />}/> */}
         <Route path="/businesses" render={(props) => {
-          return(
+          return (
             <Businesses
               {...props}
               openLogin={this.openLogin}
@@ -43,30 +43,32 @@ class Main extends Component {
               openSignUp={this.openSignUp}
               closeSignUp={this.closeSignUp}
             />
-          )
+          );
         }
-          }/>
+        }/>
         <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
         <Route
-          render={(props) => {
-           return(
-            Users.showLogin(
-              JwModal,
-              this.closeLogin,
-              this.openSignUp
-            )
-           )}
+          render={ () => {
+            return (
+              Users.showLogin(
+                JwModal,
+                this.closeLogin,
+                this.openSignUp
+              )
+            );
+          }
           }
         />
         <Route
-          render={(props) => {
-           return(
-            Users.showSignUp(
-              JwModal,
-              this.closeSignUp,
-              this.openLogin
-            )
-           )}
+          render={() => {
+            return (
+              Users.showSignUp(
+                JwModal,
+                this.closeSignUp,
+                this.openLogin
+              )
+            );
+          }
           }
         />
       </section>
