@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Loader from 'react-loader'
+import Loader from 'react-loader';
 
 import Error from './Error';
 import Review from './Review';
@@ -84,7 +84,8 @@ class BizProfile extends Component {
           <section
             className="profile-reviews-maker-holder holder-60 padding-20 flex">
             <div className="header-title"><h3>Reviews</h3></div>
-            <Error background={"#FFF"} color={"#000"} error={this.props.reviews.error} />
+            <Error background={'#FFF'} color={'#000'}
+              error={this.props.reviews.error} />
             {this.state.reviews}
           </section>
         </div>

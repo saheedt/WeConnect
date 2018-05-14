@@ -12,7 +12,7 @@ export default class Helper {
      * @memberof Helper
      */
   static isEmptyOrNull(input) {
-      return (!input || /^\s*$/.test(input));
+    return (!input || /^\s*$/.test(input));
   }
   /**
      * @description Checks if input is an email
@@ -22,7 +22,8 @@ export default class Helper {
      * @memberof Helper
      */
   static isEmail(email) {
-      return /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(email)
+    return /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+      .test(email);
   }
   /**
      * @description Checks if password is valid
@@ -67,13 +68,12 @@ export default class Helper {
       shadow: false,
       hwaccel: false,
       position: 'absolute'
-    }
+    };
   }
   /**
      * @description clears all input fields in a mounted component
      * @static
      * @param {Object} authObject flag to target authentication fields
-     * @returns {boolean} true or false
      * @memberof Helper
      */
   static clearInputs(authObject) {
@@ -83,13 +83,13 @@ export default class Helper {
       if (authObject.isAuth) {
         if (targetInputs[inputsLength].type === 'email'
           || targetInputs[inputsLength].type === 'password') {
-            targetInputs[inputsLength].value = '';
+          targetInputs[inputsLength].value = '';
         }
       }
       if (!authObject.isAuth) {
         if (targetInputs[inputsLength].type !== 'email'
           || targetInputs[inputsLength].type !== 'password') {
-            targetInputs[inputsLength].value = '';
+          targetInputs[inputsLength].value = '';
         }
       }
     }

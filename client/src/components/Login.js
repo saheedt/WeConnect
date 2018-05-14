@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Loader from 'react-loader' 
 
-import Error from '../components/Error'
+import Error from '../components/Error';
 
 import { doLogin, loginError, wipeUserError } from '../actions/userActions';
-import Helper from '../helper/Helper'; 
+import Helper from '../helper/Helper';
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.onLoginClick = this.onLoginClick.bind(this)
-    this.onSignUpClick = this.onSignUpClick.bind(this)
+    this.onLoginClick = this.onLoginClick.bind(this);
+    this.onSignUpClick = this.onSignUpClick.bind(this);
   }
   componentDidMount() {
     this.emailInput = document.getElementById('login-email');
@@ -24,8 +23,8 @@ class Login extends Component {
       this.passwordInput.disabled = true;
       this.loginBtn.disabled = true;
       if (this.loginBtn.classList.contains('teal')) {
-        this.loginBtn.classList.remove('teal')
-        console.log(this.loginBtn.style.color)
+        this.loginBtn.classList.remove('teal');
+        console.log(this.loginBtn.style.color);
       }
     }
     if (nextProps.isFetching === false) {
@@ -33,7 +32,7 @@ class Login extends Component {
       this.passwordInput.disabled = false;
       this.loginBtn.disabled = false;
       if (!this.loginBtn.classList.contains('teal')) {
-        this.loginBtn.classList.add('teal')
+        this.loginBtn.classList.add('teal');
       }
     }
   }
@@ -54,8 +53,8 @@ class Login extends Component {
   onLoginClick(event) {
     event.preventDefault();
     const {
-      loginError,
-      doLogin,
+      doLoginError,
+      doUserLogin,
       clearUserError,
       token,
       user
@@ -63,26 +62,26 @@ class Login extends Component {
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
     if (Helper.isEmptyOrNull(email)) {
-      return loginError('email cannot be empty or null');
+      return doLoginError('email cannot be empty or null');
     }
     if (!Helper.isEmail(email)) {
-      return loginError('email address is invalid');
+      return doLoginError('email address is invalid');
     }
     if (!Helper.isPasswordValid(password)) {
-      return loginError('password should be 6 characters or longer');
+      return doLoginError('password should be 6 characters or longer');
     }
-    clearUserError({token, user});
+    clearUserError({ token, user });
     const userData = {
       email,
       password
     };
-    return doLogin(userData);
+    return doUserLogin(userData);
   }
   render() {
-    return(
-        <section id="login" className="auth flex">
+    return (
+      <section id="login" className="auth flex">
         <Error error={this.props.error} />
-          <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
+        <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
           <center><h3>sign in</h3></center>
           <div className="row">
             <form className="col s12 m12 l12">
@@ -92,17 +91,26 @@ class Login extends Component {
                   <label htmlFor="login-email">Email</label>
                 </div>
                 <div className="input-field col s12 m12 l12">
-                  <input id="login-password" type="password" className="validate"/>
+                  <input id="login-password" type="password"
+                    className="validate"/>
                   <label htmlFor="login-password">Password</label>
                 </div>
               </div>
-              <button id="login-btn" onClick={this.onLoginClick} className="teal flex">Sign in</button>
-              <center><a className="pointer-cursor" onClick={this.onSignUpClick } id="login-signup-btn">Sign up</a></center>
+              <button id="login-btn" onClick={this.onLoginClick}
+                className="teal flex">
+                Sign in
+              </button>
+              <center>
+                <a className="pointer-cursor" onClick={this.onSignUpClick }
+                  id="login-signup-btn">
+                  Sign up
+                </a>
+              </center>
             </form>
+          </div>
         </div>
-        </div>
-        </section>
-    )
+      </section>
+    );
   }
 }
 
@@ -113,13 +121,13 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    doLogin: (userData) => dispatch(doLogin(userData)),
-    loginError: (error) => dispatch(loginError(error)),
-    clearUserError: (userDetails) => dispatch(wipeUserError(userDetails))
+    doUserLogin: userData => dispatch(doLogin(userData)),
+    doLoginError: error => dispatch(loginError(error)),
+    clearUserError: userDetails => dispatch(wipeUserError(userDetails))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchedToProps
-)(Login)
+)(Login);

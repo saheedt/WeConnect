@@ -25,6 +25,7 @@ export function userLogin() {
 
 /**
  * user login success action
+ * @param {Object} userData
  * @returns {Object} USER_LOGIN_SUCCESS
  */
 export function userLoginSuccess(userData) {
@@ -36,6 +37,7 @@ export function userLoginSuccess(userData) {
 
 /**
  * user login error action
+ * @param {String} error
  * @returns {Object} USER_LOGIN_ERROR
  */
 export function userLoginError(error) {
@@ -57,6 +59,7 @@ export function userSignup() {
 
 /**
  * user signup success action
+ * @param {Object} userData
  * @returns {Object} USER_SIGNUP_SUCCESS
  */
 export function userSignupSuccess(userData) {
@@ -68,6 +71,7 @@ export function userSignupSuccess(userData) {
 
 /**
  * user signup error action
+ * @param {String} error
  * @returns {Object} USER_SIGNUP_ERROR
  */
 export function userSignupError(error) {
@@ -87,6 +91,7 @@ export function clearUserToken() {
 }
 
 /**
+ * @param {Object} userDetails
  * @returns {Object} CLEAR_USER_ERROR
  */
 export function clearUserError(userDetails) {
@@ -102,86 +107,87 @@ export function clearUserError(userDetails) {
  */
 
 /**
+ * @param {Object} userData
  * @returns {Function} dispatch function
 */
 export function doLogin(userData) {
-    return (dispatch) => {
-        dispatch(clearUserToken());
-        dispatch(userLogin());
-        return API.post(
-            '/api/v1/auth/login',
-            querystring.stringify(userData)
-        )
-        .then((user) => {
-          if (user.data &&
-            user.data.message === 'login successful') {
-            const userDetails = {
-              user: user.data.user,
-              token: user.data.token
-            };
-            dispatch(userLoginSuccess(userDetails))
-          }
-        })
-        .catch((error) => {
-            if (error.response && error.response.data.message) {
-              return dispatch(userLoginError(error.response.data.message));
-            }
-            dispatch(userLoginError('network error, please try later'));
-          });
-    }
+  return (dispatch) => {
+    dispatch(clearUserToken());
+    dispatch(userLogin());
+    return API.post(
+      '/api/v1/auth/login',
+      querystring.stringify(userData)
+    )
+      .then((user) => {
+        if (user.data &&
+          user.data.message === 'login successful') {
+          const userDetails = {
+            user: user.data.user,
+            token: user.data.token
+          };
+          dispatch(userLoginSuccess(userDetails));
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(userLoginError(error.response.data.message));
+        }
+        dispatch(userLoginError('network error, please try later'));
+      });
+  };
 }
 /**
- * 
  * @param {Object} signupData
  * @return {Function} dispatch function
  */
-export function doSignup(signupData){
+export function doSignup(signupData) {
   return (dispatch) => {
-    dispatch(clearUserToken())
-    dispatch(userSignup())
+    dispatch(clearUserToken());
+    dispatch(userSignup());
     return API.post(
       '/api/v1/auth/signup',
       querystring.stringify(signupData)
     ).then((user) => {
       if (user.data &&
         user.data.message === 'user registered successfully') {
-          const userData = {
-            user: user.data.user,
-            token: user.data.token
-          };
-          dispatch(userSignupSuccess(userData))
-        }
+        const userData = {
+          user: user.data.user,
+          token: user.data.token
+        };
+        dispatch(userSignupSuccess(userData));
+      }
     }).catch((error) => {
       if (error.response && error.response.data.message) {
         return dispatch(userSignupError(error.response.data.message));
       }
       dispatch(userSignupError('network error, please try later'));
-    })
-  }
+    });
+  };
 }
 /**
+ * @param {String} error
  * @returns {Function} dispatch function
 */
 export function loginError(error) {
   return (dispatch) => {
     dispatch(userLoginError(error));
-  }
+  };
 }
-
 /**
+ * @param {String} error
  * @returns {Function} dispatch function
 */
 export function signupError(error) {
   return (dispatch) => {
     dispatch(userSignupError(error));
-  }
+  };
 }
-
 /**
+ * @param {Object} userDetails
  * @returns {Function} dispatch function
 */
 export function wipeUserError(userDetails) {
   return (dispatch) => {
     dispatch(clearUserError(userDetails));
-  }
+  };
 }

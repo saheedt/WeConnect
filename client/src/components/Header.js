@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 import Menu from './Menu';
@@ -23,7 +22,7 @@ class Header extends Component {
         document.querySelector('#listings-category-input');
       this.toggleSearchType(e, listingsLocationInput, listingsCategoryInput);
     };
-    this.goBack = this.goBack.bind(this)
+    this.goBack = this.goBack.bind(this);
   }
   toggleSearchType(e, location, category) {
     if (e.target.checked) {
@@ -43,21 +42,19 @@ class Header extends Component {
     }
   }
   doFilter(e) {
-    if ((e.keyCode === 13 || e.key === "Enter")) {
+    if ((e.keyCode === 13 || e.key === 'Enter')) {
       if (!Helper.isEmptyOrNull(e.srcElement.value)) {
         const { queryBusinesses } = this.props;
         if (e.srcElement.id === 'listings-category-input') {
-          queryBusinesses('category', e.srcElement.value)
-          return this.props.history.push('/businesses/filter')
+          queryBusinesses('category', e.srcElement.value);
+          return this.props.history.push('/businesses/filter');
         }
         if (e.srcElement.id === 'listings-location-input') {
-          queryBusinesses('location', e.srcElement.value)
-          console.log('listings-location-input querys made.. should redirect')
-          return this.props.history.push('/businesses/filter')
+          queryBusinesses('location', e.srcElement.value);
+          return this.props.history.push('/businesses/filter');
         }
       }
       // TODO: show input empty validation error
-      return;
     }
   }
   componentWillMount() {
@@ -88,11 +85,11 @@ class Header extends Component {
     }
     if (this.categoryInput) {
       this.categoryInput
-        .removeEventListener('keyup', this.doCategoryFilter)
+        .removeEventListener('keyup', this.doCategoryFilter);
     }
     if (this.locationInput) {
       this.locationInput
-        .removeEventListener('keyup', this.doLocationFilter)
+        .removeEventListener('keyup', this.doLocationFilter);
     }
   }
   componentWillReceiveProps() {
@@ -102,27 +99,27 @@ class Header extends Component {
     }
     this.setState({ display: 'none' });
   }
-  showMenuHandler(e) {
-    // this.props.openLogin(e);
-  }
-  goBack(e) {
-    e.preventDefault();
+  // showMenuHandler(e) {
+  //  this.props.openLogin(e);
+  // }
+  goBack(event) {
+    event.preventDefault();
     window.history.back();
   }
   render() {
     // let token;
     let email;
     const { display } = this.state;
-    const token = this.props.token;
+    const { token } = this.props;
     // const email = this.props.user.email ? this.props.user.email : null;
     if (this.props.user && this.props.user.email) {
-      email = this.props.user.email
+      email = this.props.user.email;
     }
     let show;
     if (token) {
-      show = 'block'
+      show = 'block';
     } else {
-      show = 'none'
+      show = 'none';
     }
     return (
       <header id="listings-header" className="flex">
@@ -164,9 +161,8 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
-          <div style={{display: show}} id="route-profile-btn" className="flex pointer-cursor"
-            >
-            {/* <i className="material-icons">menu</i>  pointer-cursor*/}
+          <div style={{ display: show }} id="route-profile-btn"
+            className="flex pointer-cursor">
             <Menu details={email}/>
           </div>
         </div>

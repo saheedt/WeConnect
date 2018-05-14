@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Loader from 'react-loader'
+import Loader from 'react-loader';
 
 import Helper from '../helper/Helper';
 
@@ -14,7 +14,7 @@ class Listings extends Component {
     this.state = {
       businesses: null
     };
-    this.onAddBtnClick = this.onAddBtnClick.bind(this)
+    this.onAddBtnClick = this.onAddBtnClick.bind(this);
   }
   componentWillMount() {
     return this.props.fetchBusinesses();
@@ -25,8 +25,8 @@ class Listings extends Component {
       return this.genListing(nextProps.businesses);
     }
   }
-  onAddBtnClick(event) {
-    return this.props.history.push('/businesses/add')
+  onAddBtnClick() {
+    return this.props.history.push('/businesses/add');
   }
   genListing(listings) {
     const dom = listings.map((listing, index) => {
@@ -72,16 +72,17 @@ class Listings extends Component {
     const { isFetching } = this.props;
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
-      <section id="listings" className="header-margin">
-        <ul id="listings-list" className="collection max630">
-          {this.state.display}
-        </ul>
-        <div className="add-btn-float">
-          <a onClick={this.onAddBtnClick} className="btn-floating btn-large waves-effect waves-light">
-          <i className="material-icons">add</i>
-          </a>
-        </div>
-      </section>
+        <section id="listings" className="header-margin">
+          <ul id="listings-list" className="collection max630">
+            {this.state.display}
+          </ul>
+          <div className="add-btn-float">
+            <a onClick={this.onAddBtnClick}
+              className="btn-floating btn-large waves-effect waves-light">
+              <i className="material-icons">add</i>
+            </a>
+          </div>
+        </section>
       </Loader>
     );
   }
@@ -97,10 +98,6 @@ const mapDispatchedToProps = (dispatch) => {
     fetchBusinesses: () => dispatch(fetchBusinesses())
   };
 };
-// export default withRouter(connect(
-//   mapStateToProps,
-//   mapDispatchedToProps
-// ))(Listings);
 export default connect(
   mapStateToProps,
   mapDispatchedToProps
