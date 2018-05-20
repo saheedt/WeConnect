@@ -75,21 +75,23 @@ class SignUp extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.isFetching) {
       this.emailInput.disabled = true;
-      this.emailInput.style.backgroundColor = 'lightgrey';
       this.passwordInput1.disabled = true;
-      this.passwordInput1.style.backgroundColor = 'lightgrey';
       this.passwordInput2.disabled = true;
-      this.passwordInput2.style.backgroundColor = 'lightgrey';
+      if (this.signUpBtn.classList.contains('teal')) {
+        this.signUpBtn.classList.remove('teal');
+        this.signUpBtn.classList.add('light-grey');
+      }
     }
     if (!nextProps.isFetching) {
       this.emailInput.disabled = false;
-      this.emailInput.style.backgroundColor = '#FFF';
       this.passwordInput1.disabled = false;
-      this.passwordInput1.style.backgroundColor = '#FFF';
       this.passwordInput2.disabled = false;
-      this.passwordInput2.style.backgroundColor = '#FFF';
+      if (this.signUpBtn.classList.contains('light-grey')) {
+        this.signUpBtn.classList.remove('light-grey');
+        this.signUpBtn.classList.add('teal');
+      }
     }
-    if (nextProps.token === true) {
+    if (nextProps.token) {
       this.setState({
         signUpSuccessMsg: 'user account successfully created'
       }, () => {
@@ -102,6 +104,7 @@ class SignUp extends Component {
     this.emailInput = document.getElementById('signup-email');
     this.passwordInput1 = document.getElementById('signup-password-1');
     this.passwordInput2 = document.getElementById('signup-password-2');
+    this.signUpBtn = document.getElementById('signup-btn');
     this.passwordInput2.addEventListener('keyup', this.checkPasswordMatch);
   }
   componentWillUnmount() {
@@ -132,12 +135,13 @@ class SignUp extends Component {
                   <label htmlFor="signup-password-2">Re-type Password</label>
                 </div>
               </div>
-              <button id="signup-btn" className="teal col s12 m12">
+              <button id="signup-btn" onClick={this.onSignupClick}
+                className="teal col s12 m12">
               Sign up
               </button>
               <center>
                 <a className="pointer-cursor"
-                  onClick={this.onLoginClick.bind(this)} id="signup-login-btn">
+                  onClick={this.onLoginClick} id="signup-login-btn">
                 Login
                 </a>
               </center>

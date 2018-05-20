@@ -24,15 +24,17 @@ class Login extends Component {
       this.loginBtn.disabled = true;
       if (this.loginBtn.classList.contains('teal')) {
         this.loginBtn.classList.remove('teal');
-        console.log(this.loginBtn.style.color);
+        this.loginBtn.classList.add('light-grey');
       }
     }
     if (nextProps.isFetching === false) {
       this.emailInput.disabled = false;
       this.passwordInput.disabled = false;
       this.loginBtn.disabled = false;
-      if (!this.loginBtn.classList.contains('teal')) {
+      if (this.loginBtn.classList.contains('light-grey')) {
+        this.loginBtn.classList.remove('light-grey');
         this.loginBtn.classList.add('teal');
+        this.emailInput.classList.remove('light-grey');
       }
     }
   }
