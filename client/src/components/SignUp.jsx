@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Error from './Error.jsx';
+import Success from './Success.jsx';
 import Helper from '../helper/Helper';
 import { signupError, wipeUserError, doSignup } from '../actions/userActions';
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignupClick = this.onSignupClick.bind(this);
     this.checkPasswordMatch = this.checkPasswordMatch.bind(this);
@@ -17,9 +19,11 @@ class SignUp extends Component {
     const {
       clearUserError,
       closeSignUp,
-      openLogin
+      openLogin,
+      token,
+      user
     } = this.props;
-    clearUserError();
+    clearUserError({ token, user });
     closeSignUp(event);
     openLogin(event);
   }
@@ -59,7 +63,9 @@ class SignUp extends Component {
     const pass2 = this.passwordInput2.value;
     const {
       token,
-      user
+      user,
+      clearUserError,
+      doSignupError
     } = this.props;
     if (pass1 !== pass2) {
       return doSignupError('supplied passwords do not match');
@@ -67,18 +73,29 @@ class SignUp extends Component {
     return clearUserError({ token, user });
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isFetching === true) {
+    if (nextProps.isFetching) {
       this.emailInput.disabled = true;
+      this.emailInput.style.backgroundColor = 'lightgrey';
       this.passwordInput1.disabled = true;
+      this.passwordInput1.style.backgroundColor = 'lightgrey';
       this.passwordInput2.disabled = true;
+      this.passwordInput2.style.backgroundColor = 'lightgrey';
     }
-    if (nextProps.isFetching === false) {
-      this.emailInput.disabled = true;
-      this.passwordInput1.disabled = true;
-      this.passwordInput2.disabled = true;
+    if (!nextProps.isFetching) {
+      this.emailInput.disabled = false;
+      this.emailInput.style.backgroundColor = '#FFF';
+      this.passwordInput1.disabled = false;
+      this.passwordInput1.style.backgroundColor = '#FFF';
+      this.passwordInput2.disabled = false;
+      this.passwordInput2.style.backgroundColor = '#FFF';
     }
     if (nextProps.token === true) {
-      nextProps.closeSignUp(this.cachedEvent);
+      this.setState({
+        signUpSuccessMsg: 'user account successfully created'
+      }, () => {
+        Helper.clearInputs({ isAuth: true });
+        setTimeout(() => nextProps.closeSignUp(this.cachedEvent), 3000);
+      });
     }
   }
   componentDidMount() {
@@ -94,24 +111,25 @@ class SignUp extends Component {
     return (
       <section id="sign-up" className="auth flex">
         <Error error={this.props.error} />
+        <Success message={this.state.signUpSuccessMsg} />
         <div className="max480 auth-raise white-bg">
           <center><h3>sign up</h3></center>
           <div className="row">
             <form className="col s12">
               <div className="row">
                 <div className="input-field col s12 m12">
-                  <input id="signup-email" type="email" className="validate" />
-                  <label forhtml="signup-email">Email</label>
+                  <input id="signup-email" type="email" className="validate"/>
+                  <label htmlFor="signup-email">Email</label>
                 </div>
                 <div className="input-field col s12 m12">
                   <input id="signup-password-1" type="password"
-                    className="validate" />
-                  <label forhtml="signup-password-1">Password</label>
+                    className="validate"/>
+                  <label htmlFor="signup-password-1">Password</label>
                 </div>
                 <div className="input-field col s12 m12">
                   <input id="signup-password-2" type="password"
-                    className="validate" />
-                  <label forhtml="signup-password-2">Re-type Password</label>
+                    className="validate"/>
+                  <label htmlFor="signup-password-2">Re-type Password</label>
                 </div>
               </div>
               <button id="signup-btn" className="teal col s12 m12">

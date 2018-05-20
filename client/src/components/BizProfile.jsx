@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import Loader from 'react-loader';
 
-import Error from './Error';
-import Review from './Review';
+import Error from './Error.jsx';
+import Review from './Review.jsx';
 import Helper from '../helper/Helper';
 
 import { fetchBusiness, fetchReviews } from '../actions/businessesActions';

@@ -89,6 +89,7 @@ class Listings extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('listings state: ', state);
   return {
     ...state.businesses
   };

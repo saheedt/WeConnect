@@ -32,13 +32,15 @@ export default class BaseHelper {
    * @description name validates bus
    * @param {Object} req request object
    * @param {Object} res response object
-   * @param {Object} model business model
+   * @param {FUnction} next passes control to next controller
    * @return {Boolean} true or false
    */
   static isBusinessNameValid(req, res, next) {
-    if (!isNaN(parseInt(req.body.name))) {
+    if (!Number.isNaN(parseInt(req.body.name, 10))) {
       return res.status(400)
-        .send({message: 'invalid, business name can\'t be only numbers'});
+        .send({
+          message: 'invalid, business name can\'t be only numbers'
+        });
     }
     return Business.findOne({
       where: {
@@ -46,32 +48,34 @@ export default class BaseHelper {
       }
     }).then((business) => {
       if (business) {
-        return res.status(409).send({message: 'business name already exists'});
+        return res.status(409).send({
+          message: 'business name already exists'
+        });
       }
       return next();
-    }).catch((error) => BaseHelper.formatError(req, res, error.toString()));
+    }).catch(error => BaseHelper.formatError(req, res, error.toString()));
   }
   /**
    * @description handles raw requests
-   * @param {Object} req 
-   * @param {Object} res 
-   * @param {Buffer} buf 
-   * @param {String} encoding 
+   * @param {Object} req
+   * @param {Object} res
+   * @param {Buffer} buf
+   * @param {String} encoding
    */
   static handleRaw(req, res, buf, encoding) {
     if (buf && buf.length) {
       let bufToString = buf.toString(encoding || 'utf8');
-      let toJson, parsed;      
+      let toJson, parsed;
       if (bufToString.includes('{') && bufToString.includes(':') &&
           bufToString.includes(',') && bufToString.includes('}')) {
-          bufToString = {'data': bufToString};
-          toJson = JSON.stringify(bufToString);
-          parsed = JSON.parse(toJson);
-          req.rawBody = parsed.data;
-          req.isRaw = true;
-          return;
+        bufToString = { data: bufToString };
+        toJson = JSON.stringify(bufToString);
+        parsed = JSON.parse(toJson);
+        req.rawBody = parsed.data;
+        req.isRaw = true;
+        return;
       }
-     req.rawDataError = true; 
+      req.rawDataError = true;
     }
   }
   /**
@@ -82,13 +86,12 @@ export default class BaseHelper {
    */
   static processBody(req, res, next) {
     if (req.isRaw && req.rawBody) {
-      let parse = JSON.parse(req.rawBody);
+      const parse = JSON.parse(req.rawBody);
       req.body = parse;
       next();
       return;
     }
     next();
-    return;
   }
   /**
      * @description Checks if User exists
@@ -97,6 +100,8 @@ export default class BaseHelper {
      * @param {Object} res Server response
      * @param {Object} user User details
      * @param {Function} proceed calls next controller
+     * @return {Function} proceed call to next controller
+     * @returns {Object} res respons object
      * @memberof BaseHelper
      */
   static userExistsInDb(req, res, user, proceed) {
@@ -111,14 +116,12 @@ export default class BaseHelper {
         if (foundUser.dataValues.id === id &&
           foundUser.dataValues.email === email) {
           req.authenticatedUser = user;
-          proceed();
-          return;
+          return proceed();
         }
       }
-      res.status(404).send({
+      return res.status(404).send({
         message: 'user does not exist'
       });
-      return;
     }).catch(error => BaseHelper.formatError(req, res, error.toString()));
   }
   /**
@@ -143,18 +146,16 @@ export default class BaseHelper {
   static isAuthorized(req, res, next) {
     const headerAuth = req.headers.authorization || req.headers.Authorization;
     if (!headerAuth) {
-      res.status(403).send({
+      return res.status(403).send({
         message: 'unauthorized user'
       });
-      return;
     }
     jwt.verify(
       headerAuth,
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
-          res.status(403).send({ message: 'invalid token' });
-          return;
+          return res.status(403).send({ message: 'invalid token' });
         }
         if (decoded) {
           BaseHelper.userExistsInDb(req, res, decoded, next);
@@ -209,38 +210,32 @@ export default class BaseHelper {
       category
     } = req.body;
     if (!name || BaseHelper.isEmptyOrNull(name)) {
-      res.status(400).send({ message: 'business name is required' });
-      return;
+      return res.status(400).send({ message: 'business name is required' });
     }
     if (!phonenumber || BaseHelper.isEmptyOrNull(phonenumber)) {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'business phone number is required'
       });
-      return;
     }
     if (!address || BaseHelper.isEmptyOrNull(address)) {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'business address is required'
       });
-      return;
     }
     if (!location || BaseHelper.isEmptyOrNull(location)) {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'business location is required'
       });
-      return;
     }
     if (!employees || BaseHelper.isEmptyOrNull(employees)) {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'employee number is required'
       });
-      return;
     }
     if (!category || BaseHelper.isEmptyOrNull(category)) {
-      res.status(400).send({
+      return res.status(400).send({
         message: 'category is required'
       });
-      return;
     }
     next();
   }
@@ -275,7 +270,7 @@ export default class BaseHelper {
    * @param {object} res response object
    * @param {Object} model sequelize model
    * @param {object} queryParams query parameters
-   * @returns {Function} Promise
+   * @returns {Function} res response object
    * @memberof BaseHelper
    */
   static queryBy(req, res, model, queryParams) {
@@ -288,16 +283,14 @@ export default class BaseHelper {
           querried = query.map(quarryData => quarryData.dataValues);
         }
         if (querried.length <= 0) {
-          res.status(404).send({
+          return res.status(404).send({
             message: 'no businesses found'
           });
-          return;
         }
-        res.status(200).send({
+        return res.status(200).send({
           message: 'business successfully filtered',
           business: querried
         });
-        return;
       }).catch(queryError =>
         BaseHelper.formatError(req, res, queryError.toString()));
   }

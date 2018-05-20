@@ -124,22 +124,21 @@ export default function businessesReducer(state = {}, action) {
       error: action.error
     };
   case CLEAR_BUSINESSES_ERROR:
-    return {
-      ...state,
-      error: null,
-      reviews: {
-        error: null
-      },
-      queries: {
-        error: null
-      },
-      add: {
-        error: null
-      },
-      update: {
-        error: null
+    if (action.details) {
+      if (action.details.toCLear === 'listings') {
+        return {
+          ...state,
+          ...action.details.payload
+        };
       }
-    };
+      return {
+        ...state,
+        [action.details.toCLear]: {
+          ...action.details.payload
+        }
+      };
+    }
+    return { ...state };
   case FETCHING_BUSINESS_REVIEWS:
     return {
       ...state,

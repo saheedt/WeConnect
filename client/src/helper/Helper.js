@@ -88,7 +88,10 @@ export default class Helper {
       }
       if (!authObject.isAuth) {
         if (targetInputs[inputsLength].type !== 'email'
-          || targetInputs[inputsLength].type !== 'password') {
+          || targetInputs[inputsLength].type !== 'password'
+          || targetInputs[inputsLength].type !== 'checkbox'
+          || targetInputs[inputsLength].id !== 'listings-category-input'
+          || targetInputs[inputsLength].id !== 'listings-location-input') {
           targetInputs[inputsLength].value = '';
         }
       }

@@ -20,6 +20,24 @@ class Add extends Component {
     this.state = {};
     this.registerBusiness = this.registerBusiness.bind(this);
   }
+  componentWillMount() {
+    const {
+      clearBusinessErrors,
+      isFetching,
+      business,
+      error
+    } = this.props;
+    if (error) {
+      clearBusinessErrors({
+        toCLear: 'add',
+        payload: {
+          isFetching,
+          business,
+          error: null
+        }
+      });
+    }
+  }
   componentDidMount() {
     // this.addBusinessBtn = document.getElementById('add-business-btn');
 
@@ -45,6 +63,16 @@ class Add extends Component {
       }
       if (nextProps.business) {
         Helper.clearInputs({ isAuth: false });
+        if (nextProps.error) {
+          nextProps.clearBusinessErrors({
+            toCLear: 'add',
+            payload: {
+              isFetching: nextProps.isFetching,
+              business: nextProps.business,
+              error: null
+            }
+          });
+        }
         return this.setState(
           {
             addSuccessMsg: 'business profile successfully added'
@@ -79,12 +107,23 @@ class Add extends Component {
       openLogin,
       doAddBusiness,
       clearUserError,
+      clearBusinessErrors,
       doLoginError,
-      user
+      user,
+      isFetching,
+      business
     } = this.props;
     if (token) {
       clearUserError({ token, user });
     }
+    clearBusinessErrors({
+      toCLear: 'add',
+      payload: {
+        isFetching: (!isFetching ? false : isFetching),
+        business: (!business ? null : business),
+        error: null
+      }
+    });
     const businessDetails = {
       name: this.businessName.value,
       address: this.businessAddress.value,
@@ -158,7 +197,7 @@ const mapStateToProps = (state) => {
 const mapDispatchedToProps = (dispatch) => {
   return {
     doAddBusiness: (details, token) => dispatch(addBusiness(details, token)),
-    clearBusinessErrors: () => dispatch(clearAllBusinessesError()),
+    clearBusinessErrors: details => dispatch(clearAllBusinessesError(details)),
     clearUserError: userDetails => dispatch(wipeUserError(userDetails)),
     doLoginError: errorMessage => dispatch(loginError(errorMessage))
   };

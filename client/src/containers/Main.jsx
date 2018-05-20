@@ -31,9 +31,6 @@ class Main extends Component {
   render() {
     return (
       <section id="entry">
-        {/* <Route exact path="/login" render={props =>
-          (<Login />)} />
-        <Route exact path="/signup" render={pros => <SignUp />}/> */}
         <Route path="/businesses" render={(props) => {
           return (
             <Businesses
@@ -48,24 +45,24 @@ class Main extends Component {
         }/>
         <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
         <Route
-          render={ () => {
-            return (
-              Users.showLogin(
-                JwModal,
-                this.closeLogin,
-                this.openSignUp
-              )
-            );
-          }
-          }
-        />
-        <Route
           render={() => {
             return (
               Users.showSignUp(
                 JwModal,
                 this.closeSignUp,
                 this.openLogin
+              )
+            );
+          }
+          }
+        />
+        <Route
+          render={ () => {
+            return (
+              Users.showLogin(
+                JwModal,
+                this.closeLogin,
+                this.openSignUp
               )
             );
           }

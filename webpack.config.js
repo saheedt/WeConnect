@@ -28,7 +28,7 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js?$/,
+        test: /\.jsx?$/,
         include: SRC_DIR,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -47,6 +47,9 @@ const config = {
         loader: 'url-loader'
       }
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   plugins: [
     dotEnv,
