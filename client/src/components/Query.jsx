@@ -12,6 +12,7 @@ class Query extends Component {
     this.state = {
       queries: null
     };
+    this.loaderOptions = Helper.loaderOptions();
   }
   componentWillMount() {
     const { businesses } = this.props;
@@ -66,8 +67,9 @@ class Query extends Component {
   render() {
     const { isFetching, error } = this.props;
     const display = error ? 'none' : 'block';
+    const { loaderOptions } = this;
     return (
-      <Loader loaded={!isFetching} options={Helper.loaderOptions}>
+      <Loader loaded={!isFetching} options={loaderOptions}>
         <section id="listings" className="header-margin">
           <center><Error error={error} /></center>
           <div style={{ display }} className="header-title">

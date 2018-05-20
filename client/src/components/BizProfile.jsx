@@ -77,6 +77,7 @@ class BizProfile extends Component {
   }
   render() {
     const { isFetching } = this.props;
+    const reviewError = this.props.reviews ? this.props.reviews.error : null;
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()}>
         <div className="flex vertical-after-header">
@@ -85,7 +86,7 @@ class BizProfile extends Component {
             className="profile-reviews-maker-holder holder-60 padding-20 flex">
             <div className="header-title"><h3>Reviews</h3></div>
             <Error background={'#FFF'} color={'#000'}
-              error={this.props.reviews.error} />
+              error={reviewError} />
             {this.state.reviews}
           </section>
         </div>
