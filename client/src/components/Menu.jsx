@@ -6,8 +6,7 @@ import Dropdown, {
   DropdownContent
 } from 'react-simple-dropdown';
 
-// const DropdownTrigger = Dropdown.DropdownTrigger
-// const DropdownContent = Dropdown.DropdownContent
+import { signOut } from '../actions/userActions';
 
 class Menu extends Component {
   render() {
@@ -32,7 +31,7 @@ class Menu extends Component {
               <Link to={'/users/profile'}>Profile</Link>
             </li>
             <li style={{ display }} >
-              <a href="#">Log out</a>
+              <a onClick={() => doSignOut()}>Log out</a>
             </li>
           </ul>
         </DropdownContent>
@@ -47,7 +46,12 @@ const mapStateToProps = (state) => {
     user: state.users.user
   };
 };
+const mapDispatchedToProps = (dispatch) => {
+  return {
+    doSignOut: () => dispatch(signOut())
+  };
+};
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchedToProps
 )(Menu);

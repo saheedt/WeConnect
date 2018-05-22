@@ -191,3 +191,11 @@ export function wipeUserError(userDetails) {
     dispatch(clearUserError(userDetails));
   };
 }
+/**
+ * @returns {Fuction} dispatch function
+ */
+export function signOut() {
+  return (dispatch) => {
+    dispatch(clearUserToken());
+  };
+}
