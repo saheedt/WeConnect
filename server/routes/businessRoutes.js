@@ -32,5 +32,7 @@ businessRoutes.route('/api/v1/businesses/:businessId/reviews')
   .post(BusinessController.processBody, BusinessController.reviewBusiness);
 businessRoutes.route('/api/v1/businesses/:businessId/reviews')
   .get(BusinessController.fetchBusinessReviews);
+businessRoutes.route('/api/v1/businesses/:userId/businesses')
+  .get(BusinessController.fetchUserBusinesses);
 
 export default businessRoutes;

@@ -270,26 +270,26 @@ export default class BaseHelper {
    * @param {object} res response object
    * @param {Object} model sequelize model
    * @param {object} queryParams query parameters
+   * @param {int} pageOffset pagination offset
    * @returns {Function} res response object
    * @memberof BaseHelper
    */
-  static queryBy(req, res, model, queryParams) {
-    return model.findAll({
-      where: queryParams
+  static queryBy(req, res, model, queryParams, pageOffset) {
+    return model.findAndCountAll({
+      where: queryParams,
+      limit: 10,
+      offset: (parseInt(pageOffset, 10) - 1) * 10,
+      order: [['id', 'ASC']]
     })
       .then((query) => {
-        let querried;
-        if (Array.isArray(query)) {
-          querried = query.map(quarryData => quarryData.dataValues);
-        }
-        if (querried.length <= 0) {
+        if (query.rows.length <= 0) {
           return res.status(404).send({
             message: 'no businesses found'
           });
         }
         return res.status(200).send({
           message: 'business successfully filtered',
-          business: querried
+          business: query.rows
         });
       }).catch(queryError =>
         BaseHelper.formatError(req, res, queryError.toString()));
