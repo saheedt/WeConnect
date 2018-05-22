@@ -4,6 +4,7 @@ import JwModal from 'jw-react-modal';
 
 import Users from '../containers/Users.jsx';
 import Businesses from './Businesses.jsx';
+import Header from '../components/Header.jsx';
 // import Login from '../components/Login.jsx';
 // import SignUp from '../components/SignUp.jsx';
 
@@ -31,6 +32,10 @@ class Main extends Component {
   render() {
     return (
       <section id="entry">
+        <Route render={props => <Header {...props}
+          openLogin={event => this.openLogin(event)}
+        />}
+        />
         <Route path="/businesses" render={(props) => {
           return (
             <Businesses
@@ -41,33 +46,37 @@ class Main extends Component {
               closeSignUp={this.closeSignUp}
             />
           );
-        }
-        }/>
+        }}/>
+        <Route path="/users" render={props => <Users {...props} />}/>
         <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
-        <Route
-          render={() => {
-            return (
-              Users.showSignUp(
-                JwModal,
-                this.closeSignUp,
-                this.openLogin
-              )
-            );
-          }
-          }
-        />
-        <Route
-          render={ () => {
-            return (
-              Users.showLogin(
-                JwModal,
-                this.closeLogin,
-                this.openSignUp
-              )
-            );
-          }
-          }
-        />
+        {/* <Route render={() => {
+          return (
+            Users.showSignUp(
+              JwModal,
+              this.closeSignUp,
+              this.openLogin
+            )
+          );
+        }}/>
+        <Route render={() => {
+          return (
+            Users.showLogin(
+              JwModal,
+              this.closeLogin,
+              this.openSignUp
+            )
+          );
+        }}/> */}
+        {Users.showSignUp(
+          JwModal,
+          this.closeSignUp,
+          this.openLogin
+        )}
+        {Users.showLogin(
+          JwModal,
+          this.closeLogin,
+          this.openSignUp
+        )}
       </section>
     );
   }

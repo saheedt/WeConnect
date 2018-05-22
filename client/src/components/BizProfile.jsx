@@ -97,7 +97,7 @@ class BizProfile extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ...state.businesses,
+    ...state.businesses
   };
 };
 const mapDispatchedToProps = (dispatch) => {

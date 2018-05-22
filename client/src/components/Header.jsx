@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Menu from './Menu';
+import Menu from './Menu.jsx';
 
 import { query } from '../actions/businessesActions';
 import Helper from '../helper/Helper';
@@ -15,54 +15,17 @@ class Header extends Component {
     this.listingsSwitchInput = null;
     this.categoryInput = null;
     this.locationInput = null;
-    this.toggleHandler = (e) => {
-      const listingsLocationInput =
-        document.querySelector('#listings-location-input');
-      const listingsCategoryInput =
-        document.querySelector('#listings-category-input');
-      this.toggleSearchType(e, listingsLocationInput, listingsCategoryInput);
-    };
+    this.toggleHandler = this.toggleHandler.bind(this);
+    this.doFilter = this.doFilter.bind(this);
     this.goBack = this.goBack.bind(this);
   }
-  toggleSearchType(e, location, category) {
-    if (e.target.checked) {
-      if (location.style.display === 'none' ||
-      location.style.display === '') {
-        location.style.display = 'block';
-        category.style.display = 'none';
-      }
-      return;
-    }
-    if (!e.target.checked) {
-      if (category.style.display === 'none' ||
-      category.style.display === '') {
-        category.style.display = 'block';
-        location.style.display = 'none';
-      }
-    }
-  }
-  doFilter(e) {
-    if ((e.keyCode === 13 || e.key === 'Enter')) {
-      if (!Helper.isEmptyOrNull(e.srcElement.value)) {
-        const { queryBusinesses } = this.props;
-        if (e.srcElement.id === 'listings-category-input') {
-          queryBusinesses('category', e.srcElement.value);
-          return this.props.history.push('/businesses/filter');
-        }
-        if (e.srcElement.id === 'listings-location-input') {
-          queryBusinesses('location', e.srcElement.value);
-          return this.props.history.push('/businesses/filter');
-        }
-      }
-      // TODO: show input empty validation error
-    }
-  }
   componentWillMount() {
-    if (window.location.pathname !== '/businesses') {
-      this.setState({ display: 'block' });
+    if (window.location.pathname === '/businesses' ||
+      window.location.pathname === '/businesses/') {
+      this.setState({ display: 'none' });
       return;
     }
-    this.setState({ display: 'none' });
+    this.setState({ display: 'block' });
   }
   componentDidMount() {
     this.listingsSwitchInput = document.getElementById('listings-switch-input');
@@ -72,10 +35,10 @@ class Header extends Component {
       this.listingsSwitchInput.addEventListener('change', this.toggleHandler);
     }
     if (this.categoryInput) {
-      this.categoryInput.addEventListener('keyup', this.doFilter.bind(this));
+      this.categoryInput.addEventListener('keyup', this.doFilter);
     }
     if (this.locationInput) {
-      this.locationInput.addEventListener('keyup', this.doFilter.bind(this));
+      this.locationInput.addEventListener('keyup', this.doFilter);
     }
   }
   componentWillUnmount() {
@@ -93,34 +56,62 @@ class Header extends Component {
     }
   }
   componentWillReceiveProps() {
-    if (window.location.pathname !== '/businesses') {
-      this.setState({ display: 'block' });
+    if (window.location.pathname === '/businesses' ||
+      window.location.pathname === '/businesses/') {
+      this.setState({ display: 'none' });
       return;
     }
-    this.setState({ display: 'none' });
+    this.setState({ display: 'block' });
   }
-  // showMenuHandler(e) {
-  //  this.props.openLogin(e);
-  // }
+  toggleHandler(event) {
+    const listingsLocationInput =
+      document.querySelector('#listings-location-input');
+    const listingsCategoryInput =
+      document.querySelector('#listings-category-input');
+    this
+      .toggleSearchType(event, listingsLocationInput, listingsCategoryInput);
+  }
+  toggleSearchType(event, location, category) {
+    if (event.target.checked) {
+      if (location.style.display === 'none' ||
+      location.style.display === '') {
+        location.style.display = 'block';
+        category.style.display = 'none';
+      }
+      return;
+    }
+    if (!event.target.checked) {
+      if (category.style.display === 'none' ||
+      category.style.display === '') {
+        category.style.display = 'block';
+        location.style.display = 'none';
+      }
+    }
+  }
+  doFilter(event) {
+    if ((event.keyCode === 13 || event.key === 'Enter')) {
+      if (!Helper.isEmptyOrNull(event.srcElement.value)) {
+        const { queryBusinesses } = this.props;
+        if (event.srcElement.id === 'listings-category-input') {
+          queryBusinesses('category', event.srcElement.value);
+          return this.props.history.push('/businesses/filter');
+        }
+        if (event.srcElement.id === 'listings-location-input') {
+          queryBusinesses('location', event.srcElement.value);
+          return this.props.history.push('/businesses/filter');
+        }
+      }
+      // TODO: show input empty validation error
+    }
+  }
   goBack(event) {
     event.preventDefault();
     window.history.back();
   }
   render() {
-    // let token;
-    let email;
+    // let show;
     const { display } = this.state;
-    const { token } = this.props;
-    // const email = this.props.user.email ? this.props.user.email : null;
-    if (this.props.user && this.props.user.email) {
-      email = this.props.user.email;
-    }
-    let show;
-    if (token) {
-      show = 'block';
-    } else {
-      show = 'none';
-    }
+    const { openLogin } = this.props;
     return (
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first" style={{}}>
@@ -161,9 +152,9 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
-          <div style={{ display: show }} id="route-profile-btn"
+          <div style={{}} id="route-profile-btn"
             className="flex pointer-cursor">
-            <Menu details={email}/>
+            <Menu openLogin={openLogin}/>
           </div>
         </div>
       </header>
@@ -171,10 +162,11 @@ class Header extends Component {
   }
 }
 
+// display: show
 
 const mapStateToProps = (state) => {
   return {
-    ...state.users.users
+    ...state.users
   };
 };
 const mapDispatchedToProps = (dispatch) => {
