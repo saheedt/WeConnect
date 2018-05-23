@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const { log } = require('util');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -11,3 +12,4 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port);
+log(`app running on port ${port}`);

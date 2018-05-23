@@ -1,6 +1,5 @@
 const DotEnv = require('dotenv');
 const path = require('path');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
@@ -29,7 +28,7 @@ const config = {
   module: {
     loaders: [
       {
-        test: /\.js?$/,
+        test: /\.jsx?$/,
         include: SRC_DIR,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -46,17 +45,14 @@ const config = {
         test: /\.(png|jpg|gif|svg|jpeg)$/,
         exclude: /node_modules/,
         loader: 'url-loader'
-      },
-      {
-        test: /\.html$/,
-        exclude: /node_modules/,
-        use: 'html-loader'
       }
     ]
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   plugins: [
     dotEnv,
-    // extractPlugin,
     htmlWebpackPlugin
   ]
 };

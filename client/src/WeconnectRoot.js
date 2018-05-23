@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/loadState';
 
-import Main from './containers/Main';
+import Main from './containers/Main.jsx';
 
 import './css/styles.scss';
 
@@ -14,6 +14,7 @@ const persistedState = loadState();
 const store = configureStore(persistedState);
 
 store.subscribe(() => {
+  // console.log('store state: ', store.getState());
   saveState(store.getState());
 });
 

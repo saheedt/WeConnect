@@ -1,28 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 
-import { fetchBusinesses } from '../actions/businessesActions';
+import Error from './Error.jsx';
+import Helper from '../helper/Helper';
 
-class Listings extends Component {
+class Query extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      businesses: null
+      queries: null
     };
+    this.loaderOptions = Helper.loaderOptions();
   }
   componentWillMount() {
-    this.props.fetchBusinesses();
+    const { businesses } = this.props;
+    if (businesses) {
+      return this.genQueryListing(businesses);
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.businesses &&
-        nextProps.businesses !== this.props.businesses) {
-      this.genListing(nextProps.businesses);
+      nextProps.businesses !== this.props.businesses) {
+      return this.genQueryListing(nextProps.businesses);
     }
   }
-  genListing(listings) {
-    const dom = listings.map((listing, index) => {
-      const unique = `${listing.name}-${index}`;
+  genQueryListing(businesses) {
+    const queries = businesses.map((business, index) => {
+      const unique = `${business.name}-${index}`;
       return (
         <li key={unique} className="collection-item">
           <div className="listings-list-groupings flex" >
@@ -31,61 +37,59 @@ class Listings extends Component {
             </div>
             <div className="listings-list-groupings-items-right">
               <h4>
-                <Link to={`businesses/${listing.id}`}>
-                  <span className="title">{listing.name}</span>
+                <Link to={`/businesses/${business.id}`}>
+                  <span className="title">{business.name}</span>
                 </Link>
               </h4>
             </div>
           </div>
-
           <div className="listings-list-groupings flex">
             <div className="listings-list-groupings-items-left flex">
               <i className="material-icons circle">place</i>
             </div>
             <div className="listings-list-groupings-items-right">
-              <p>{listing.address}</p>
+              <p>{business.address}</p>
             </div>
           </div>
-
           <div className="listings-list-groupings flex">
             <div className="listings-list-groupings-items-left flex">
               <i className="material-icons circle">description</i>
             </div>
             <div className="listings-list-groupings-items-right">
-              <p>{listing.category}</p>
+              <p>{business.category}</p>
             </div>
           </div>
         </li>
       );
     });
-    this.setState({ businesses: dom });
+    this.setState({ queries });
   }
   render() {
+    const { isFetching, error } = this.props;
+    const display = error ? 'none' : 'block';
+    const { loaderOptions } = this;
     return (
-      <section id="listings" className="header-margin">
-        <ul id="listings-list" className="collection max630">
-          {this.state.businesses}
-        </ul>
-      </section>
+      <Loader loaded={!isFetching} options={loaderOptions}>
+        <section id="listings" className="header-margin">
+          <center><Error error={error} /></center>
+          <div style={{ display }} className="header-title">
+            <h3 className="padding-15">Result</h3>
+          </div>
+          <ul id="listings-list" className="collection max630">
+            {this.state.queries}
+          </ul>
+        </section>
+      </Loader>
     );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    ...state.businesses
+    ...state.businesses.queries
   };
 };
-const mapDispatchedToProps = (dispatch) => {
-  return {
-    fetchBusinesses: () => dispatch(fetchBusinesses())
-  };
-};
-// export default withRouter(connect(
-//   mapStateToProps,
-//   mapDispatchedToProps
-// ))(Listings);
 export default connect(
   mapStateToProps,
-  mapDispatchedToProps
-)(Listings);
+  null
+)(Query);

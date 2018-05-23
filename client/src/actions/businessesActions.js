@@ -1,4 +1,12 @@
+import querystring from 'querystring';
+
 import {
+  ADDING_BUSINESS,
+  ADDING_BUSINESS_SUCCESS,
+  ADDING_BUSINESS_ERROR,
+  UPDATE_BUSINESS,
+  UPDATE_BUSINESS_SUCCESS,
+  UPDATE_BUSINESS_ERROR,
   FETCHING_BUSINESSES,
   FETCHING_BUSINESSES_SUCCESS,
   FETCHING_BUSINESSES_ERROR,
@@ -8,11 +16,77 @@ import {
   FETCHING_BUSINESS_ERROR,
   FETCHING_BUSINESS_REVIEWS,
   FETCHING_BUSINESS_REVIEWS_SUCCESS,
-  FETCHING_BUSINESS_REVIEWS_ERROR
+  FETCHING_BUSINESS_REVIEWS_ERROR,
+  QUERY_BUSINESS,
+  QUERY_BUSINESS_SUCCESS,
+  QUERY_BUSINESS_ERROR,
+  CLEAR_QUERY_ERROR
 } from './actionTypes';
 
 import API from '../axiosInstance/api';
 
+/**
+ * add business action
+ * @returns {Object} ADDING_BUSINESS
+ */
+export function addingBusiness() {
+  return {
+    type: ADDING_BUSINESS
+  };
+}
+/**
+ * add business success action
+ * @param {Object} business
+ * @returns {Object} ADDING_BUSINESS_SUCCESS
+ */
+export function addingBusinessSuccess(business) {
+  return {
+    type: ADDING_BUSINESS_SUCCESS,
+    business
+  };
+}
+/**
+ * add business error action
+ * @param {String} error
+ * @returns {Object} ADDING_BUSINESS_ERROR
+ */
+export function addingBusinessError(error) {
+  return {
+    type: ADDING_BUSINESS_ERROR,
+    error
+  };
+}
+/**
+ * update business action
+ * @returns {Object} UPDATE_BUSINESS
+ */
+export function updateBusiness() {
+  return {
+    type: UPDATE_BUSINESS
+  };
+}
+/**
+ * update business success action
+ * @param {Object} business
+ * @returns {Object} UPDATE_BUSINESS_SUCCESS
+ */
+export function updateBusinessSuccess(business) {
+  return {
+    type: UPDATE_BUSINESS_SUCCESS,
+    business
+  };
+}
+/**
+ * update business error action
+ * @param {String} error
+ * @returns {Object} UPDATE_BUSINESS_ERROR
+ */
+export function updateBusinessError(error) {
+  return {
+    type: UPDATE_BUSINESS_ERROR,
+    error
+  };
+}
 /**
  * get businesses action
  * @returns {Object} FETCHING_BUSINESSES
@@ -92,7 +166,7 @@ export function getBusinessError(error) {
   };
 }
 /**
- * @param {*} error error data
+ * @param {String} error error data
  * @returns {Object}  FETCHING_BUSINESS_REVIEWS_ERROR action & error data
  */
 export function getBusinessReviewsError(error) {
@@ -102,77 +176,222 @@ export function getBusinessReviewsError(error) {
   };
 }
 /**
+ * @param {Object} details
  * @returns {Object} CLEAR_BUSINESSES_ERROR
  */
-export function clearGetBusinessesError() {
+export function clearBusinessesError(details) {
   return {
-    type: CLEAR_BUSINESSES_ERROR
+    type: CLEAR_BUSINESSES_ERROR,
+    details
   };
 }
 /**
- *@returns {Function} dispatch closure
-*/
-export function fetchBusinesses() {
+ * @returns {Object} QUERY_BUSINESS
+ */
+export function queryBusiness() {
+  return {
+    type: QUERY_BUSINESS
+  };
+}
+/**
+ * @param {*} businesses queried businesses
+ * @returns {Object} QUERY_BUSINESS_SUCCESS & businesses
+ */
+export function queryBusinessSuccess(businesses) {
+  return {
+    type: QUERY_BUSINESS_SUCCESS,
+    businesses
+  };
+}
+/**
+ * @param {*} error query error
+ * @returns {Object} QUERY_BUSNESS_ERROR & error
+ */
+export function queryBusinessError(error) {
+  return {
+    type: QUERY_BUSINESS_ERROR,
+    error
+  };
+}
+/**
+ * @returns {Object} CLEAR_QUERY_ERROR
+ */
+export function clearQueryError() {
+  return {
+    type: CLEAR_QUERY_ERROR
+  };
+}
+
+/**
+ * Action creators
+ */
+/**
+ * @param {Object} businessDetails
+ * @param {String} token
+ * @returns {Function} dispatch function
+ */
+export function addBusiness(businessDetails, token) {
   return (dispatch) => {
-    dispatch(clearGetBusinessesError());
-    dispatch(getBusinesses());
-    return API.get('/api/v1/businesses')
-      .then((businesses) => {
-        if (businesses.data.error) {
-          dispatch(getBusinessesError(businesses.data.error));
-          return;
+    dispatch(clearBusinessesError());
+    dispatch(addingBusiness());
+    return API.post(
+      '/api/v1/businesses',
+      querystring.stringify(businessDetails),
+      {
+        headers: {
+          authorization: token
         }
-        dispatch(getBusinessesSuccess(businesses.data.business));
-      }).catch(() => {
-        dispatch(getBusinessesError('network error, please try later'));
+      }
+    )
+      .then((business) => {
+        if (business.data &&
+        business.data.message === 'business successfully added') {
+          const addedBusinessDetails = business.data.business;
+          return dispatch(addingBusinessSuccess(addedBusinessDetails));
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(addingBusinessError(error.response.data.message));
+        }
+        return dispatch(addingBusinessError('network error, try later'));
       });
   };
 }
 /**
- * @returns {Function} dispatch closure
+ * @param {Int} businessId
+ * @param {Object} updateDetails
+ * @param {String} token
+ * @returns {Function} dispatch function
+ */
+export function businessUpdate(businessId, updateDetails, token) {
+  return (dispatch) => {
+    dispatch(clearBusinessesError());
+    dispatch(updateBusiness());
+    return API.put(
+      `/api/v1/businesses/${businessId}`,
+      querystring.stringify(updateDetails),
+      {
+        headers: {
+          authorization: token
+        }
+      }
+    )
+      .then((business) => {
+        if (business.data &&
+        business.data.message === 'business successfully updated') {
+          const updated = business.business;
+          return dispatch(updateBusinessSuccess(updated));
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(updateBusinessError(error.response.data.message));
+        }
+        return dispatch(updateBusinessError('network error, try later'));
+      });
+  };
+}
+/**
+ *@returns {Function} dispatch function
+*/
+export function fetchBusinesses() {
+  return (dispatch) => {
+    dispatch(clearBusinessesError());
+    dispatch(getBusinesses());
+    return API.get('/api/v1/businesses')
+      .then((businesses) => {
+        if (businesses.data && businesses.data.error) {
+          dispatch(getBusinessesError(businesses.data.error));
+          return;
+        }
+        dispatch(getBusinessesSuccess(businesses.data.businesses));
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
+        return dispatch(getBusinessReviewsError('network error, try later'));
+      });
+  };
+}
+/**
+ * @returns {Function} dispatch function
  * @param {Int} businessId
 */
 export function fetchBusiness(businessId) {
   return (dispatch) => {
-    dispatch(clearGetBusinessesError());
+    dispatch(clearBusinessesError());
     dispatch(getBusiness());
     return API.get(`/api/v1/businesses/${businessId}`)
       .then((business) => {
-        if (business.data.error) {
+        if (business.data && business.data.error) {
           dispatch(getBusinessError(business.data.error));
           return;
         }
         dispatch(getBusinessSuccess(business.data.business));
-      }).catch(() => {
-        dispatch(getBusinessError('network error, please try later'));
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
+        return dispatch(getBusinessReviewsError('network error, try later'));
       });
   };
 }
 /**
- * @returns {Function} dispatch closure
+ * @returns {Function} dispatch function
  * @param {Int} businessId
 */
 export function fetchReviews(businessId) {
   return (dispatch) => {
-    dispatch(clearGetBusinessesError());
+    dispatch(clearBusinessesError());
     dispatch(getBusinessReviews());
     return API.get(`/api/v1/businesses/${businessId}/reviews`)
       .then((reviews) => {
-        if (reviews.data.error) {
+        if (reviews.data && reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
           return;
         }
         dispatch(getBusinessReviewsSuccess(reviews.data.reviews));
-      }).catch(() => {
-        dispatch(getBusinessReviewsError('network error, please try later'));
+      }).catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(getBusinessReviewsError(error.response.data.message));
+        }
+        return dispatch(getBusinessReviewsError('network error, try later'));
       });
   };
 }
 /**
- * @return {Function} dispatch closure
+ * @param {Object} details
+ * @return {Function} dispatch function
  */
-export function clearBusinessesError() {
+export function clearAllBusinessesError(details) {
   return (dispatch) => {
-    dispatch(clearGetBusinessesError());
+    return dispatch(clearBusinessesError(details));
+  };
+}
+/**
+ * @param {String} by
+ * @param {Object} queryData
+ * @returns {Function} dispatch function
+*/
+export function query(by, queryData) {
+  return (dispatch) => {
+    dispatch(clearQueryError());
+    dispatch(queryBusiness());
+    return API.get(`/api/v1/businesses?${by}=${queryData}`)
+      .then((filtered) => {
+        if (filtered.data && filtered.data.error) {
+          return dispatch(queryBusinessError(filtered.data.error));
+        }
+        dispatch(queryBusinessSuccess(filtered.data.business));
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          return dispatch(queryBusinessError(error.response.data.message));
+        }
+        return dispatch(queryBusinessError('network error, try later'));
+      });
   };
 }
