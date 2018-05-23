@@ -172,7 +172,7 @@ export default class BusinessController extends BaseHelper {
       if (location) {
         const locationQuery = {
           location: {
-            $like: `%${location}%`
+            $iLike: `%${location}%`
           }
         };
         if (Number.isNaN(parseInt(page, 10))) {
@@ -185,7 +185,7 @@ export default class BusinessController extends BaseHelper {
       if (category) {
         const categoryQuery = {
           category: {
-            $like: `%${category}%`
+            $iLike: `%${category}%`
           }
         };
         if (Number.isNaN(parseInt(page, 10))) {
@@ -295,6 +295,7 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static fetchBusinessReviews(req, res) {
+    console.log('review query: ', req.query);
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
@@ -303,27 +304,30 @@ export default class BusinessController extends BaseHelper {
             message: 'business not found'
           });
         }
-        return Review.findAll({
+        if (Number.isNaN(parseInt(req.query.page, 10))) {
+          req.query.page = 1;
+        }
+        return Review.findAndCountAll({
           where: {
             businessId: parseInt(req.params.businessId, 10)
           },
+          limit: 5,
+          offset: (parseInt(req.query.page, 10) - 1) * 5,
+          order: [['id', 'DESC']],
           include: [{
             model: Business,
             attributes: ['id', 'name']
           }]
         }).then((reviews) => {
-          let fetchedReviews;
-          if (Array.isArray(reviews)) {
-            fetchedReviews = reviews.map(revs => revs.dataValues);
-          }
-          if (fetchedReviews.length <= 0) {
+          if (reviews.rows.length <= 0) {
             return res.status(404).send({
               message: 'no reviews found',
             });
           }
           return res.status(200).send({
             message: 'reviews successfully retrieved',
-            reviews: fetchedReviews
+            reviews: reviews.rows,
+            count: reviews.count
           });
         }).catch(revFetchError =>
           BusinessController.formatError(req, res, revFetchError.toString()));
@@ -344,9 +348,9 @@ export default class BusinessController extends BaseHelper {
         userId: parseInt(req.params.userId, 10)
       }
     }).then((businesses) => {
-      let fetchedBusiness;
+      let fetchedBusinesses;
       if (Array.isArray(businesses)) {
-        fetchedBusiness = businesses.map(business => business.dataValues);
+        fetchedBusinesses = businesses.map(business => business.dataValues);
       }
       if (fetchedBusiness.length <= 0) {
         return res.status(404).send({
@@ -354,8 +358,8 @@ export default class BusinessController extends BaseHelper {
         });
       }
       return res.status(200).send({
-        message: 'businesses successfully retrieved',
-        businesses: fetchedBusiness
+        message: 'user businesses successfully retrieved',
+        businesses: fetchedBusinesses
       });
     }).catch(userBizfetchError =>
       BusinessController.formatError(req, res, userBizfetchError.toString()));
