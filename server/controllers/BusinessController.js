@@ -351,7 +351,7 @@ export default class BusinessController extends BaseHelper {
       if (Array.isArray(businesses)) {
         fetchedBusinesses = businesses.map(business => business.dataValues);
       }
-      if (fetchedBusiness.length <= 0) {
+      if (fetchedBusinesses.length <= 0) {
         return res.status(404).send({
           message: 'no business found'
         });

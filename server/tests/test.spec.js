@@ -444,50 +444,56 @@ describe('businesses endpoint', () => {
         });
     });
     // cut out //
-    it('should not successfully add a business if business name already exists', (done) => {
-      request(server)
-        .post('/api/v1/businesses')
-        .set('authorization', testToken1)
-        .send({
-          name: 'test business',
-          address: '123, gaga',
-          location: 'ogun',
-          phonenumber: 122424552,
-          employees: 8,
-          category: 'ride sharing services'
-        })
-        .expect('Content-Type', /json/)
-        .end((err, resp) => {
-          assert.deepEqual(resp.status, 409);
-          assert.deepEqual(
-            resp.body.message,
-            'business name already exists'
-          );
-          done();
-        });
-    });
-    it('should not successfully add a business if business name is numbers only', (done) => {
-      request(server)
-        .post('/api/v1/businesses')
-        .set('authorization', testToken1)
-        .send({
-          name: '12347578855',
-          address: '123, gaga',
-          location: 'ogun',
-          phonenumber: 122424552,
-          employees: 8,
-          category: 'ride sharing services'
-        })
-        .expect('Content-Type', /json/)
-        .end((err, resp) => {
-          assert.deepEqual(resp.status, 400);
-          assert.deepEqual(
-            resp.body.message,
-            'invalid, business name can\'t be only numbers'
-          );
-          done();
-        });
-    });
+    it(
+      'should not successfully add a business if business name already exists',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: 'test business',
+            address: '123, gaga',
+            location: 'ogun',
+            phonenumber: 122424552,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 409);
+            assert.deepEqual(
+              resp.body.message,
+              'business name already exists'
+            );
+            done();
+          });
+      }
+    );
+    it(
+      'should not successfully add a business if business name is numbers only',
+      (done) => {
+        request(server)
+          .post('/api/v1/businesses')
+          .set('authorization', testToken1)
+          .send({
+            name: '12347578855',
+            address: '123, gaga',
+            location: 'ogun',
+            phonenumber: 122424552,
+            employees: 8,
+            category: 'ride sharing services'
+          })
+          .expect('Content-Type', /json/)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 400);
+            assert.deepEqual(
+              resp.body.message,
+              'invalid, business name can\'t be only numbers'
+            );
+            done();
+          });
+      }
+    );
     it(
       'should not successfully add a business if name is not provided',
       (done) => {
@@ -640,6 +646,37 @@ describe('businesses endpoint', () => {
     );
 
     // cut out //
+  });
+  /** */
+  /** */
+  describe('fetch user businesses', () => {
+    it('should not retrieve businesses if user has no businesses', (done) => {
+      request(server)
+        .get('/api/v1/businesses/6700/businesses')
+        .end((err, resp) => {
+          assert.deepEqual(resp.status, 404);
+          assert.deepEqual(
+            resp.body.message,
+            'no business found'
+          );
+          done();
+        });
+    });
+    it(
+      'should successfully retrieve businesses if user has businesses',
+      (done) => {
+        request(server)
+          .get(`/api/v1/businesses/${userId1}/businesses`)
+          .end((err, resp) => {
+            assert.deepEqual(resp.status, 200);
+            assert.deepEqual(
+              resp.body.message,
+              'user businesses successfully retrieved'
+            );
+            done();
+          });
+      }
+    );
   });
   /** */
   /** */
