@@ -295,7 +295,6 @@ export default class BusinessController extends BaseHelper {
     * @memberof BusinessController
     */
   static fetchBusinessReviews(req, res) {
-    console.log('review query: ', req.query);
     return Business
       .findById(parseInt(req.params.businessId, 10))
       .then((business) => {
