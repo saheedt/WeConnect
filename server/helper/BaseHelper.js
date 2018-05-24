@@ -289,7 +289,8 @@ export default class BaseHelper {
         }
         return res.status(200).send({
           message: 'business successfully filtered',
-          business: query.rows
+          business: query.rows,
+          count: query.count
         });
       }).catch(queryError =>
         BaseHelper.formatError(req, res, queryError.toString()));

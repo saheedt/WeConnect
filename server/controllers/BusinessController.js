@@ -216,7 +216,6 @@ export default class BusinessController extends BaseHelper {
     if (Number.isNaN(parseInt(req.query.page, 10))) {
       req.query.page = 1;
     }
-    // .findAll()
     return Business.findAndCountAll({
       limit: 10,
       offset: (parseInt(req.query.page, 10) - 1) * 10,
@@ -230,7 +229,8 @@ export default class BusinessController extends BaseHelper {
         }
         return res.status(200).send({
           message: 'businesses successfully fetched',
-          businesses: business.rows
+          businesses: business.rows,
+          count: business.count
         });
       }).catch(fetchAllError =>
         BusinessController.formatError(req, res, fetchAllError.toString()));
