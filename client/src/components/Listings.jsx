@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import Pagination from 'rc-pagination';
 import Loader from 'react-loader';
 
 import Helper from '../helper/Helper';
@@ -12,9 +12,11 @@ class Listings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      businesses: null
+      businesses: null,
+      current: 1
     };
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
   componentWillMount() {
     return this.props.fetchBusinesses();
@@ -68,8 +70,14 @@ class Listings extends Component {
     });
     this.setState({ display: dom });
   }
+  onChange(page) {
+    this.setState(
+      { current: page },
+      () => this.props.fetchBusinesses(page)
+    );
+  }
   render() {
-    const { isFetching } = this.props;
+    const { isFetching, count } = this.props;
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
         <section id="listings" className="header-margin">
@@ -82,6 +90,11 @@ class Listings extends Component {
               <i className="material-icons">add</i>
             </a>
           </div>
+          <Pagination onChange={this.onChange}
+            current={this.state.current}
+            total={count}
+            showLessItems
+          />
         </section>
       </Loader>
     );
@@ -95,7 +108,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    fetchBusinesses: () => dispatch(fetchBusinesses())
+    fetchBusinesses: page => dispatch(fetchBusinesses(page))
   };
 };
 export default connect(

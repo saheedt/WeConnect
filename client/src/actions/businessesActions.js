@@ -121,7 +121,8 @@ export function getBusinessReviews() {
 export function getBusinessesSuccess(businessData) {
   return {
     type: FETCHING_BUSINESSES_SUCCESS,
-    businesses: businessData
+    businesses: businessData.businesses,
+    count: businessData.count
   };
 }
 /**
@@ -293,19 +294,23 @@ export function businessUpdate(businessId, updateDetails, token) {
   };
 }
 /**
- *@returns {Function} dispatch function
+ * @param {Int} page
+ * @returns {Function} dispatch function
 */
-export function fetchBusinesses() {
+export function fetchBusinesses(page) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(getBusinesses());
-    return API.get('/api/v1/businesses')
+    return API.get(`/api/v1/businesses?page=${page}`)
       .then((businesses) => {
         if (businesses.data && businesses.data.error) {
-          dispatch(getBusinessesError(businesses.data.error));
-          return;
+          return dispatch(getBusinessesError(businesses.data.error));
         }
-        dispatch(getBusinessesSuccess(businesses.data.businesses));
+        const businessData = {
+          businesses: businesses.data.businesses,
+          count: businesses.data.count
+        };
+        dispatch(getBusinessesSuccess(businessData));
       })
       .catch((error) => {
         if (error.response && error.response.data.message) {

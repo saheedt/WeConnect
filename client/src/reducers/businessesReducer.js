@@ -100,6 +100,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       isFetching: false,
       businesses: action.businesses,
+      count: action.count,
       error: null
     };
   case FETCHING_BUSINESS_SUCCESS:
