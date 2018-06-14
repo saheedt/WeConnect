@@ -10,11 +10,11 @@ import Main from './containers/Main.jsx';
 
 import './css/styles.scss';
 
+
 const persistedState = loadState();
 const store = configureStore(persistedState);
 
 store.subscribe(() => {
-  // console.log('store state: ', store.getState());
   saveState(store.getState());
 });
 

@@ -83,6 +83,15 @@ class Listings extends Component {
         <section id="listings" className="header-margin">
           <ul id="listings-list" className="collection max630">
             {this.state.display}
+            {/* <center> */}
+            <div id="paginator">
+              <Pagination onChange={this.onChange}
+                current={this.state.current}
+                total={count}
+                showLessItems
+              />
+            </div>
+            {/* </center> */}
           </ul>
           <div className="add-btn-float">
             <a onClick={this.onAddBtnClick}
@@ -90,11 +99,6 @@ class Listings extends Component {
               <i className="material-icons">add</i>
             </a>
           </div>
-          <Pagination onChange={this.onChange}
-            current={this.state.current}
-            total={count}
-            showLessItems
-          />
         </section>
       </Loader>
     );

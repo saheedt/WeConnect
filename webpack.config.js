@@ -14,9 +14,8 @@ const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: 'client/src/index.html'
 });
 
-
-const DIST_DIR = path.resolve(__dirname, 'dist'),
-  SRC_DIR = path.resolve(__dirname, 'client/src');
+const DIST_DIR = path.resolve(__dirname, 'dist');
+const SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
   entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
@@ -42,7 +41,7 @@ const config = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|jpg|gif|svg|jpeg)$/,
+        test: /\.(png|jpg|gif|svg|jpeg|eot|ttf|woff|woff2)$/,
         exclude: /node_modules/,
         loader: 'url-loader'
       }
