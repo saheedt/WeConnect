@@ -17,7 +17,10 @@ import {
   FETCHING_BUSINESS_REVIEWS_ERROR,
   QUERY_BUSINESS,
   QUERY_BUSINESS_SUCCESS,
-  QUERY_BUSINESS_ERROR
+  QUERY_BUSINESS_ERROR,
+  ADDING_BUSINESS_REVIEW,
+  ADDING_BUSINESS_REVIEW_SUCCESS,
+  ADDING_BUSINESS_REVIEW_ERROR
 } from '../actions/actionTypes';
 
 /**
@@ -140,6 +143,33 @@ export default function businessesReducer(state = {}, action) {
       };
     }
     return { ...state };
+  case ADDING_BUSINESS_REVIEW:
+    return {
+      ...state,
+      addReview: {
+        isFetching: true,
+        review: null,
+        error: null
+      }
+    };
+  case ADDING_BUSINESS_REVIEW_SUCCESS:
+    return {
+      ...state,
+      addReview: {
+        isFetching: false,
+        review: action.review,
+        error: null
+      }
+    };
+  case ADDING_BUSINESS_REVIEW_ERROR:
+    return {
+      ...state,
+      addReview: {
+        isFetching: false,
+        review: false,
+        error: action.error
+      }
+    };
   case FETCHING_BUSINESS_REVIEWS:
     return {
       ...state,
@@ -154,6 +184,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       reviews: {
         isFetching: false,
+        count: action.count,
         reviews: action.reviews,
         error: null
       }

@@ -20,7 +20,10 @@ import {
   QUERY_BUSINESS,
   QUERY_BUSINESS_SUCCESS,
   QUERY_BUSINESS_ERROR,
-  CLEAR_QUERY_ERROR
+  CLEAR_QUERY_ERROR,
+  ADDING_BUSINESS_REVIEW,
+  ADDING_BUSINESS_REVIEW_SUCCESS,
+  ADDING_BUSINESS_REVIEW_ERROR
 } from './actionTypes';
 
 import API from '../axiosInstance/api';
@@ -142,7 +145,7 @@ export function getBusinessSuccess(businessData) {
 export function getBusinessReviewsSuccess(businessReviews) {
   return {
     type: FETCHING_BUSINESS_REVIEWS_SUCCESS,
-    reviews: businessReviews
+    ...businessReviews
   };
 }
 
@@ -173,6 +176,34 @@ export function getBusinessError(error) {
 export function getBusinessReviewsError(error) {
   return {
     type: FETCHING_BUSINESS_REVIEWS_ERROR,
+    error
+  };
+}
+/**
+ * @returns {Object} ADDING_BUSINESS_REVIEW
+ */
+export function addingBusinessReview() {
+  return {
+    type: ADDING_BUSINESS_REVIEW
+  };
+}
+/**
+ * @param {Object} review
+ * @returns {Object} ADDING_BUSINESS_REVIEW_SUCCESS & review data
+ */
+export function addingBusinessReviewSuccess(review) {
+  return {
+    type: ADDING_BUSINESS_REVIEW_SUCCESS,
+    review
+  };
+}
+/**
+ * @param {String} error
+ * @returns {Object} ADDING_BUSINESS_REVIEW_ERROR & error data
+ */
+export function addingBusinessReviewError(error) {
+  return {
+    type: ADDING_BUSINESS_REVIEW_ERROR,
     error
   };
 }
@@ -347,18 +378,23 @@ export function fetchBusiness(businessId) {
 /**
  * @returns {Function} dispatch function
  * @param {Int} businessId
-*/
-export function fetchReviews(businessId) {
+ * @param {page} page number
+ */
+export function fetchReviews(businessId, page) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(getBusinessReviews());
-    return API.get(`/api/v1/businesses/${businessId}/reviews`)
+    return API.get(`/api/v1/businesses/${businessId}/reviews?page=${page}`)
       .then((reviews) => {
         if (reviews.data && reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
           return;
         }
-        dispatch(getBusinessReviewsSuccess(reviews.data.reviews));
+        const businessReviews = {
+          reviews: reviews.data.reviews,
+          count: reviews.data.count
+        };
+        dispatch(getBusinessReviewsSuccess(businessReviews));
       }).catch((error) => {
         if (error.response && error.response.data.message) {
           return dispatch(getBusinessReviewsError(error.response.data.message));
@@ -397,6 +433,36 @@ export function query(by, queryData) {
           return dispatch(queryBusinessError(error.response.data.message));
         }
         return dispatch(queryBusinessError('network error, try later'));
+      });
+  };
+}
+/**
+ * @param {Int} businessId
+ * @param {Object} review
+ * @returns {Function} dispatch function
+ */
+export function addBusinessReview(businessId, review) {
+  return (dispatch) => {
+    dispatch(addingBusinessReview());
+    return API.post(
+      `/api/v1/businesses/${businessId}/reviews`,
+      querystring.stringify(review)
+    )
+      .then((reviewed) => {
+        if (reviewed.data && reviewed.data.error) {
+          return dispatch(addingBusinessReviewError(reviewed.data.error));
+        }
+        if (reviewed.data &&
+          reviewed.data.message === 'business sucessfully reviewed') {
+          dispatch(addingBusinessReviewSuccess(reviewed.data.review));
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          dispatch(addingBusinessReviewError(error.response.data.message));
+          return;
+        }
+        dispatch(addingBusinessReviewError('network error, try later'));
       });
   };
 }

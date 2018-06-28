@@ -16,7 +16,7 @@ class Listings extends Component {
       current: 1
     };
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.onPageChange = this.onPageChange.bind(this);
   }
   componentWillMount() {
     return this.props.fetchBusinesses();
@@ -70,7 +70,7 @@ class Listings extends Component {
     });
     this.setState({ display: dom });
   }
-  onChange(page) {
+  onPageChange(page) {
     this.setState(
       { current: page },
       () => this.props.fetchBusinesses(page)
@@ -83,15 +83,13 @@ class Listings extends Component {
         <section id="listings" className="header-margin">
           <ul id="listings-list" className="collection max630">
             {this.state.display}
-            {/* <center> */}
             <div id="paginator">
-              <Pagination onChange={this.onChange}
+              <Pagination onChange={this.onPageChange}
                 current={this.state.current}
                 total={count}
                 showLessItems
               />
             </div>
-            {/* </center> */}
           </ul>
           <div className="add-btn-float">
             <a onClick={this.onAddBtnClick}

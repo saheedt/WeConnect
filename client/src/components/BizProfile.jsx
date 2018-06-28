@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Pagination from 'rc-pagination';
+
 import Loader from 'react-loader';
 
 import Error from './Error.jsx';
 import Review from './Review.jsx';
 import Helper from '../helper/Helper';
+import AddReviews from './AddReviews.jsx';
 
-import { fetchBusiness, fetchReviews } from '../actions/businessesActions';
+import {
+  fetchBusiness,
+  fetchReviews,
+  addBusinessReview
+} from '../actions/businessesActions';
 
 class BizProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       business: null,
-      reviews: null
+      reviews: null,
+      current: 1
     };
+    this.onPageChange = this.onPageChange.bind(this);
   }
   componentWillMount() {
     const { businessId } = this.props.match.params;
@@ -30,6 +39,13 @@ class BizProfile extends Component {
         nextProps.reviews.reviews !== this.props.reviews.reviews) {
       this.genReviews(nextProps.reviews.reviews);
     }
+  }
+  onPageChange(page) {
+    const { businessId } = this.props.match.params;
+    this.setState(
+      { current: page },
+      () => this.props.fetchReviews(businessId, page)
+    );
   }
   generateProfile(profile) {
     return (
@@ -77,7 +93,10 @@ class BizProfile extends Component {
   }
   render() {
     const { isFetching } = this.props;
+    const { count } = this.props.reviews;
     const reviewError = this.props.reviews ? this.props.reviews.error : null;
+    const displayPagination = this.props.reviews.reviews ? 'block' : 'none';
+    const { businessId } = this.props.match.params;
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()}>
         <div className="flex vertical-after-header">
@@ -88,6 +107,18 @@ class BizProfile extends Component {
             <Error background={'#FFF'} color={'#000'}
               error={reviewError} />
             {this.state.reviews}
+            <div style={{ display: displayPagination }} id="paginator">
+              <Pagination onChange={this.onPageChange}
+                current={this.state.current}
+                total={count}
+                pageSize={5}
+                showLessItems
+              />
+            </div>
+            <AddReviews
+              addReview={this.props.addBusinessReview}
+              businessId={businessId}
+            />
           </section>
         </div>
       </Loader>
@@ -103,7 +134,10 @@ const mapStateToProps = (state) => {
 const mapDispatchedToProps = (dispatch) => {
   return {
     fetchBusiness: businessId => dispatch(fetchBusiness(businessId)),
-    fetchReviews: businessId => dispatch(fetchReviews(businessId))
+    fetchReviews: (businessId, page) =>
+      dispatch(fetchReviews(businessId, page)),
+    addBusinessReview: (businessId, review) =>
+      dispatch(addBusinessReview(businessId, review))
   };
 };
 export default connect(
