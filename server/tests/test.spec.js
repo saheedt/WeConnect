@@ -9,6 +9,7 @@ dotenv.config();
 process.env.NODE_ENV = 'test';
 
 const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0Ij';
+const imageUrl = 'https://images.pexels.com/1002638/pexels-photo-1002638.jpeg';
 let userId1, testToken1, testToken2, businessId;
 
 describe('un-matched endpoints', () => {
@@ -400,7 +401,8 @@ describe('businesses endpoint', () => {
           location: 'ogun',
           phonenumber: 122424552,
           employees: 8,
-          category: 'ride sharing services'
+          category: 'ride sharing services',
+          image_url: imageUrl
         })
         .expect('Content-Type', /json/)
         .end((err, resp) => {
@@ -422,7 +424,8 @@ describe('businesses endpoint', () => {
           location: 'ogun',
           phonenumber: 122424552,
           employees: 8,
-          category: 'ride sharing services'
+          category: 'ride sharing services',
+          image_url: imageUrl
         })
         .expect('Content-Type', /json/)
         .end((err, resp) => {
@@ -456,7 +459,8 @@ describe('businesses endpoint', () => {
             location: 'ogun',
             phonenumber: 122424552,
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -481,7 +485,8 @@ describe('businesses endpoint', () => {
             location: 'ogun',
             phonenumber: 122424552,
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -506,7 +511,8 @@ describe('businesses endpoint', () => {
             location: 'ogun',
             phonenumber: 122424552,
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -531,7 +537,8 @@ describe('businesses endpoint', () => {
             location: 'ogun',
             phonenumber: '',
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -556,7 +563,8 @@ describe('businesses endpoint', () => {
             location: 'ogun',
             phonenumber: 1357579759,
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -581,7 +589,8 @@ describe('businesses endpoint', () => {
             location: null,
             phonenumber: 1357579759,
             employees: 8,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -606,7 +615,8 @@ describe('businesses endpoint', () => {
             location: 'ahjsh nxn',
             phonenumber: 1357579759,
             employees: null,
-            category: 'ride sharing services'
+            category: 'ride sharing services',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
@@ -631,7 +641,8 @@ describe('businesses endpoint', () => {
             location: 'ahjsh nxn',
             phonenumber: 1357579759,
             employees: 66,
-            category: ''
+            category: '',
+            image_url: imageUrl
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
