@@ -13,7 +13,7 @@ class Menu extends Component {
     const display = this.props.token ? 'block' : 'none';
     const showLogin = this.props.token ? 'none' : 'block';
     const email = this.props.user ? this.props.user.email : null;
-    const { openLogin } = this.props;
+    const { openLogin, doSignOut } = this.props;
     return (
       <Dropdown ref={() => 'dropdown'}>
         <DropdownTrigger>

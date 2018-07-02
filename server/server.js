@@ -10,7 +10,7 @@ import cors from 'cors';
 // import all api routes
 import routes from './routes';
 
-import BaseHelper from './helper/BaseHelper'
+import BaseHelper from './helper/BaseHelper';
 
 const { businessRoutes, userRoutes } = routes;
 

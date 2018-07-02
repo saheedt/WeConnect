@@ -44,6 +44,13 @@ export default (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
+    image_url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
