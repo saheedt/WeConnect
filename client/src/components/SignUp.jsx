@@ -13,6 +13,7 @@ class SignUp extends Component {
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignupClick = this.onSignupClick.bind(this);
     this.checkPasswordMatch = this.checkPasswordMatch.bind(this);
+    this.didSignUp = false;
   }
   onLoginClick(event) {
     event.preventDefault();
@@ -33,9 +34,7 @@ class SignUp extends Component {
     const {
       signUp,
       doSignupError,
-      clearUserError,
-      token,
-      user
+      clearUserError
     } = this.props;
     const email = this.emailInput.value;
     const password = this.passwordInput1.value;
@@ -49,12 +48,13 @@ class SignUp extends Component {
     if (!Helper.isPasswordValid(password)) {
       return doSignupError('password should be 6 characters or longer');
     }
-    clearUserError({ token, user });
+    clearUserError({ token: null, user: null });
     const userData = {
       email,
       password
     };
     this.cachedEvent = event;
+    this.didSignUp = true;
     return setTimeout(() => signUp(userData), 100);
   }
   checkPasswordMatch(event) {
@@ -91,11 +91,12 @@ class SignUp extends Component {
         this.signUpBtn.classList.add('teal');
       }
     }
-    if (nextProps.token) {
+    if (nextProps.token && this.didSignUp) {
       this.setState({
         signUpSuccessMsg: 'user account successfully created'
       }, () => {
         Helper.clearInputs({ isAuth: true });
+        this.didSignUp = false;
         setTimeout(() => nextProps.closeSignUp(this.cachedEvent), 3000);
       });
     }

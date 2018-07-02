@@ -49,6 +49,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      image_url: {
+        validate: {
+          notEmpty: true
+        },
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -68,5 +75,6 @@ module.exports = {
         }
       }
     }),
+
   down: queryInterface => queryInterface.dropTable('Businesses')
 };

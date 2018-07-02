@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Error from '../components/Error.jsx';
+import Success from './Success.jsx';
 
 import { doLogin, loginError, wipeUserError } from '../actions/userActions';
 import Helper from '../helper/Helper';
@@ -9,8 +10,10 @@ import Helper from '../helper/Helper';
 class Login extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignUpClick = this.onSignUpClick.bind(this);
+    this.didLogin = false;
   }
   componentDidMount() {
     this.emailInput = document.getElementById('login-email');
@@ -34,8 +37,16 @@ class Login extends Component {
       if (this.loginBtn.classList.contains('light-grey')) {
         this.loginBtn.classList.remove('light-grey');
         this.loginBtn.classList.add('teal');
-        this.emailInput.classList.remove('light-grey');
       }
+    }
+    if (nextProps.token && this.didLogin) {
+      this.setState({
+        loginSuccessMsg: 'Log in success'
+      }, () => {
+        Helper.clearInputs({ isAuth: true });
+        this.didLogin = false;
+        setTimeout(() => nextProps.closeLogin(this.cachedEvent), 2000);
+      });
     }
   }
   onSignUpClick(event) {
@@ -43,23 +54,25 @@ class Login extends Component {
     const {
       clearUserError,
       closeLogin,
-      openSignUp
+      openSignUp,
+      token,
+      user
     } = this.props;
     clearUserError({
-      token: null,
-      user: null
+      token,
+      user
     });
     closeLogin(event);
     openSignUp(event);
   }
   onLoginClick(event) {
+    event.persist();
     event.preventDefault();
+    this.didLogin = true;
     const {
       doLoginError,
       doUserLogin,
-      clearUserError,
-      token,
-      user
+      clearUserError
     } = this.props;
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
@@ -72,17 +85,20 @@ class Login extends Component {
     if (!Helper.isPasswordValid(password)) {
       return doLoginError('password should be 6 characters or longer');
     }
-    clearUserError({ token, user });
+    clearUserError({ token: null, user: null });
     const userData = {
       email,
       password
     };
-    return doUserLogin(userData);
+    this.cachedEvent = event;
+    this.didLogin = true;
+    return setTimeout(() => doUserLogin(userData), 100);
   }
   render() {
     return (
       <section id="login" className="auth flex">
         <Error error={this.props.error} />
+        <Success message={this.state.loginSuccessMsg} />
         <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
           <center><h3>sign in</h3></center>
           <div className="row">
