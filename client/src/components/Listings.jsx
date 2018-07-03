@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
 import Loader from 'react-loader';
 
 import Helper from '../helper/Helper';
 
+import Business from '../components/Business.jsx';
+
 import { fetchBusinesses } from '../actions/businessesActions';
+
+const defaultImage = Helper.defaultImageUrl();
 
 class Listings extends Component {
   constructor(props) {
@@ -31,44 +34,21 @@ class Listings extends Component {
     return this.props.history.push('/businesses/add');
   }
   genListing(listings) {
-    const dom = listings.map((listing, index) => {
+    const businesses = listings.map((listing, index) => {
       const unique = `${listing.name}-${index}`;
+      const image = listing.image_url ? listing.image_url : defaultImage;
       return (
-        <li key={unique} className="collection-item">
-          <div className="listings-list-groupings flex" >
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">business_center</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <h4>
-                <Link to={`/businesses/${listing.id}`}>
-                  <span className="title">{listing.name}</span>
-                </Link>
-              </h4>
-            </div>
-          </div>
-
-          <div className="listings-list-groupings flex">
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">place</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <p>{listing.address}</p>
-            </div>
-          </div>
-
-          <div className="listings-list-groupings flex">
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">description</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <p>{listing.category}</p>
-            </div>
-          </div>
-        </li>
+        <Business
+          key={unique}
+          image={image}
+          name={listing.name}
+          category={listing.category}
+          address={listing.address}
+          id={listing.id}
+        />
       );
     });
-    this.setState({ display: dom });
+    this.setState({ businesses });
   }
   onPageChange(page) {
     this.setState(
@@ -81,16 +61,17 @@ class Listings extends Component {
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
         <section id="listings" className="header-margin">
-          <ul id="listings-list" className="collection max630">
-            {this.state.display}
-            <div id="paginator">
-              <Pagination onChange={this.onPageChange}
-                current={this.state.current}
-                total={count}
-                showLessItems
-              />
-            </div>
-          </ul>
+          <div id="listings-list"
+            className="collection flex flex-wrap justify-center flex-row">
+            {this.state.businesses}
+          </div>
+          <div id="paginator">
+            <Pagination onChange={this.onPageChange}
+              current={this.state.current}
+              total={count}
+              showLessItems
+            />
+          </div>
           <div className="add-btn-float">
             <a onClick={this.onAddBtnClick}
               className="btn-floating btn-large waves-effect waves-light">
