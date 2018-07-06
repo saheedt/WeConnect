@@ -49,24 +49,6 @@ class Main extends Component {
         }}/>
         <Route path="/users" render={props => <Users {...props} />}/>
         <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
-        {/* <Route render={() => {
-          return (
-            Users.showSignUp(
-              JwModal,
-              this.closeSignUp,
-              this.openLogin
-            )
-          );
-        }}/>
-        <Route render={() => {
-          return (
-            Users.showLogin(
-              JwModal,
-              this.closeLogin,
-              this.openSignUp
-            )
-          );
-        }}/> */}
         {Users.showSignUp(
           JwModal,
           this.closeSignUp,

@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 
 import Menu from './Menu.jsx';
 
-import { query } from '../actions/businessesActions';
+import {
+  query,
+  queryError,
+  removeQueryError
+} from '../actions/businessesActions';
 import Helper from '../helper/Helper';
 
 class Header extends Component {
@@ -12,12 +16,14 @@ class Header extends Component {
     this.state = {
       display: 'none'
     };
-    this.listingsSwitchInput = null;
-    this.categoryInput = null;
-    this.locationInput = null;
-    this.toggleHandler = this.toggleHandler.bind(this);
-    this.doFilter = this.doFilter.bind(this);
+    this.searchInput = null;
+    this.selectInput = null;
+    this.queryBy = null;
+    this.doQuery = this.doQuery.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleQuery = this.handleQuery.bind(this);
     this.goBack = this.goBack.bind(this);
+    this.errorMsg = null;
   }
   componentWillMount() {
     if (window.location.pathname === '/businesses' ||
@@ -25,34 +31,24 @@ class Header extends Component {
       this.setState({ display: 'none' });
       return;
     }
-    this.setState({ display: 'block' });
+    this.setState({ display: 'flex' });
   }
   componentDidMount() {
-    this.listingsSwitchInput = document.getElementById('listings-switch-input');
-    this.categoryInput = document.getElementById('listings-category-input');
-    this.locationInput = document.getElementById('listings-location-input');
-    if (this.listingsSwitchInput) {
-      this.listingsSwitchInput.addEventListener('change', this.toggleHandler);
+    this.searchInput = document.getElementById('listings-search-input');
+    this.selectInput = document.getElementById('search-select');
+    if (this.searchInput) {
+      this.searchInput.addEventListener('keyup', this.handleQuery);
     }
-    if (this.categoryInput) {
-      this.categoryInput.addEventListener('keyup', this.doFilter);
-    }
-    if (this.locationInput) {
-      this.locationInput.addEventListener('keyup', this.doFilter);
+    if (this.selectInput) {
+      this.selectInput.addEventListener('change', this.handleSelect);
     }
   }
   componentWillUnmount() {
-    if (this.listingsSwitchInput) {
-      this.listingsSwitchInput
-        .removeEventListener('change', this.toggleHandler);
+    if (this.searchInput) {
+      this.searchInput.removeEventListener('keyup', this.handleQuery);
     }
-    if (this.categoryInput) {
-      this.categoryInput
-        .removeEventListener('keyup', this.doCategoryFilter);
-    }
-    if (this.locationInput) {
-      this.locationInput
-        .removeEventListener('keyup', this.doLocationFilter);
+    if (this.selectInput) {
+      this.selectInput.removeEventListener('change', this.handleSelect);
     }
   }
   componentWillReceiveProps() {
@@ -61,48 +57,51 @@ class Header extends Component {
       this.setState({ display: 'none' });
       return;
     }
-    this.setState({ display: 'block' });
+    this.setState({ display: 'flex' });
   }
-  toggleHandler(event) {
-    const listingsLocationInput =
-      document.querySelector('#listings-location-input');
-    const listingsCategoryInput =
-      document.querySelector('#listings-category-input');
-    this
-      .toggleSearchType(event, listingsLocationInput, listingsCategoryInput);
-  }
-  toggleSearchType(event, location, category) {
-    if (event.target.checked) {
-      if (location.style.display === 'none' ||
-      location.style.display === '') {
-        location.style.display = 'block';
-        category.style.display = 'none';
-      }
+  handleSelect(event) {
+    if (event.srcElement.value === '--select--') {
+      this.queryBy = null;
       return;
     }
-    if (!event.target.checked) {
-      if (category.style.display === 'none' ||
-      category.style.display === '') {
-        category.style.display = 'block';
-        location.style.display = 'none';
+    this.queryBy = event.srcElement.value;
+  }
+  isQueryPage() {
+    if (window.location.pathname === '/businesses/filter' ||
+        window.location.pathname === '/businesses/filter/') {
+      return true;
+    }
+    return false;
+  }
+  handleQuery(event) {
+    const {
+      isQueryPage,
+      queryBy,
+      doQuery,
+      searchInput
+    } = this;
+    const {
+      queryErrored,
+      history,
+      clearQueryError
+    } = this.props;
+    clearQueryError();
+    if ((event.keyCode === 13 || event.type === 'click')) {
+      if (!isQueryPage()) {
+        history.push('/businesses/filter');
       }
+      if (queryBy === '--select--' || queryBy === null) {
+        return queryErrored('please select query type');
+      }
+      if (Helper.isEmptyOrNull(searchInput.value)) {
+        return queryErrored('oops!.. query cannot be empty');
+      }
+      doQuery(queryBy, searchInput.value);
     }
   }
-  doFilter(event) {
-    if ((event.keyCode === 13 || event.key === 'Enter')) {
-      if (!Helper.isEmptyOrNull(event.srcElement.value)) {
-        const { queryBusinesses } = this.props;
-        if (event.srcElement.id === 'listings-category-input') {
-          queryBusinesses('category', event.srcElement.value);
-          return this.props.history.push('/businesses/filter');
-        }
-        if (event.srcElement.id === 'listings-location-input') {
-          queryBusinesses('location', event.srcElement.value);
-          return this.props.history.push('/businesses/filter');
-        }
-      }
-      // TODO: show input empty validation error
-    }
+  doQuery(queryBy, queryValue) {
+    const { queryBusinesses } = this.props;
+    queryBusinesses(queryBy, queryValue);
   }
   goBack(event) {
     event.preventDefault();
@@ -112,9 +111,10 @@ class Header extends Component {
     // let show;
     const { display } = this.state;
     const { openLogin } = this.props;
+    const { handleQuery } = this;
     return (
       <header id="listings-header" className="flex">
-        <div id="listings-header-holder-left-first" style={{}}>
+        <div id="listings-header-holder-left-first">
           <div style={{ display }} className="wc-header-back-btn-holder flex">
             <a onClick={this.goBack} href="#">
               <i className="material-icons">arrow_back</i>
@@ -123,36 +123,27 @@ class Header extends Component {
         </div>
         <div id="listenings-header-holder-right">
           <div id="listings-search-holder-gen" className="flex">
-            <div id="listings-filter-switch" className="flex" >
-              <div className="switch">
-                <label>
-                  <a className="tooltipped" data-position="bottom"
-                    data-delay="50"
-                    data-tooltip="Toggle switch to change filter type">
-                    <i className="material-icons">info_outline</i>
-                  </a>
-                  <input id="listings-switch-input"type="checkbox" />
-                  <span className="lever"></span>
-                </label>
-              </div>
-            </div>
             <div id="listings-input-holder">
-              <div style={{ width: '100%', height: '100%' }}>
-                <input id="listings-category-input"
-                  placeholder="Filter by category" />
-                <input id="listings-location-input"
-                  placeholder="Filter by location" />
-              </div>
+              <input id="listings-search-input"
+                placeholder="Filter by .." />
+            </div>
+            <div id="listings-select-holder">
+              <select id="search-select">
+                <option value="--select--">--select--</option>
+                <option value="category">category</option>
+                <option value="location">location</option>
+              </select>
             </div>
             <div id="listings-search-btn-holder">
-              <button id="listings-search-btn" className="white">
+              <button id="listings-search-btn" className="white"
+                onClick={handleQuery}>
                 <i className="material-icons">search</i>
               </button>
             </div>
           </div>
         </div>
         <div id="listings-add-holder">
-          <div style={{}} id="route-profile-btn"
+          <div id="route-profile-btn"
             className="flex pointer-cursor">
             <Menu openLogin={openLogin}/>
           </div>
@@ -171,7 +162,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    queryBusinesses: (by, queryData) => dispatch(query(by, queryData))
+    queryBusinesses: (by, queryData) => dispatch(query(by, queryData)),
+    queryErrored: message => dispatch(queryError(message)),
+    clearQueryError: () => dispatch(removeQueryError())
   };
 };
 export default connect(

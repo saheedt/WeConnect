@@ -437,6 +437,23 @@ export function query(by, queryData) {
   };
 }
 /**
+ * @param {String} errorMessage
+ * @returns {Function} dispatch function
+*/
+export function queryError(errorMessage) {
+  return (dispatch) => {
+    dispatch(queryBusinessError(errorMessage));
+  };
+}
+/**
+ * @returns {Function} dispatch function
+*/
+export function removeQueryError() {
+  return (dispatch) => {
+    dispatch(clearQueryError());
+  };
+}
+/**
  * @param {Int} businessId
  * @param {Object} review
  * @returns {Function} dispatch function

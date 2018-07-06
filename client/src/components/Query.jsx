@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 
+import { removeQueryError } from '../actions/businessesActions';
 import Error from './Error.jsx';
 import Helper from '../helper/Helper';
 
@@ -15,7 +16,8 @@ class Query extends Component {
     this.loaderOptions = Helper.loaderOptions();
   }
   componentWillMount() {
-    const { businesses } = this.props;
+    const { businesses, clearQueryError } = this.props;
+    clearQueryError();
     if (businesses) {
       return this.genQueryListing(businesses);
     }
@@ -26,6 +28,7 @@ class Query extends Component {
       return this.genQueryListing(nextProps.businesses);
     }
   }
+  // <Business /> component to display quried businesses..
   genQueryListing(businesses) {
     const queries = businesses.map((business, index) => {
       const unique = `${business.name}-${index}`;
@@ -89,7 +92,12 @@ const mapStateToProps = (state) => {
     ...state.businesses.queries
   };
 };
+const mapDispatchedToProps = (dispatch) => {
+  return {
+    clearQueryError: () => dispatch(removeQueryError())
+  };
+};
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchedToProps
 )(Query);

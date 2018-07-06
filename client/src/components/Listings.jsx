@@ -58,22 +58,24 @@ class Listings extends Component {
   }
   render() {
     const { isFetching, count } = this.props;
+    const { businesses, current } = this.state;
+    const { onPageChange, onAddBtnClick } = this;
     return (
       <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
         <section id="listings" className="header-margin">
           <div id="listings-list"
             className="collection flex flex-wrap justify-center flex-row">
-            {this.state.businesses}
+            {businesses}
           </div>
           <div id="paginator">
-            <Pagination onChange={this.onPageChange}
-              current={this.state.current}
+            <Pagination onChange={onPageChange}
+              current={current}
               total={count}
               showLessItems
             />
           </div>
           <div className="add-btn-float">
-            <a onClick={this.onAddBtnClick}
+            <a onClick={onAddBtnClick}
               className="btn-floating btn-large waves-effect waves-light">
               <i className="material-icons">add</i>
             </a>

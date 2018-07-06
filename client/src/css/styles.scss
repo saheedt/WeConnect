@@ -24,7 +24,7 @@ input {
     float: left;
 }
 #listings-header-holder-left-first {
-  width: 10%;
+  width: 15%;
   height: 100%;
 }
 .wc-header-back-btn-holder{
@@ -38,8 +38,8 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   border: 0;
 }
@@ -118,29 +118,22 @@ input {
 #listings-input-holder{
   width: 35%;
   height: 55%;
+  border-right: 1px solid $light-grey;
 }
-#listings-category-input{
+#listings-search-input{
   width: 100%;
   height: 100%;
   margin: 0px;
   border: 0;
   background-color: $soft-white;
   padding-left: 20px;
+  border-bottom: 0 !important;
+  border-right: 1px solid $light-grey;
 }
-#listings-category-input:focus{
-  border: 0;
-}
-#listings-location-input{
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  border: 0;
-  display: none;
-  background-color: $soft-white;
-  padding-left: 20px;
-}
-#listings-location-input:focus{
-  border: 0;
+#listings-search-input:focus{
+  // border: 0px !important;
+  border-right: 1px solid $light-grey;
+  box-shadow: 0 0 0 0 $soft-white !important
 }
 #listings-search-btn-holder{
   width: 5%;
@@ -148,18 +141,41 @@ input {
 }
 #listings-search-btn{
   height: 100%;
-  border:0px;
+  border: 0px;
 }
 #listings-search-btn i{
   line-height: unset;
 }
 #listings-add-holder{
-  width: 20%;
+  width: 15%;
   height:100%;
   float:left;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#search-select{
+  width: auto !important;
+  display: block !important;
+  background-color: $soft-white;
+  border: 1px solid $soft-white;
+  border-radius: 0px;
+  height: 100%
+}
+#search-select:focus{
+  outline: 1px solid $soft-white;
+}
+select {
+  height: 20px;
+  border-radius: 0;
+  border: 0;
+  outline: 1px solid $soft-white;
+  outline-offset: -1px;
+}
+#listings-select-holder{
+  padding-left: 20px;
+  height: 55%;
+  border-right: 1px solid $light-grey;
 }
 #listings-list{
   // box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
@@ -203,8 +219,8 @@ input {
   padding-left: 2px;
   padding-right: 2px;
   color: $soft-white;
-  /* justify-content:  center; */
-  /* align-items: center; */
+  justify-content:  center;
+  align-items: center;
   /*width: 20%;*/
 }
 #listings-add-holder a{
