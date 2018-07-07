@@ -146,6 +146,12 @@ input {
 #listings-search-btn i{
   line-height: unset;
 }
+#listings-search-btn:hover{
+  border: 1px solid $primary-green
+}
+#listings-search-btn:focus{
+  background-color: $light-grey;
+}
 #listings-add-holder{
   width: 15%;
   height:100%;

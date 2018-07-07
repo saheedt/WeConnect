@@ -426,11 +426,11 @@ export function query(by, queryData) {
         if (filtered.data && filtered.data.error) {
           return dispatch(queryBusinessError(filtered.data.error));
         }
-        // const queries = {
-
-        // };
-        console.log(filtered.data);
-        dispatch(queryBusinessSuccess(filtered.data.business));
+        const queries = {
+          business: filtered.data.business,
+          count: filtered.data.count
+        };
+        dispatch(queryBusinessSuccess(queries));
       })
       .catch((error) => {
         if (error.response && error.response.data.message) {

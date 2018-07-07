@@ -215,8 +215,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       queries: {
         isFetching: false,
-        businesses: action.businesses,
-        count: action.count,
+        businesses: action.businesses.business,
+        count: action.businesses.count,
         error: null
       }
     };
