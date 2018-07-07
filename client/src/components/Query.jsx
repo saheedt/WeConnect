@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 
 import { removeQueryError } from '../actions/businessesActions';
 import Error from './Error.jsx';
+import Business from './Business.jsx';
 import Helper from '../helper/Helper';
+
+const defaultImage = Helper.defaultImageUrl();
 
 class Query extends Component {
   constructor(props) {
@@ -32,37 +35,16 @@ class Query extends Component {
   genQueryListing(businesses) {
     const queries = businesses.map((business, index) => {
       const unique = `${business.name}-${index}`;
+      const image = business.image_url ? business.image_url : defaultImage;
       return (
-        <li key={unique} className="collection-item">
-          <div className="listings-list-groupings flex" >
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">business_center</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <h4>
-                <Link to={`/businesses/${business.id}`}>
-                  <span className="title">{business.name}</span>
-                </Link>
-              </h4>
-            </div>
-          </div>
-          <div className="listings-list-groupings flex">
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">place</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <p>{business.address}</p>
-            </div>
-          </div>
-          <div className="listings-list-groupings flex">
-            <div className="listings-list-groupings-items-left flex">
-              <i className="material-icons circle">description</i>
-            </div>
-            <div className="listings-list-groupings-items-right">
-              <p>{business.category}</p>
-            </div>
-          </div>
-        </li>
+        <Business
+          key={unique}
+          image={image}
+          name={business.name}
+          category={business.category}
+          address={business.address}
+          id={business.id}
+        />
       );
     });
     this.setState({ queries });
@@ -78,9 +60,10 @@ class Query extends Component {
           <div style={{ display }} className="header-title">
             <h3 className="padding-15">Result</h3>
           </div>
-          <ul id="listings-list" className="collection max630">
+          <div id="listings-list"
+            className="collection flex flex-wrap justify-center flex-row">
             {this.state.queries}
-          </ul>
+          </div>
         </section>
       </Loader>
     );

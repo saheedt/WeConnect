@@ -426,6 +426,10 @@ export function query(by, queryData) {
         if (filtered.data && filtered.data.error) {
           return dispatch(queryBusinessError(filtered.data.error));
         }
+        // const queries = {
+
+        // };
+        console.log(filtered.data);
         dispatch(queryBusinessSuccess(filtered.data.business));
       })
       .catch((error) => {

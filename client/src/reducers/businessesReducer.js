@@ -176,7 +176,8 @@ export default function businessesReducer(state = {}, action) {
       reviews: {
         isFetching: true,
         reviews: null,
-        error: null
+        error: null,
+        count: null
       }
     };
   case FETCHING_BUSINESS_REVIEWS_SUCCESS:
@@ -195,6 +196,7 @@ export default function businessesReducer(state = {}, action) {
       reviews: {
         isFetching: false,
         reviews: null,
+        count: null,
         error: action.error
       }
     };
@@ -204,7 +206,8 @@ export default function businessesReducer(state = {}, action) {
       queries: {
         isFetching: true,
         businesses: null,
-        error: null
+        error: null,
+        count: null
       }
     };
   case QUERY_BUSINESS_SUCCESS:
@@ -213,6 +216,7 @@ export default function businessesReducer(state = {}, action) {
       queries: {
         isFetching: false,
         businesses: action.businesses,
+        count: action.count,
         error: null
       }
     };
@@ -222,6 +226,7 @@ export default function businessesReducer(state = {}, action) {
       queries: {
         isFetching: false,
         businesses: null,
+        count: null,
         error: action.error
       }
     };
