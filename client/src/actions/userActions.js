@@ -95,7 +95,6 @@ export function clearUserToken() {
  * @returns {Object} CLEAR_USER_ERROR
  */
 export function clearUserError(userDetails) {
-  console.log('we clearing: ', userDetails);
   return {
     type: CLEAR_USER_ERROR,
     token: userDetails.token,
