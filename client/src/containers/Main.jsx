@@ -5,8 +5,8 @@ import JwModal from 'jw-react-modal';
 import Users from '../containers/Users.jsx';
 import Businesses from './Businesses.jsx';
 import Header from '../components/Header.jsx';
-// import Login from '../components/Login.jsx';
-// import SignUp from '../components/SignUp.jsx';
+
+import { wipeUserError } from '../actions/userActions';
 
 class Main extends Component {
   constructor(props) {
@@ -18,12 +18,14 @@ class Main extends Component {
     this.closeSignUp = this.closeSignUp.bind(this);
   }
   openLogin(event) {
+    wipeUserError({ token: null, user: null });
     return JwModal.open('user-login')(event);
   }
   closeLogin(event) {
     return JwModal.close('user-login')(event);
   }
   openSignUp(event) {
+    wipeUserError({ token: null, user: null });
     return JwModal.open('user-sign-up')(event);
   }
   closeSignUp(event) {

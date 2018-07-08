@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
 import Loader from 'react-loader';
+import PropTypes from 'prop-types';
 
 import Helper from '../helper/Helper';
 
@@ -10,8 +11,18 @@ import Business from '../components/Business.jsx';
 import { fetchBusinesses } from '../actions/businessesActions';
 
 const defaultImage = Helper.defaultImageUrl();
-
+/**
+ * @description Lists all registered businesses
+ * @class Listings
+ * @extends {Component}
+ * @export
+ */
 class Listings extends Component {
+  /**
+   * @description Creates an instance of Listings
+   * @param {Object} props
+   * @memberof Listings
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -21,18 +32,38 @@ class Listings extends Component {
     this.onAddBtnClick = this.onAddBtnClick.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
   }
+  /**
+   * @description Fires before component is mounted into the dom
+   * @memberof Listings
+   */
   componentWillMount() {
-    return this.props.fetchBusinesses();
+    this.props.fetchBusinesses();
   }
+  /**
+   * @description Fires when component props changes
+   * @param {Object} nextProps
+   * @return {Function}
+   * @memberof Listings
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.businesses &&
         nextProps.businesses !== this.props.businesses) {
       return this.genListing(nextProps.businesses);
     }
   }
+  /**
+   * @description Handles floating add button click event
+   * @return {Function}
+   * @memberof Listings
+   */
   onAddBtnClick() {
     return this.props.history.push('/businesses/add');
   }
+  /**
+   * @description Generates business cards for Listings component
+   * @param {Array} listings
+   * @memberof Listings
+   */
   genListing(listings) {
     const businesses = listings.map((listing, index) => {
       const unique = `${listing.name}-${index}`;
@@ -50,12 +81,22 @@ class Listings extends Component {
     });
     this.setState({ businesses });
   }
+  /**
+   * @description Handles change event for pagination
+   * @param {Number} page
+   * @memberof Listings
+   */
   onPageChange(page) {
     this.setState(
       { current: page },
       () => this.props.fetchBusinesses(page)
     );
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof Listings
+   */
   render() {
     const { isFetching, count } = this.props;
     const { businesses, current } = this.state;
@@ -85,6 +126,13 @@ class Listings extends Component {
     );
   }
 }
+
+Listings.propTypes = {
+  isFetching: PropTypes.bool,
+  count: PropTypes.number,
+  businesses: PropTypes.arrayOf(PropTypes.object),
+  fetchBusinesses: PropTypes.func
+};
 
 const mapStateToProps = (state) => {
   return {

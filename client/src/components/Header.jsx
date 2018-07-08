@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Menu from './Menu.jsx';
 
@@ -10,7 +11,18 @@ import {
 } from '../actions/businessesActions';
 import Helper from '../helper/Helper';
 
+/**
+ * @description Displays header
+ * @class Header
+ * @extends {Component}
+ * @export
+ */
 class Header extends Component {
+  /**
+   * @description Creates an instance of Header
+   * @param {Object} props
+   * @memberof Header
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -25,14 +37,24 @@ class Header extends Component {
     this.goBack = this.goBack.bind(this);
     this.errorMsg = null;
   }
+  /**
+   * @description Fires before component is mounted into the dom
+   * @memberof Header
+   */
   componentWillMount() {
+    const { clearQueryError } = this.props;
     if (window.location.pathname === '/businesses' ||
       window.location.pathname === '/businesses/') {
       this.setState({ display: 'none' });
       return;
     }
     this.setState({ display: 'flex' });
+    clearQueryError();
   }
+  /**
+   * @description Fires when component is added to the dom
+   * @memberof Header
+   */
   componentDidMount() {
     this.searchInput = document.getElementById('listings-search-input');
     this.selectInput = document.getElementById('search-select');
@@ -43,14 +65,23 @@ class Header extends Component {
       this.selectInput.addEventListener('change', this.handleSelect);
     }
   }
+  /**
+   * @description Fires when component is removed from the dom
+   * @memberof Header
+   */
   componentWillUnmount() {
-    if (this.searchInput) {
-      this.searchInput.removeEventListener('keyup', this.handleQuery);
+    const { searchInput, selectInput } = this;
+    if (searchInput) {
+      searchInput.removeEventListener('keyup', this.handleQuery);
     }
-    if (this.selectInput) {
-      this.selectInput.removeEventListener('change', this.handleSelect);
+    if (selectInput) {
+      selectInput.removeEventListener('change', this.handleSelect);
     }
   }
+  /**
+   * @description Fires when component props changes
+   * @memberof Header
+   */
   componentWillReceiveProps() {
     if (window.location.pathname === '/businesses' ||
       window.location.pathname === '/businesses/') {
@@ -59,6 +90,11 @@ class Header extends Component {
     }
     this.setState({ display: 'flex' });
   }
+  /**
+   * @description Handles search type select element change event
+   * @param {Object} event
+   * @memberof Header
+   */
   handleSelect(event) {
     if (event.srcElement.value === '--select--') {
       this.queryBy = null;
@@ -66,6 +102,11 @@ class Header extends Component {
     }
     this.queryBy = event.srcElement.value;
   }
+  /**
+   * @description Checks if Query page is the currently displayed page
+   * @return {Boolean} true / false
+   * @memberof Header
+   */
   isQueryPage() {
     if (window.location.pathname === '/businesses/filter' ||
         window.location.pathname === '/businesses/filter/') {
@@ -73,6 +114,12 @@ class Header extends Component {
     }
     return false;
   }
+  /**
+   * @description Handles search event
+   * @param {Object} event
+   * @return {Function} queryErrored
+   * @memberof Header
+   */
   handleQuery(event) {
     const {
       isQueryPage,
@@ -99,19 +146,36 @@ class Header extends Component {
       doQuery(queryBy, searchInput.value);
     }
   }
+  /**
+   * @description Handles asyncronous server business query
+   * @param {String} queryBy
+   * @param {String} queryValue
+   * @memberof Header
+   */
   doQuery(queryBy, queryValue) {
     const { queryBusinesses } = this.props;
     queryBusinesses(queryBy, queryValue);
   }
+  /**
+   * @description Handles back button onclick event
+   * @param {Object} event
+   * @memberof Header
+   */
   goBack(event) {
     event.preventDefault();
     window.history.back();
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof Header
+   */
   render() {
-    // let show;
     const { display } = this.state;
-    const { openLogin } = this.props;
+    const { openLogin, token } = this.props;
     const { handleQuery } = this;
+    const displayMenu = token ? 'flex' : 'none';
+    const displayLogin = token ? 'none' : 'flex';
     return (
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first">
@@ -125,7 +189,7 @@ class Header extends Component {
           <div id="listings-search-holder-gen" className="flex">
             <div id="listings-input-holder">
               <input id="listings-search-input"
-                placeholder="Filter by .." />
+                placeholder="Search for businesses.." />
             </div>
             <div id="listings-select-holder">
               <select id="search-select">
@@ -143,8 +207,15 @@ class Header extends Component {
           </div>
         </div>
         <div id="listings-add-holder">
+          <button id="route-login-btn" className="flex pointer-cursor"
+            style={{ display: displayLogin }}
+            onClick={openLogin}>
+              Login
+            {/* <i className="material-icons">search</i> */}
+          </button>
           <div id="route-profile-btn"
-            className="flex pointer-cursor">
+            className="flex pointer-cursor"
+            style={{ display: displayMenu }}>
             <Menu openLogin={openLogin}/>
           </div>
         </div>
@@ -153,18 +224,27 @@ class Header extends Component {
   }
 }
 
-// display: show
+Header.propTypes = {
+  queryBusinesses: PropTypes.func,
+  clearQueryError: PropTypes.func,
+  queryErrored: PropTypes.func,
+  openLogin: PropTypes.func,
+  history: PropTypes.object,
+  location: PropTypes.object,
+  match: PropTypes.object,
+  token: PropTypes.string
+};
 
 const mapStateToProps = (state) => {
   return {
-    ...state.users
+    token: state.users.token
   };
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
     queryBusinesses: (by, queryData) => dispatch(query(by, queryData)),
     queryErrored: message => dispatch(queryError(message)),
-    clearQueryError: () => dispatch(removeQueryError())
+    clearQueryError: () => dispatch(removeQueryError()),
   };
 };
 export default connect(

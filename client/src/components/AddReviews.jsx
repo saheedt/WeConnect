@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { fetchReviews } from '../actions/businessesActions';
 
+/**
+ * @description Diplay review input
+ * @class AddReviews
+ * @extends {Component}
+ * @export
+ */
 class AddReviews extends Component {
+  /**
+   * @description Creates an instance of AddReviews
+   * @param {Object} props
+   * @memberof AddReviews
+   */
   constructor(props) {
     super(props);
     this.doAddReview = this.doAddReview.bind(this);
@@ -13,18 +24,32 @@ class AddReviews extends Component {
       review: null
     };
   }
+  /**
+   * @description Handles add review click event
+   * @param {Object} event
+   * @memberof AddReviews
+   */
   doAddReview(event) {
     event.preventDefault();
     const name = this.name.value;
     const review = this.review.value;
-    const { businessId } = this.props;
-    this.props.addReview(businessId, { name, review });
+    const { businessId, addReview } = this.props;
+    addReview(businessId, { name, review });
   }
+  /**
+   * @description Fires when component is mounted into the dom
+   * @memberof AddReviews
+   */
   componentDidMount() {
     this.name = document.getElementById('reviewer-name-input');
     this.review = document.getElementById('review-input');
     this.addReviewBtn = document.getElementById('post-review');
   }
+  /**
+   * @description Fires when component props changes
+   * @param {Object} nextProps
+   * @memberof AddReviews
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.isFetching) {
       this.name.readonly = true;
@@ -44,6 +69,11 @@ class AddReviews extends Component {
       });
     }
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof AddReviews
+   */
   render() {
     return (
       <section
@@ -79,6 +109,13 @@ class AddReviews extends Component {
     );
   }
 }
+
+AddReviews.propTypes = {
+  isFetching: PropTypes.bool,
+  review: PropTypes.object,
+  error: PropTypes.string,
+  fetchReviews: PropTypes.func
+};
 
 const mapStateToProps = (state) => {
   return {

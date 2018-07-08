@@ -415,13 +415,14 @@ export function clearAllBusinessesError(details) {
 /**
  * @param {String} by
  * @param {Object} queryData
+ * @param {Number} pageOffset
  * @returns {Function} dispatch function
 */
-export function query(by, queryData) {
+export function query(by, queryData, pageOffset) {
   return (dispatch) => {
     dispatch(clearQueryError());
     dispatch(queryBusiness());
-    return API.get(`/api/v1/businesses?${by}=${queryData}`)
+    return API.get(`/api/v1/businesses?${by}=${queryData}&page=${pageOffset}`)
       .then((filtered) => {
         if (filtered.data && filtered.data.error) {
           return dispatch(queryBusinessError(filtered.data.error));

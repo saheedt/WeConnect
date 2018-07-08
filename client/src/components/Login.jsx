@@ -1,25 +1,47 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Error from '../components/Error.jsx';
-import Success from './Success.jsx';
+// import Success from './Success.jsx';
 
 import { doLogin, loginError, wipeUserError } from '../actions/userActions';
 import Helper from '../helper/Helper';
 
+/**
+ * @description Displays Login
+ * @class Login
+ * @extends {Component}
+ * @export
+ */
 class Login extends Component {
+  /**
+   * @description Creates an instance of Login
+   * @param {Object} props
+   * @memberof Login
+   */
   constructor(props) {
     super(props);
     this.state = {};
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignUpClick = this.onSignUpClick.bind(this);
+    this.showToast = this.showToast.bind(this);
     this.didLogin = false;
   }
+  /**
+   * @description Fires when component is mounted into the dom
+   * @memberof Login
+   */
   componentDidMount() {
     this.emailInput = document.getElementById('login-email');
     this.passwordInput = document.getElementById('login-password');
     this.loginBtn = document.getElementById('login-btn');
   }
+  /**
+   * @description Fires when component props changes
+   * @param {Object} nextProps
+   * @memberof Login
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.isFetching === true) {
       this.emailInput.disabled = true;
@@ -41,14 +63,32 @@ class Login extends Component {
     }
     if (nextProps.token && this.didLogin) {
       this.setState({
-        loginSuccessMsg: 'Log in success'
+        loginSuccessMsg: 'Welcome back..'
       }, () => {
+        const { loginSuccessMsg } = this.state;
+        const message = `<span id="toast-custom">${loginSuccessMsg}</span>`;
         Helper.clearInputs({ isAuth: true });
         this.didLogin = false;
-        setTimeout(() => nextProps.closeLogin(this.cachedEvent), 2000);
+        this.showToast({ html: message }, 3000);
+        nextProps.closeLogin(this.cachedEvent);
+        // setTimeout(() => nextProps.closeLogin(this.cachedEvent), 2000);
       });
     }
   }
+  /**
+   * @description Fires Materialize toatser
+   * @param {Object} options
+   * @param {Number} duration
+   * @memberof Login
+   */
+  showToast(options, duration) {
+    M.toast(options, duration);
+  }
+  /**
+   * @description Handles signup button click event
+   * @param {Object} event
+   * @memberof Login
+   */
   onSignUpClick(event) {
     event.preventDefault();
     const {
@@ -65,6 +105,11 @@ class Login extends Component {
     closeLogin(event);
     openSignUp(event);
   }
+  /**
+   * @description Handles login button click event
+   * @param {Object} event
+   * @memberof Login
+   */
   onLoginClick(event) {
     event.persist();
     event.preventDefault();
@@ -77,13 +122,16 @@ class Login extends Component {
     const email = this.emailInput.value;
     const password = this.passwordInput.value;
     if (Helper.isEmptyOrNull(email)) {
-      return doLoginError('email cannot be empty or null');
+      doLoginError('email cannot be empty or null');
+      return;
     }
     if (!Helper.isEmail(email)) {
-      return doLoginError('email address is invalid');
+      doLoginError('email address is invalid');
+      return;
     }
     if (!Helper.isPasswordValid(password)) {
-      return doLoginError('password should be 6 characters or longer');
+      doLoginError('password should be 6 characters or longer');
+      return;
     }
     clearUserError({ token: null, user: null });
     const userData = {
@@ -92,13 +140,21 @@ class Login extends Component {
     };
     this.cachedEvent = event;
     this.didLogin = true;
-    return setTimeout(() => doUserLogin(userData), 100);
+    setTimeout(() => doUserLogin(userData), 100);
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof Login
+   */
   render() {
+    const { error } = this.props;
+    // const { loginSuccessMsg } = this.state;
+    const { onLoginClick, onSignUpClick } = this;
     return (
       <section id="login" className="auth flex">
-        <Error error={this.props.error} />
-        <Success message={this.state.loginSuccessMsg} />
+        <Error error={error} />
+        {/* <Success message={loginSuccessMsg} /> */}
         <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
           <center><h3>sign in</h3></center>
           <div className="row">
@@ -114,12 +170,12 @@ class Login extends Component {
                   <label htmlFor="login-password">Password</label>
                 </div>
               </div>
-              <button id="login-btn" onClick={this.onLoginClick}
+              <button id="login-btn" onClick={onLoginClick}
                 className="teal flex">
                 Sign in
               </button>
               <center>
-                <a className="pointer-cursor" onClick={this.onSignUpClick }
+                <a className="pointer-cursor" onClick={onSignUpClick }
                   id="login-signup-btn">
                   Sign up
                 </a>
@@ -132,6 +188,15 @@ class Login extends Component {
   }
 }
 
+Login.propTypes = {
+  token: PropTypes.string,
+  isFetching: PropTypes.bool,
+  error: PropTypes.string,
+  user: PropTypes.object,
+  doUserLogin: PropTypes.func,
+  doLoginError: PropTypes.func,
+  clearUserError: PropTypes.func
+};
 const mapStateToProps = (state) => {
   return {
     ...state.users
