@@ -237,12 +237,12 @@ select {
   height: 100%;
   border: 0;
 }
-#toast-custom{
-  background-color: $primary-green !important;
-  color: $soft-white !important;
-}
+// #toast-custom{
+//   background-color: $primary-green !important;
+//   color: $soft-white !important;
+// }
 .toast{
-  background-color: $primary-green !important;
+  background-color: $primary-green
 }
 #toast-container {
   top: auto !important;

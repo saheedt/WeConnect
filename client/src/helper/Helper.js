@@ -107,4 +107,13 @@ export default class Helper {
   static defaultImageUrl() {
     return 'https://www.gumtree.com/static/1/resources/assets/rwd/images/orphans/a37b37d99e7cef805f354d47.noimage_thumbnail.png';
   }
+  /**
+   * @description Fires Materialize toatser
+   * @param {Object} options
+   * @param {Number} duration
+   * @memberof Helper
+   */
+  static showToast(options, duration) {
+    M.toast(options, duration);
+  }
 }

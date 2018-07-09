@@ -25,7 +25,6 @@ class Login extends Component {
     this.state = {};
     this.onLoginClick = this.onLoginClick.bind(this);
     this.onSignUpClick = this.onSignUpClick.bind(this);
-    this.showToast = this.showToast.bind(this);
     this.didLogin = false;
   }
   /**
@@ -66,23 +65,13 @@ class Login extends Component {
         loginSuccessMsg: 'Welcome back..'
       }, () => {
         const { loginSuccessMsg } = this.state;
-        const message = `<span id="toast-custom">${loginSuccessMsg}</span>`;
-        Helper.clearInputs({ isAuth: true });
+        const { clearInputs, showToast } = Helper;
+        clearInputs({ isAuth: true });
         this.didLogin = false;
-        this.showToast({ html: message }, 3000);
+        showToast({ html: loginSuccessMsg }, 3000);
         nextProps.closeLogin(this.cachedEvent);
-        // setTimeout(() => nextProps.closeLogin(this.cachedEvent), 2000);
       });
     }
-  }
-  /**
-   * @description Fires Materialize toatser
-   * @param {Object} options
-   * @param {Number} duration
-   * @memberof Login
-   */
-  showToast(options, duration) {
-    M.toast(options, duration);
   }
   /**
    * @description Handles signup button click event
