@@ -1,6 +1,7 @@
 const DotEnv = require('dotenv');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 
 DotEnv.config({ path: `${__dirname}/.env` });
@@ -12,6 +13,9 @@ const dotEnv = new webpack.DefinePlugin({
 });
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
   template: 'client/src/index.html'
+});
+const extractPlugin = new ExtractTextPlugin({
+  filename: 'secondary.css'
 });
 
 const DIST_DIR = path.resolve(__dirname, 'dist');
@@ -41,7 +45,18 @@ const config = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|jpg|gif|svg|jpeg|eot|ttf|woff|woff2)$/,
+        test: /\.css$/,
+        loader: extractPlugin.extract({
+          fallback: 'style-loader', use: 'url-loader'
+        })
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+        options: { noquotes: true }
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg|eot|ttf|woff|woff2|svg)$/,
         exclude: /node_modules/,
         loader: 'url-loader'
       }
@@ -51,6 +66,7 @@ const config = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    extractPlugin,
     dotEnv,
     htmlWebpackPlugin
   ]

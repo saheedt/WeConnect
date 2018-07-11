@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Error from './Error.jsx';
 import Success from './Success.jsx';
+import ImagePreview from './ImagePreview.jsx';
 
 import {
   addBusiness,
@@ -19,6 +20,7 @@ class Add extends Component {
     super(props);
     this.state = {};
     this.registerBusiness = this.registerBusiness.bind(this);
+    this.imageFromPreview = this.imageFromPreview.bind(this);
   }
   componentWillMount() {
     const {
@@ -39,8 +41,6 @@ class Add extends Component {
     }
   }
   componentDidMount() {
-    // this.addBusinessBtn = document.getElementById('add-business-btn');
-
     this.businessName = document.getElementById('company-name');
     this.businessAddress = document.getElementById('address');
     this.businessLocation = document.getElementById('state');
@@ -140,7 +140,12 @@ class Add extends Component {
     this.cachedEvent = event;
     return setTimeout(() => doAddBusiness(businessDetails, token), 100);
   }
+  imageFromPreview(picture) {
+    console.log('picture from imageFromUploader callback:', picture);
+    this.setState({ picture }, () => { console.log('from setState cb', this.state.picture); });
+  }
   render() {
+    const { imageFromUploader } = this;
     return (
       <div className="flex vertical-after-header">
         <Error error={this.props.error} />
@@ -150,6 +155,7 @@ class Add extends Component {
           <div className="row">
             <form className="col s12 m12 l12">
               <div className="row">
+                <ImagePreview imageFromPreview={imageFromUploader} />
                 <div className="input-field col s12 m12 l12">
                   <input id="company-name" type="text" className="validate" />
                   <label forhtml="company-name">Company name</label>
