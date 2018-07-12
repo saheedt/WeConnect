@@ -9,6 +9,9 @@ DotEnv.config({ path: `${__dirname}/.env` });
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
     BASE_URL: JSON.stringify(process.env.BASE_URL),
+    CLOUDINARY_CLOUD_NAME: JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
+    CLOUDINARY_API_KEY: JSON.stringify(process.env.CLOUDINARY_API_KEY),
+    CLOUDINARY_API_SECRET: JSON.stringify(process.env.CLOUDINARY_API_SECRET)
   }
 });
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
@@ -22,6 +25,9 @@ const DIST_DIR = path.resolve(__dirname, 'dist');
 const SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
+  node: {
+    fs: 'empty'
+  },
   entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
   output: {
     path: path.join(DIST_DIR),

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-// import Uploader from 'react-images-upload';
 import classnames from 'classnames';
 
 import Helper from '../helper/Helper';
@@ -14,8 +13,7 @@ class ImagePreview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imagePreview: null,
-      imageFile: null
+      image: null
     };
     this.onImageAdd = this.onImageAdd.bind(this);
     this.handleChooseImageClick = this.handleChooseImageClick.bind(this);
@@ -27,10 +25,10 @@ class ImagePreview extends Component {
   onImageAdd(event) {
     const reader = new FileReader();
     const imageFile = event.target.files[0];
-    const { imageFromUploader } = this.props;
+    const { imageFromPreview } = this.props;
     reader.onloadend = () => {
-      this.setState({ imagePreview: reader.result, imageFile }, () => {
-        imageFromUploader(this.state.imageFile);
+      this.setState({ image: reader.result }, () => {
+        imageFromPreview(this.state.image);
       });
     };
     reader.readAsDataURL(imageFile);
@@ -40,14 +38,14 @@ class ImagePreview extends Component {
     this.imageSelector.click();
   }
   onImageDelete() {
-    this.setState({ imagePreview: null });
+    this.setState({ image: null });
   }
   render() {
     const { handleChooseImageClick, onImageAdd, onImageDelete } = this;
-    const { imagePreview } = this.state;
+    const { image } = this.state;
     const displayUpload = classnames({
-      uploadPicturesWrapper: imagePreview ? trueValue : falseValue,
-      'hide-area': !imagePreview ? trueValue : falseValue
+      uploadPicturesWrapper: image ? trueValue : falseValue,
+      'hide-area': !image ? trueValue : falseValue
     });
     return (
       <div className="fileUploader">
@@ -66,7 +64,7 @@ class ImagePreview extends Component {
             <div className="uploadPicturesInner">
               <div className="uploadPictureContainer">
                 <div className="deleteImage" onClick={onImageDelete} >X</div>
-                <img src={imagePreview} className="uploadPicture"
+                <img src={image} className="uploadPicture"
                   alt="preview" />
               </div>
             </div>

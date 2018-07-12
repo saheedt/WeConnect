@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+// require('fs'); /*eslint-disable*/
+
+import cloudinary from 'cloudinary';
+
 import Error from './Error.jsx';
 import Success from './Success.jsx';
 import ImagePreview from './ImagePreview.jsx';
 
 import {
   addBusiness,
+  addBusinessError,
   clearAllBusinessesError
 } from '../actions/businessesActions';
 import {
@@ -18,9 +23,13 @@ import Helper from '../helper/Helper';
 class Add extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      image: null,
+      shouldRegBusiness: false
+    };
     this.registerBusiness = this.registerBusiness.bind(this);
     this.imageFromPreview = this.imageFromPreview.bind(this);
+    this.doImageUpload = this.doImageUpload.bind(this);
   }
   componentWillMount() {
     const {
@@ -29,6 +38,7 @@ class Add extends Component {
       business,
       error
     } = this.props;
+    const { cloudinaryConfig } = Helper;
     if (error) {
       clearBusinessErrors({
         toCLear: 'add',
@@ -39,6 +49,7 @@ class Add extends Component {
         }
       });
     }
+    cloudinaryConfig(cloudinary);
   }
   componentDidMount() {
     this.businessName = document.getElementById('company-name');
@@ -49,22 +60,35 @@ class Add extends Component {
     this.businessPhoneNumber = document.getElementById('phone-number');
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.token) {
-      if (nextProps.error &&
-        nextProps.error === 'invalid token') {
-        nextProps.doLoginError('access token expired, kindly re-authenticate');
-        return nextProps.openLogin(this.cachedEvent);
+    const {
+      doLoginError,
+      openLogin,
+      token,
+      error,
+      business,
+      clearBusinessErrors,
+      closeLogin
+    } = nextProps;
+
+    if (token) {
+      if (error && error === 'invalid token') {
+        doLoginError('access token expired, kindly re-authenticate');
+        openLogin(this.cachedEvent);
+        return;
       }
-      if (nextProps.token &&
-          nextProps.error === 'unauthorized user') {
-        nextProps
-          .doLoginError('un-authorized to perform action, sign-in/sign-up');
-        return nextProps.openLogin(this.cachedEvent);
+      if (token && error === 'unauthorized user') {
+        doLoginError('un-authorized to perform action, sign-in/sign-up');
+        openLogin(this.cachedEvent);
+        return;
       }
-      if (nextProps.business) {
+      if (token &&
+        error === 'error!.. check supplied details and try again') {
+        return;
+      }
+      if (business) {
         Helper.clearInputs({ isAuth: false });
-        if (nextProps.error) {
-          nextProps.clearBusinessErrors({
+        if (error) {
+          clearBusinessErrors({
             toCLear: 'add',
             payload: {
               isFetching: nextProps.isFetching,
@@ -73,31 +97,60 @@ class Add extends Component {
             }
           });
         }
-        return this.setState(
+        this.setState(
           {
-            addSuccessMsg: 'business profile successfully added'
+            addSuccessMsg: 'business profile successfully added',
+            image: null
           },
-          () => setTimeout(() => this.props.history.push('/businesses'), 3000)
+          () => setTimeout(() => {
+            this.props.history.push('/businesses');
+          }, 3000)
         );
+        return;
       }
-      return nextProps.closeLogin(this.cachedEvent);
+      closeLogin(this.cachedEvent);
+      return;
     }
-    if (!nextProps.token) {
-      if (nextProps.error &&
-        nextProps.error === 'invalid token') {
-        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
-        return nextProps.openLogin(this.cachedEvent);
+    if (!token) {
+      if (error && error === 'invalid token') {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(this.cachedEvent);
+        return;
       }
-      if (nextProps.error &&
-        nextProps.error === 'unauthorized user') {
-        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
-        return nextProps.openLogin(this.cachedEvent);
+      if (error && error === 'unauthorized user') {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(this.cachedEvent);
+        return;
       }
-      if (nextProps.business) {
-        nextProps.doLoginError('you appear offline, kindly sign-in/sign-up');
-        return nextProps.openLogin(this.cachedEvent);
+      if (business) {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(this.cachedEvent);
       }
     }
+  }
+  doImageUpload(businessDetails) {
+    const { doAddBusiness, doAddBusinessError, token } = this.props;
+    const { image } = this.state;
+    if (image) {
+      cloudinary.uploader.upload(image, (result) => {
+        /* eslint-disable */
+        const { secure_url, error } = result;
+        if (error) {
+          doAddBusinessError('error!.. check supplied details and try again');
+          return;
+        }
+        if (secure_url) {
+          const updateDetails = {
+            ...businessDetails,
+            image_url: secure_url
+          };
+          doAddBusiness(updateDetails, token);
+          return;
+        }
+      });
+      return;
+    }
+    doAddBusiness(businessDetails, token);
   }
   registerBusiness(event) {
     event.persist();
@@ -105,7 +158,6 @@ class Add extends Component {
     const {
       token,
       openLogin,
-      doAddBusiness,
       clearUserError,
       clearBusinessErrors,
       doLoginError,
@@ -113,6 +165,7 @@ class Add extends Component {
       isFetching,
       business
     } = this.props;
+    const { doImageUpload } = this;
     if (token) {
       clearUserError({ token, user });
     }
@@ -124,6 +177,11 @@ class Add extends Component {
         error: null
       }
     });
+    if (!token) {
+      doLoginError('sign in to create business profile');
+      this.cachedEvent = event;
+      return setTimeout(() => openLogin(event), 100);
+    }
     const businessDetails = {
       name: this.businessName.value,
       address: this.businessAddress.value,
@@ -132,20 +190,16 @@ class Add extends Component {
       employees: this.staffStrength.value,
       category: this.businessCategory.value
     };
-    if (!token) {
-      doLoginError('sign in to create business profile');
-      this.cachedEvent = event;
-      return setTimeout(() => openLogin(event), 100);
-    }
     this.cachedEvent = event;
-    return setTimeout(() => doAddBusiness(businessDetails, token), 100);
+    return setTimeout(() => doImageUpload(businessDetails), 100);
+    // doAddBusiness(businessDetails, token)
   }
-  imageFromPreview(picture) {
-    console.log('picture from imageFromUploader callback:', picture);
-    this.setState({ picture }, () => { console.log('from setState cb', this.state.picture); });
+  imageFromPreview(image) {
+    this.setState({ image });
   }
+  // onClick={this.registerBusiness}
   render() {
-    const { imageFromUploader } = this;
+    const { imageFromPreview } = this;
     return (
       <div className="flex vertical-after-header">
         <Error error={this.props.error} />
@@ -153,38 +207,45 @@ class Add extends Component {
         <section id="add-business-container"
           className="flex holder-60-shadow padding-20">
           <div className="row">
-            <form className="col s12 m12 l12">
+            <form onSubmit={this.registerBusiness} id="add-form"
+              className="col s12 m12 l12">
               <div className="row">
-                <ImagePreview imageFromPreview={imageFromUploader} />
+                <ImagePreview imageFromPreview={imageFromPreview} />
                 <div className="input-field col s12 m12 l12">
-                  <input id="company-name" type="text" className="validate" />
+                  <input id="company-name" type="text" className="validate"
+                    required/>
                   <label forhtml="company-name">Company name</label>
                 </div>
                 <div className="input-field col s12 m12 l12 ">
-                  <input id="address" type="text" className="validate"/>
+                  <input id="address" type="text" className="validate"
+                    required/>
                   <label forhtml="address">Address</label>
                 </div>
                 <div className="input-field col s12 m12 l12 ">
-                  <input id="state" type="text" className="validate"/>
+                  <input id="state" type="text" className="validate"
+                    required/>
                   <label forhtml="state">State</label>
                 </div>
                 <div className="input-field col s12 m12 l12">
-                  <input id="employees" type="number" className="validate"/>
+                  <input id="employees" type="number" className="validate"
+                    required/>
                   <label forhtml="employees">Employees</label>
                 </div>
                 <div className="input-field col s12 m12 l12">
-                  <input id="category" type="text" className="validate"/>
+                  <input id="category" type="text" className="validate"
+                    required/>
                   <label forhtml="category">Category</label>
                 </div>
                 <div className="input-field col s12 m12 l12">
-                  <input id="phone-number" type="number" className="validate"/>
+                  <input id="phone-number" type="number" className="validate"
+                    required/>
                   <label forhtml="phone-number">Phone number</label>
                 </div>
               </div>
-              <button onClick={this.registerBusiness} id="add-business-btn"
-                className="teal col s12 pointer-cursor">
-                Register Business
-              </button>
+              <input type="submit" id="add-business-btn"
+                className="teal col s12 pointer-cursor" />
+              {/* Register Business
+              </input> */}
             </form>
           </div>
         </section>
@@ -203,6 +264,7 @@ const mapStateToProps = (state) => {
 const mapDispatchedToProps = (dispatch) => {
   return {
     doAddBusiness: (details, token) => dispatch(addBusiness(details, token)),
+    doAddBusinessError: (errorMsg) => dispatch(addBusinessError(errorMsg)),
     clearBusinessErrors: details => dispatch(clearAllBusinessesError(details)),
     clearUserError: userDetails => dispatch(wipeUserError(userDetails)),
     doLoginError: errorMessage => dispatch(loginError(errorMessage))

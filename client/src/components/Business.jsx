@@ -12,7 +12,7 @@ const Business = ({
     <div className="card business-card">
       <div className="card-image">
         <Link to={`/businesses/${id}`}>
-          <img src={image} />
+          <img src={image} height="180px"/>
         </Link>
       </div>
       <div className="card-content">

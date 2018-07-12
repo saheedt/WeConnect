@@ -291,6 +291,15 @@ export function addBusiness(businessDetails, token) {
   };
 }
 /**
+ * @param {String} businessError
+ * @returns {Function} dispatch function
+ */
+export function addBusinessError(businessError) {
+  return (dispatch) => {
+    dispatch(addingBusinessError(businessError));
+  };
+}
+/**
  * @param {Int} businessId
  * @param {Object} updateDetails
  * @param {String} token
