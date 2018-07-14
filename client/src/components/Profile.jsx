@@ -10,7 +10,8 @@ class Profile extends Component {
     this.state = {};
   }
   componentWillMount() {
-    return this.props.fetchAllBusinesses();
+    console.log('profile componentWillMount', this.props);
+    // return this.props.fetchAllBusinesses();
   }
   componentWillReceiveProps(nextProps) {
     console.log('Profile WillReceiveProps: ', nextProps);

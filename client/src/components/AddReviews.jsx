@@ -112,7 +112,6 @@ class AddReviews extends Component {
 
 AddReviews.propTypes = {
   isFetching: PropTypes.bool,
-  review: PropTypes.object,
   error: PropTypes.string,
   fetchReviews: PropTypes.func
 };
