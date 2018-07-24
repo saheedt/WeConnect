@@ -1,43 +1,74 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import Loader from 'react-loader';
+import OwnBusiness from './OwnBusiness.jsx';
 
-import { fetchBusinesses } from '../actions/businessesActions';
+import { fetchUserBusinesses } from '../actions/userActions';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      ownBusinesses: null
+    };
+    this.doOwnBusinesses = this.doOwnBusinesses.bind(this);
   }
   componentWillMount() {
-    console.log('profile componentWillMount', this.props);
-    // return this.props.fetchAllBusinesses();
+    const { id } = this.props.user;
+    const { doFetchUserBusinesses } = this.props;
+    return doFetchUserBusinesses(id);
+  }
+  doOwnBusinesses(businesses) {
+    const ownBusinesses = businesses.map((business, index) => {
+      const { name, createdAt, image_url, id } = business; /* eslint-disable-line */
+      const unique = `${name}-${index}`;
+      return (
+        <OwnBusiness
+          key={unique}
+          name={name}
+          createdAt={createdAt}
+          image_url={image_url} /* eslint-disable-line */
+          businessId={id}
+        />
+      );
+    });
+    this.setState({ ownBusinesses });
   }
   componentWillReceiveProps(nextProps) {
-    console.log('Profile WillReceiveProps: ', nextProps);
+    const { businesses } = nextProps;
+    const { doOwnBusinesses } = this;
+    if (businesses) {
+      doOwnBusinesses(businesses);
+    }
   }
   render() {
+    const { ownBusinesses } = this.state;
+    console.log(this.state);
     return (
-      <section className="header-margin">
-        <div>
+      <section className="header-margin flex flex-column profile-container">
+        <div className="flex profile-header">
           <h3>Profile</h3>
         </div>
-        <div></div>
+        <div className="max630 own-business">
+          <ul className="collection with-header">
+            <li className="collection-header"><h5><b>Own Business</b></h5></li>
+            {ownBusinesses}
+          </ul>
+        </div>
       </section>
     );
   }
 }
 
-// export default Profile;
 const mapStateToProps = (state) => {
   return {
-    businesses: state.businesses.businesses,
+    user: state.users.user,
+    ...state.users.profile
   };
 };
 const mapDispatchedToProps = (dispatch) => {
   return {
-    fetchAllBusinesses: () => dispatch(fetchBusinesses()),
-    // fetchReviews: () => dispatch()
+    doFetchUserBusinesses: userId => dispatch(fetchUserBusinesses(userId)),
   };
 };
 

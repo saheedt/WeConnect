@@ -186,7 +186,7 @@ class SignUp extends Component {
                 </div>
               </div>
               <button id="signup-btn" onClick={this.onSignupClick}
-                className="teal col s12 m12">
+                className="primary-green col s12 m12">
               Sign up
               </button>
               <center>

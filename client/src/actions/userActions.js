@@ -8,7 +8,10 @@ import {
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_ERROR,
   CLEAR_USER_TOKEN,
-  CLEAR_USER_ERROR
+  CLEAR_USER_ERROR,
+  FETCHING_USER_BUSINESSES,
+  FETCHING_USER_BUSINESSES_SUCCESS,
+  FETCHING_USER_BUSINESSES_ERROR
 } from './actionTypes';
 
 import API from '../axiosInstance/api';
@@ -101,10 +104,68 @@ export function clearUserError(userDetails) {
     user: userDetails.user
   };
 }
+/**
+ * @returns {Object}
+ */
+export function fetchingUserBusinesses() {
+  return {
+    type: FETCHING_USER_BUSINESSES
+  };
+}
 
+/**
+ * @param {Array} businesses
+ * @returns {Object}
+ */
+export function fetchingUserBusinessesSuccess(businesses) {
+  return {
+    type: FETCHING_USER_BUSINESSES_SUCCESS,
+    businesses
+  };
+}
+
+/**
+ * @param {String} error
+ * @returns {Object}
+ */
+export function fetchingUserBusinessesError(error) {
+  return {
+    type: FETCHING_USER_BUSINESSES_ERROR,
+    error
+  };
+}
+
+// /api/v1/businesses/:userId/businesses
 /**
  * Action creators
  */
+
+/**
+  * @param {Number} userId
+  * @returns {Function} dispatch function
+  */
+export function fetchUserBusinesses(userId) {
+  return (dispatch) => {
+    dispatch(fetchingUserBusinesses());
+    return API.get(`/api/v1/businesses/${userId}/businesses`)
+      .then(((businesses) => {
+        const { data } = businesses;
+        if (data && data.error) {
+          return dispatch(fetchingUserBusinessesError(data.error));
+        }
+        if (data && data.message === 'user businesses successfully retrieved') {
+          return dispatch(fetchingUserBusinessesSuccess(data.businesses));
+        }
+      })).catch(((error) => {
+        const { response } = error;
+        if (response && response.data.message) {
+          dispatch(fetchingUserBusinessesError(response.data.message));
+          return;
+        }
+        dispatch(fetchingUserBusinessesError('network error, try later'));
+      }));
+  };
+}
 
 /**
  * @param {Object} userData

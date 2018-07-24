@@ -187,16 +187,16 @@ class Header extends Component {
         </div>
         <div id="listenings-header-holder-right">
           <div id="listings-search-holder-gen" className="flex">
-            <div id="listings-input-holder">
-              <input id="listings-search-input"
-                placeholder="Search for businesses.." />
-            </div>
             <div id="listings-select-holder">
               <select id="search-select">
                 <option value="--select--">--select--</option>
                 <option value="category">category</option>
                 <option value="location">location</option>
               </select>
+            </div>
+            <div id="listings-input-holder">
+              <input id="listings-search-input"
+                placeholder="Search for businesses.." />
             </div>
             <div id="listings-search-btn-holder">
               <button id="listings-search-btn" className="white"

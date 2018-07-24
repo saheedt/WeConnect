@@ -75,13 +75,14 @@ class AddReviews extends Component {
    * @memberof AddReviews
    */
   render() {
+    const { doAddReview } = this;
     return (
       <section
         className="profile-reviews-maker-holder holder-60 padding-20 flex">
         <div className="header-title"><h3>Add Review</h3></div>
         <div id="review-input-holder">
           <div className="row">
-            <form className="col s12 m12 l12">
+            <form onSubmit={doAddReview} className="col s12 m12 l12">
               <div className="row">
                 <div className="input-field col s12 m12 l12">
                   <textarea id="reviewer-name-input"
@@ -90,17 +91,15 @@ class AddReviews extends Component {
                   <label htmlFor="reviewer-name-input">Name</label>
                 </div>
                 <div className="input-field col s12 m12 l12">
-                  <textarea id="review-input" className="materialize-textarea">
+                  <textarea id="review-input" className="materialize-textarea"
+                    required>
                   </textarea>
                   <label htmlFor="review-input">Review Business</label>
                 </div>
               </div>
               <div id="post-review-holder">
-                <a href="" id="post-review"
-                  onClick={this.doAddReview}
-                  className="teal right flex">
-                  Add review
-                </a>
+                <input type="submit" id="post-review"
+                  className="primary-green right flex" value="Add review" />
               </div>
             </form>
           </div>
@@ -112,6 +111,7 @@ class AddReviews extends Component {
 
 AddReviews.propTypes = {
   isFetching: PropTypes.bool,
+  review: PropTypes.object,
   error: PropTypes.string,
   fetchReviews: PropTypes.func
 };

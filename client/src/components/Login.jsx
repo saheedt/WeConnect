@@ -160,11 +160,12 @@ class Login extends Component {
                 </div>
               </div>
               <button id="login-btn" onClick={onLoginClick}
-                className="teal flex">
+                className="primary-green flex">
                 Sign in
               </button>
               <center>
-                <a className="pointer-cursor" onClick={onSignUpClick }
+                <a className="pointer-cursor"
+                  onClick={onSignUpClick }
                   id="login-signup-btn">
                   Sign up
                 </a>

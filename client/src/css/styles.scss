@@ -14,6 +14,9 @@ input {
     width: 100vw;
     height: 100vh;
 }
+.primary-green{
+  background-color: $primary-green;
+}
 #listings-header{
     background-color: $primary-green;
     height: 6rem;
@@ -111,6 +114,9 @@ input {
 }
 .justify-space-evenly{
   justify-content: space-evenly;
+}
+.align-center{
+  align-items: center;
 }
 .switch{
   color: $soft-white;
@@ -994,7 +1000,28 @@ select {
     flex-wrap: wrap;
     width: 100%;
 }
-
+.profile-container{
+  justify-content: center;
+  align-items: center;
+  // margin-top: 4rem;
+  flex-direction: column;
+  background-color: #f7f7f7;
+}
+// .profile{
+  
+// }
+.own-business{
+  width: 80%;
+  margin: auto;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
+.own-business-image{
+  width: 5rem;
+  height: 5rem
+}
+.own-business .collection .collection-item {
+  border-bottom: 0;
+}
 
 /*.loader {
   border: 16px solid $light-grey; 

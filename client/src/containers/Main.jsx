@@ -6,14 +6,6 @@ import Users from '../containers/Users.jsx';
 import Businesses from './Businesses.jsx';
 import Header from '../components/Header.jsx';
 
-// import { wipeUserError } from '../actions/userActions';
-
-// class Main extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//   }
-//   render() {
 const Main = (props) => {
   const {
     openLogin,
@@ -43,6 +35,5 @@ const Main = (props) => {
     </section>
   );
 };
-// }
 
 export default Main;

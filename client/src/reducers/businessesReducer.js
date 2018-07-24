@@ -166,7 +166,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       addReview: {
         isFetching: false,
-        review: false,
+        review: null,
         error: action.error
       }
     };

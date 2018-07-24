@@ -243,9 +243,7 @@ class Add extends Component {
                 </div>
               </div>
               <input type="submit" id="add-business-btn"
-                className="teal col s12 pointer-cursor" />
-              {/* Register Business
-              </input> */}
+                className="primary-green col s12 pointer-cursor" value="Register Business" />
             </form>
           </div>
         </section>

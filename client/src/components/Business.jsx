@@ -17,10 +17,10 @@ const Business = ({
       </div>
       <div className="card-content">
         <Link to={`/businesses/${id}`}>
-          <p className="business-name">{name}</p>
+          <p className="business-name"><h5><b>{name}</b></h5></p>
         </Link>
-        <p className="business-category">{category}</p>
-        <p className="business-address">{address}</p>
+        <p className="business-category"><h6><b>{category}</b></h6></p>
+        <p className="business-address"><h7><i>{address}</i></h7></p>
       </div>
     </div>
   );
