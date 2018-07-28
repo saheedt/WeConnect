@@ -166,7 +166,7 @@ class Add extends Component {
       return;
     }
     doAddBusiness(businessDetails, token);
-  }
+  } 
   /**
    * @description Handles register business button click event
    * @param {Object} event

@@ -25,7 +25,11 @@ const Menu = ({ doSignOut, user }) => {
           <strong>{user ? user.email : null}</strong>
         </div>
         <ul>
-          <li onClick={() => { instance.hide(); }}>
+          <li onClick={(event) => {
+            event.persist();
+            window.$$cachedEventForProfile$$ = event;
+            instance.hide();
+          }}>
             <Link to={'/users/profile'}>Profile</Link>
           </li>
           <li onClick={() => { instance.hide(); }}>

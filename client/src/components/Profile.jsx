@@ -4,8 +4,15 @@ import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import OwnBusiness from './OwnBusiness.jsx';
 import Spinner from './Spinner.jsx';
+import Helper from '../helper/Helper';
 
-import { fetchUserBusinesses, deleteOwnBusiness } from '../actions/userActions';
+import {
+  fetchUserBusinesses,
+  deleteOwnBusiness,
+  wipeUserError,
+  loginError
+} from '../actions/userActions';
+
 /**
  * @description Displays user profile page
  * @class Profile
@@ -28,6 +35,11 @@ class Profile extends Component {
     this.doDeleteBusiness = this.doDeleteBusiness.bind(this);
   }
   componentWillMount() {
+    const { cachedEventForProfile } = Helper;
+    const { history } = this.props;
+    if (!cachedEventForProfile()) {
+      return history.push('/');
+    }
     const { id } = this.props.user;
     const { doFetchUserBusinesses } = this.props;
     return doFetchUserBusinesses(id);
@@ -77,14 +89,54 @@ class Profile extends Component {
       });
   }
   componentWillReceiveProps(nextProps) {
-    const { businesses, message, doFetchUserBusinesses } = nextProps;
-    const { id } = nextProps.user;
-    const { doOwnBusinesses } = this;
-    if (businesses) {
-      doOwnBusinesses(businesses);
+    const {
+      businesses,
+      message,
+      doFetchUserBusinesses,
+      token,
+      error,
+      openLogin,
+      closeLogin,
+      doLoginError
+    } = nextProps;
+    const { cachedEventForProfile } = Helper;
+    if (token) {
+      const { id } = nextProps.user;
+      const { doOwnBusinesses } = this;
+      if (error && error === 'invalid token') {
+        doLoginError('access token expired, kindly re-authenticate');
+        openLogin(cachedEventForProfile());
+        return;
+      }
+      if (token && error === 'unauthorized user') {
+        doLoginError('un-authorized to perform action, sign-in/sign-up');
+        openLogin(cachedEventForProfile());
+        return;
+      }
+      if (businesses) {
+        doOwnBusinesses(businesses);
+      }
+      if (message) {
+        doFetchUserBusinesses(id);
+      }
+      closeLogin(cachedEventForProfile());
+      return;
     }
-    if (message) {
-      doFetchUserBusinesses(id);
+    if (!token) {
+      if (error && error === 'invalid token') {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(cachedEventForProfile());
+        return;
+      }
+      if (error && error === 'unauthorized user') {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(cachedEventForProfile());
+        return;
+      }
+      if (businesses) {
+        doLoginError('you appear offline, kindly sign-in/sign-up');
+        openLogin(cachedEventForProfile());
+      }
     }
   }
   /**
@@ -131,7 +183,9 @@ const mapDispatchedToProps = (dispatch) => {
   return {
     doFetchUserBusinesses: userId => dispatch(fetchUserBusinesses(userId)),
     deleteBusiness: (token, businessId) =>
-      dispatch(deleteOwnBusiness(token, businessId))
+      dispatch(deleteOwnBusiness(token, businessId)),
+    clearUserError: userDetails => dispatch(wipeUserError(userDetails)),
+    doLoginError: errorMessage => dispatch(loginError(errorMessage))
   };
 };
 

@@ -30,7 +30,17 @@ const Main = (props) => {
           />
         );
       }}/>
-      <Route path="/users" render={properties => <Users {...properties} />}/>
+      <Route path="/users" render={(properties) => {
+        return (
+          <Users
+            {...properties}
+            openLogin={openLogin}
+            closeLogin={closeLogin}
+            openSignUp={openSignUp}
+            closeSignUp={closeSignUp}
+          />
+        );
+      }}/>
       <Route exact path="/" render={() => (<Redirect to="/businesses"/>)}/>
     </section>
   );

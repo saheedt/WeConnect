@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Spinner from './Spinner.jsx';
+
 import { fetchReviews } from '../actions/businessesActions';
 
 /**
@@ -76,9 +78,11 @@ class AddReviews extends Component {
    */
   render() {
     const { doAddReview } = this;
+    const { isFetching } = this.props;
     return (
       <section
         className="profile-reviews-maker-holder holder-60 padding-20 flex">
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'}/>}
         <div className="header-title"><h3>Add Review</h3></div>
         <div id="review-input-holder">
           <div className="row">

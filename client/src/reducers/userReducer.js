@@ -76,7 +76,8 @@ export default function userReducer(state = {}, action) {
       profile: {
         isFetching: true,
         error: null,
-        businesses: null
+        businesses: null,
+        message: null,
       }
     };
   case FETCHING_USER_BUSINESSES_SUCCESS:
@@ -85,7 +86,8 @@ export default function userReducer(state = {}, action) {
       profile: {
         isFetching: false,
         error: null,
-        businesses: action.businesses
+        businesses: action.businesses,
+        message: null,
       }
     };
   case FETCHING_USER_BUSINESSES_ERROR:
@@ -94,7 +96,8 @@ export default function userReducer(state = {}, action) {
       profile: {
         isFetching: false,
         error: action.error,
-        businesses: null
+        businesses: null,
+        message: null,
       }
     };
   case DELETE_BUSINESS:

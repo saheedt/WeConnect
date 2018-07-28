@@ -21,9 +21,14 @@ const OwnBusiness = (props) => {
       <div><b><Link to={`/businesses/${businessId}`}>{name}</Link></b></div>
       <div>{createdAt.split('T')[0]}</div>
       <div>
-        <button data-business-id={businessId} id="profile-delete-biz"
-          className="secondary-content" onClick={deleteBusiness}>
+        <button data-business-id={businessId}
+          className="secondary-content profile-delete-modify"
+          onClick={deleteBusiness}>
           <i className="material-icons">delete</i>
+        </button>
+        <button data-business-id={businessId}
+          className="secondary-content profile-delete-modify" >
+          <i className="material-icons">edit</i>
         </button>
       </div>
     </li>

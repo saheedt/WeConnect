@@ -47,35 +47,6 @@ export default class Helper {
     return true;
   }
   /**
-     * @description Loader option config
-     * @static
-     * @returns {Object}
-     * @memberof Helper
-     */
-  static loaderOptions() {
-    return {
-      lines: 13,
-      length: 20,
-      width: 10,
-      radius: 30,
-      scale: 1.00,
-      corners: 1,
-      color: '#fff',
-      opacity: 0.25,
-      rotate: 0,
-      direction: 1,
-      speed: 1,
-      trail: 60,
-      fps: 20,
-      zIndex: 2e9,
-      top: '50%',
-      left: '50%',
-      shadow: false,
-      hwaccel: false,
-      position: 'absolute'
-    };
-  }
-  /**
      * @description clears all input fields in a mounted component
      * @static
      * @param {Object} authObject flag to target authentication fields
@@ -138,5 +109,16 @@ export default class Helper {
       api_key: process.env.CLOUDINARY_API_KEY,
       api_secret: process.env.CLOUDINARY_API_SECRET
     });
+  }
+  /**
+   * @description returns cached event from global scope
+   * @returns {Object}
+   * @memberof Helper
+   */
+  static cachedEventForProfile() {
+    if (window.$$cachedEventForProfile$$) {
+      return window.$$cachedEventForProfile$$
+    }
+    return null;
   }
 }
