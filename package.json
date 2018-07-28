@@ -74,7 +74,6 @@
     "rc-pagination": "1.16.3",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-loader": "2.4.4",
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
     "react-simple-dropdown": "3.2.0",
@@ -84,6 +83,7 @@
     "sequelize": "4.36.0",
     "style-loader": "0.20.3",
     "svg-url-loader": "2.3.2",
+    "sweetalert": "2.1.0",
     "url-loader": "1.0.1",
     "webpack": "3.8.1"
   }

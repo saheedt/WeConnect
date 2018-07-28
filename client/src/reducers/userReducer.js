@@ -9,7 +9,10 @@ import {
   CLEAR_USER_ERROR,
   FETCHING_USER_BUSINESSES,
   FETCHING_USER_BUSINESSES_SUCCESS,
-  FETCHING_USER_BUSINESSES_ERROR
+  FETCHING_USER_BUSINESSES_ERROR,
+  DELETE_BUSINESS,
+  DELETE_BUSINESS_SUCCESS,
+  DELETE_BUSINESS_ERROR
 } from '../actions/actionTypes';
 
   /**
@@ -92,6 +95,36 @@ export default function userReducer(state = {}, action) {
         isFetching: false,
         error: action.error,
         businesses: null
+      }
+    };
+  case DELETE_BUSINESS:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: true,
+        message: null,
+        error: null
+      }
+    };
+  case DELETE_BUSINESS_ERROR:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: false,
+        message: null,
+        error: action.error
+      }
+    };
+  case DELETE_BUSINESS_SUCCESS:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: false,
+        message: action.message,
+        error: null
       }
     };
   case CLEAR_USER_ERROR:

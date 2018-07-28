@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination';
-
-import Loader from 'react-loader';
 
 import Error from './Error.jsx';
 import Review from './Review.jsx';
-import Helper from '../helper/Helper';
 import AddReviews from './AddReviews.jsx';
+import Spinner from './Spinner.jsx';
 
 import {
   fetchBusiness,
@@ -16,7 +14,18 @@ import {
   addBusinessReview
 } from '../actions/businessesActions';
 
+/**
+ * @description Displays business profile page
+ * @class BizProfile
+ * @extends {Component}
+ * @export
+ */
 class BizProfile extends Component {
+  /**
+   * @description Creates an instance of BizProfile
+   * @param {Object} props
+   * @memberof BizProfile
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +49,11 @@ class BizProfile extends Component {
       this.genReviews(nextProps.reviews.reviews);
     }
   }
+  /**
+   * @description Handles pagination onChange event
+   * @param {Number} page
+   * @memberof BizProfile
+   */
   onPageChange(page) {
     const { businessId } = this.props.match.params;
     this.setState(
@@ -47,10 +61,16 @@ class BizProfile extends Component {
       () => this.props.fetchReviews(businessId, page)
     );
   }
+  /**
+   * @description Handles business profile generation
+   * @param {Object} profile
+   * @return JSX element
+   * @memberof BizProfile
+   */
   generateProfile(profile) {
     return (
       <section id="business-profile"
-        className="holder-60-shadow padding-20 flex">
+        className="holder-60-shadow padding-20 flex white">
         <div id="business-name-emph"><h3>{profile.name}</h3></div>
         <div id="business-profile-details" className="flex">
           <div className="profile-grouping flex">
@@ -81,6 +101,11 @@ class BizProfile extends Component {
       </section>
     );
   }
+  /**
+   * @description Handles business reviews generation
+   * @param {Array} reviews
+   * @memberof BizProfile
+   */
   genReviews(reviews) {
     const bizReviews = reviews.map((review, index) => {
       const unique = `${index}--${index}`;
@@ -91,6 +116,11 @@ class BizProfile extends Component {
     });
     this.setState({ reviews: bizReviews });
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof BizProfile
+   */
   render() {
     const { isFetching } = this.props;
     const { count } = this.props.reviews;
@@ -98,30 +128,30 @@ class BizProfile extends Component {
     const displayPagination = this.props.reviews.reviews ? 'block' : 'none';
     const { businessId } = this.props.match.params;
     return (
-      <Loader loaded={!isFetching} options={Helper.loaderOptions()}>
-        <div className="flex vertical-after-header">
-          {this.state.business}
-          <section
-            className="profile-reviews-maker-holder holder-60 padding-20 flex">
-            <div className="header-title"><h3>Reviews</h3></div>
-            <Error background={'#FFF'} color={'#000'}
-              error={reviewError} />
-            {this.state.reviews}
-            <div style={{ display: displayPagination }} id="paginator">
-              <Pagination onChange={this.onPageChange}
-                current={this.state.current}
-                total={count}
-                pageSize={5}
-                showLessItems
-              />
-            </div>
-            <AddReviews
-              addReview={this.props.addBusinessReview}
-              businessId={businessId}
+      <div className="flex vertical-after-header">
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'}/>}
+        {this.state.business}
+        <section
+          className="profile-reviews-maker-holder holder-60 padding-20 flex
+          white">
+          <div className="header-title"><h3>Reviews</h3></div>
+          <Error background={'#FFF'} color={'#000'}
+            error={reviewError} />
+          {this.state.reviews}
+          <div style={{ display: displayPagination }} id="paginator">
+            <Pagination onChange={this.onPageChange}
+              current={this.state.current}
+              total={count}
+              pageSize={5}
+              showLessItems
             />
-          </section>
-        </div>
-      </Loader>
+          </div>
+          <AddReviews
+            addReview={this.props.addBusinessReview}
+            businessId={businessId}
+          />
+        </section>
+      </div>
     );
   }
 }
@@ -139,6 +169,14 @@ const mapDispatchedToProps = (dispatch) => {
     addBusinessReview: (businessId, review) =>
       dispatch(addBusinessReview(businessId, review))
   };
+};
+BizProfile.propTypes = {
+  isFetching: PropTypes.bool,
+  business: PropTypes.object,
+  reviews: PropTypes.object,
+  fetchBusiness: PropTypes.func,
+  fetchReviews: PropTypes.func,
+  addBusinessReview: PropTypes.func
 };
 export default connect(
   mapStateToProps,

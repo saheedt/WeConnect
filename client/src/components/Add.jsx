@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-// require('fs'); /*eslint-disable*/
-
 import cloudinary from 'cloudinary';
+import PropTypes from 'prop-types';
 
 import Error from './Error.jsx';
 import Success from './Success.jsx';
 import ImagePreview from './ImagePreview.jsx';
+import Spinner from './Spinner.jsx';
 
 import {
   addBusiness,
@@ -20,7 +19,18 @@ import {
 } from '../actions/userActions';
 import Helper from '../helper/Helper';
 
+/**
+ * @description Displays Add business page
+ * @class Add
+ * @extends {Component}
+ * @export
+ */
 class Add extends Component {
+  /**
+   * @description Creates an instance of Add
+   * @param {Object} props
+   * @memberof Add
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -128,6 +138,11 @@ class Add extends Component {
       }
     }
   }
+  /**
+   * @description Handles image upload to cloudinary
+   * @param {Object} businessDetails
+   * @memberof Add
+   */
   doImageUpload(businessDetails) {
     const { doAddBusiness, doAddBusinessError, token } = this.props;
     const { image } = this.state;
@@ -152,6 +167,11 @@ class Add extends Component {
     }
     doAddBusiness(businessDetails, token);
   }
+  /**
+   * @description Handles register business button click event
+   * @param {Object} event
+   * @memberof Add
+   */
   registerBusiness(event) {
     event.persist();
     event.preventDefault();
@@ -192,61 +212,73 @@ class Add extends Component {
     };
     this.cachedEvent = event;
     return setTimeout(() => doImageUpload(businessDetails), 100);
-    // doAddBusiness(businessDetails, token)
   }
+  /**
+   * @description sets raw image data from ImagePreview to state
+   * @param {String} image
+   * @memberof Add
+   */
   imageFromPreview(image) {
     this.setState({ image });
   }
-  // onClick={this.registerBusiness}
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof Add
+   */
   render() {
     const { imageFromPreview } = this;
+    const { isFetching } = this.props;
     return (
-      <div className="flex vertical-after-header">
-        <Error error={this.props.error} />
-        <Success message={this.state.addSuccessMsg} />
-        <section id="add-business-container"
-          className="flex holder-60-shadow padding-20">
-          <div className="row">
-            <form onSubmit={this.registerBusiness} id="add-form"
-              className="col s12 m12 l12">
-              <div className="row">
-                <ImagePreview imageFromPreview={imageFromPreview} />
-                <div className="input-field col s12 m12 l12">
-                  <input id="company-name" type="text" className="validate"
-                    required/>
-                  <label forhtml="company-name">Company name</label>
+      <div>
+      {isFetching && <Spinner spinnerColor={"#7fc6c8"} />}
+        <div className="flex vertical-after-header">
+          <Error error={this.props.error} />
+          <Success message={this.state.addSuccessMsg} />
+          <section id="add-business-container"
+            className="flex holder-60-shadow padding-20">
+            <div className="row">
+              <form onSubmit={this.registerBusiness} id="add-form"
+                className="col s12 m12 l12">
+                <div className="row">
+                  <ImagePreview imageFromPreview={imageFromPreview} />
+                  <div className="input-field col s12 m12 l12">
+                    <input id="company-name" type="text" className="validate"
+                      required/>
+                    <label forhtml="company-name">Company name</label>
+                  </div>
+                  <div className="input-field col s12 m12 l12 ">
+                    <input id="address" type="text" className="validate"
+                      required/>
+                    <label forhtml="address">Address</label>
+                  </div>
+                  <div className="input-field col s12 m12 l12 ">
+                    <input id="state" type="text" className="validate"
+                      required/>
+                    <label forhtml="state">State</label>
+                  </div>
+                  <div className="input-field col s12 m12 l12">
+                    <input id="employees" type="number" className="validate"
+                      required/>
+                    <label forhtml="employees">Employees</label>
+                  </div>
+                  <div className="input-field col s12 m12 l12">
+                    <input id="category" type="text" className="validate"
+                      required/>
+                    <label forhtml="category">Category</label>
+                  </div>
+                  <div className="input-field col s12 m12 l12">
+                    <input id="phone-number" type="number" className="validate"
+                      required/>
+                    <label forhtml="phone-number">Phone number</label>
+                  </div>
                 </div>
-                <div className="input-field col s12 m12 l12 ">
-                  <input id="address" type="text" className="validate"
-                    required/>
-                  <label forhtml="address">Address</label>
-                </div>
-                <div className="input-field col s12 m12 l12 ">
-                  <input id="state" type="text" className="validate"
-                    required/>
-                  <label forhtml="state">State</label>
-                </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="employees" type="number" className="validate"
-                    required/>
-                  <label forhtml="employees">Employees</label>
-                </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="category" type="text" className="validate"
-                    required/>
-                  <label forhtml="category">Category</label>
-                </div>
-                <div className="input-field col s12 m12 l12">
-                  <input id="phone-number" type="number" className="validate"
-                    required/>
-                  <label forhtml="phone-number">Phone number</label>
-                </div>
-              </div>
-              <input type="submit" id="add-business-btn"
-                className="primary-green col s12 pointer-cursor" value="Register Business" />
-            </form>
-          </div>
-        </section>
+                <input type="submit" id="add-business-btn"
+                  className="primary-green col s12 pointer-cursor" value="Register Business" />
+              </form>
+            </div>
+          </section>
+        </div>
       </div>
     );
   }
@@ -269,6 +301,18 @@ const mapDispatchedToProps = (dispatch) => {
   };
 };
 
+Add.propTypes = {
+  user: PropTypes.object,
+  error: PropTypes.string,
+  isFetching: PropTypes.bool,
+  business: PropTypes.object,
+  token: PropTypes.string,
+  doAddBusiness: PropTypes.func,
+  doAddBusinessError: PropTypes.func,
+  clearBusinessErrors: PropTypes.func,
+  clearUserError: PropTypes.func,
+  doLoginError: PropTypes.func
+};
 export default connect(
   mapStateToProps,
   mapDispatchedToProps

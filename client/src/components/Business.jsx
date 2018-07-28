@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
+/**
+   * @description Renders Business component to the dom
+   * @param {Object} {...}
+   * @returns {object} JSX object
+   */
 const Business = ({
   image,
   name,
@@ -17,12 +23,19 @@ const Business = ({
       </div>
       <div className="card-content">
         <Link to={`/businesses/${id}`}>
-          <p className="business-name"><h5><b>{name}</b></h5></p>
+          <h5 className="business-name"><b>{name}</b></h5>
         </Link>
-        <p className="business-category"><h6><b>{category}</b></h6></p>
-        <p className="business-address"><h7><i>{address}</i></h7></p>
+        <h6 className="business-category"><p><b>{category}</b></p></h6>
+        <h6 className="business-address"><p><i>{address}</i></p></h6>
       </div>
     </div>
   );
+};
+Business.propTypes = {
+  image: PropTypes.string,
+  name: PropTypes.string,
+  id: PropTypes.number,
+  category: PropTypes.string,
+  address: PropTypes.string
 };
 export default Business;

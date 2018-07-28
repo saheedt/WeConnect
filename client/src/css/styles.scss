@@ -12,7 +12,40 @@ input {
 }
 #entry{
     width: 100vw;
-    height: 100vh;
+    height: 100%;
+    background-color: #f7f7f7;
+}
+a {
+  color: $primary-green;
+}
+.notify-container {
+  width: '40%';
+  padding: '10px';
+  margin-top: '0.5rem';
+}
+.error-support {
+  background-color: 'rgb(254, 241, 241)';
+  border-color: 'rgb(226, 168, 167)'
+}
+.success-style {
+  font-size: '1rem';
+  font-weight: 'bold';
+  color: '#FFF';
+  text-Align: 'center';
+}
+.error-style {
+  font-size: '1rem';
+  font-weight: 'bold';
+  color: 'rgb(213, 109, 109)';
+  text-align: 'center'
+}
+.white {
+  background-color: $soft-white;
+}
+#profile-delete-biz {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
 }
 .primary-green{
   background-color: $primary-green;
@@ -82,6 +115,9 @@ input {
   margin-top: 0px;
   border: 0px;
 }
+#profile-email-holder{
+  margin: 1.0933333333rem 0 .656rem 0;
+}
 .collection{
   border: 0 !important;
 }
@@ -117,6 +153,9 @@ input {
 }
 .align-center{
   align-items: center;
+}
+.align-end{
+  align-items: flex-end;
 }
 .switch{
   color: $soft-white;
@@ -1023,6 +1062,60 @@ select {
   border-bottom: 0;
 }
 
+.show-spinner {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1098765423456;
+}
+.spinner-container {
+  width: 50%;
+  height: 50%;
+  margin: auto;
+  display: flex;
+}
+.spinner {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+  margin: auto
+}
+.with-profile-mail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+}
+.half-way{
+  width: 50%;
+}
+.spinner-overlay {
+  position: fixed;
+  // display: none;
+  width: 100%;
+  height: 100%;
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 111;
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 /*.loader {
   border: 16px solid $light-grey; 
   border-top: 16px solid $light-blue; 

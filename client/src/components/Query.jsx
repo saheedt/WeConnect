@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Loader from 'react-loader';
 import Pagination from 'rc-pagination';
 import PropTypes from 'prop-types';
 
 import { removeQueryError, query } from '../actions/businessesActions';
 import Error from './Error.jsx';
 import Business from './Business.jsx';
+import Spinner from './Spinner.jsx';
 import Helper from '../helper/Helper';
 
 const defaultImage = Helper.defaultImageUrl();
@@ -109,28 +109,27 @@ class Query extends Component {
   render() {
     const { isFetching, error, count } = this.props;
     const display = error ? 'none' : 'block';
-    const { loaderOptions, onPageChange } = this;
+    const { onPageChange } = this;
     const { current } = this.state;
     return (
-      <Loader loaded={!isFetching} options={loaderOptions}>
-        <section id="listings" className="header-margin">
-          <center><Error error={error} /></center>
-          <div style={{ display }} className="header-title">
-            <h3 className="padding-15">Result</h3>
-          </div>
-          <div id="listings-list"
-            className="collection flex flex-wrap justify-center flex-row">
-            {this.state.queries}
-          </div>
-          <div id="paginator">
-            <Pagination onChange={onPageChange}
-              current={current}
-              total={count}
-              showLessItems
-            />
-          </div>
-        </section>
-      </Loader>
+      <section id="listings" className="header-margin">
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
+        <center><Error error={error} /></center>
+        <div style={{ display }} className="header-title">
+          <h3 className="padding-15">Result</h3>
+        </div>
+        <div id="listings-list"
+          className="collection flex flex-wrap justify-center flex-row">
+          {this.state.queries}
+        </div>
+        <div id="paginator">
+          <Pagination onChange={onPageChange}
+            current={current}
+            total={count}
+            showLessItems
+          />
+        </div>
+      </section>
     );
   }
 }

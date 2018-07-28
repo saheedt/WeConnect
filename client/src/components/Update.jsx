@@ -13,7 +13,18 @@ import {
   loginError
 } from '../actions/userActions';
 
+/**
+ * @description Displays Update business page
+ * @class Add
+ * @extends {Component}
+ * @export
+ */
 class Update extends Component {
+  /**
+   * @description Creates an instance of Update
+   * @param {Object} props
+   * @memberof Update
+   */
   constructor(props) {
     super(props);
     this.updateBusiness = this.updateBusiness.bind(this);
@@ -103,6 +114,11 @@ class Update extends Component {
     this.cachedEvent = event;
     return setTimeout(() => doBusinessUpdate(businessId, updateDetails, token));
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof Update
+   */
   render() {
     return (
       <div className="flex vertical-after-header">

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
-import Loader from 'react-loader';
+// import Loader from 'react-loader';
 import PropTypes from 'prop-types';
 
 import Helper from '../helper/Helper';
-
+import Spinner from './Spinner.jsx';
 import Business from '../components/Business.jsx';
 
 import { fetchBusinesses } from '../actions/businessesActions';
@@ -102,27 +102,29 @@ class Listings extends Component {
     const { businesses, current } = this.state;
     const { onPageChange, onAddBtnClick } = this;
     return (
-      <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
-        <section id="listings" className="header-margin">
-          <div id="listings-list"
-            className="collection flex flex-wrap justify-center flex-row">
-            {businesses}
-          </div>
-          <div id="paginator">
-            <Pagination onChange={onPageChange}
-              current={current}
-              total={count}
-              showLessItems
-            />
-          </div>
-          <div className="add-btn-float">
-            <a onClick={onAddBtnClick}
-              className="btn-floating btn-large waves-effect waves-light">
-              <i className="material-icons">add</i>
-            </a>
-          </div>
-        </section>
-      </Loader>
+      // <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
+
+      <section id="listings" className="header-margin">
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
+        <div id="listings-list"
+          className="collection flex flex-wrap justify-center flex-row">
+          {businesses}
+        </div>
+        <div id="paginator">
+          <Pagination onChange={onPageChange}
+            current={current}
+            total={count}
+            showLessItems
+          />
+        </div>
+        <div className="add-btn-float">
+          <a onClick={onAddBtnClick}
+            className="btn-floating btn-large waves-effect waves-light">
+            <i className="material-icons">add</i>
+          </a>
+        </div>
+      </section>
+      // </Loader>
     );
   }
 }

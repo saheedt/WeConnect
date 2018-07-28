@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+   * @description Renders Review component to the dom
+   * @returns {object} JSX object
+   * @param {object} props
+   */
 const Review = ({ createdAt, name, review }) => {
   return (
     <div className="profile-review flex padding-20">

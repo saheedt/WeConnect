@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Spinner from './Spinner.jsx';
 
 import Error from './Error.jsx';
-import Success from './Success.jsx';
 import Helper from '../helper/Helper';
 import { signupError, wipeUserError, doSignup } from '../actions/userActions';
 
@@ -131,9 +131,12 @@ class SignUp extends Component {
       this.setState({
         signUpSuccessMsg: 'user account successfully created'
       }, () => {
-        Helper.clearInputs({ isAuth: true });
+        const { signUpSuccessMsg } = this.state;
+        const { clearInputs, showToast } = Helper;
+        clearInputs({ isAuth: true });
         this.didSignUp = false;
-        setTimeout(() => nextProps.closeSignUp(this.cachedEvent), 3000);
+        showToast({ html: signUpSuccessMsg }, 3000);
+        nextProps.closeSignUp(this.cachedEvent);
       });
     }
   }
@@ -161,10 +164,11 @@ class SignUp extends Component {
    * @memberof SignUp
    */
   render() {
+    const { error, isFetching } = this.props;
     return (
       <section id="sign-up" className="auth flex">
-        <Error error={this.props.error} />
-        <Success message={this.state.signUpSuccessMsg} />
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
+        <Error error={error} />
         <div className="max480 auth-raise white-bg">
           <center><h3>sign up</h3></center>
           <div className="row">

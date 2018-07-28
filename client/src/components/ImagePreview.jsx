@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 import Helper from '../helper/Helper';
 
@@ -9,7 +9,19 @@ const uploadIcon = uploadImage();
 const trueValue = true;
 const falseValue = false;
 
+/**
+ * @description Displays Image selector & preview
+ * @class ImagePreview
+ * @extends {Component}
+ * @export
+ */
+
 class ImagePreview extends Component {
+  /**
+   * @description Creates an instance of ImagePreview
+   * @param {Object} props
+   * @memberof ImagePreview
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +34,11 @@ class ImagePreview extends Component {
   componentDidMount() {
     this.imageSelector = document.getElementById('imageSelect');
   }
+  /**
+   * @description Handles file input change event
+   * @param {Object} event
+   * @memberof ImagePreview
+   */
   onImageAdd(event) {
     const reader = new FileReader();
     const imageFile = event.target.files[0];
@@ -33,13 +50,28 @@ class ImagePreview extends Component {
     };
     reader.readAsDataURL(imageFile);
   }
+  /**
+   * @description Handles choose image button click event
+   * @param {Object} event
+   * @memberof ImagePreview
+   */
   handleChooseImageClick(event) {
     event.preventDefault();
     this.imageSelector.click();
   }
+  /**
+   * @description Handles delete image div click event
+   * @param {Object} event
+   * @memberof ImagePreview
+   */
   onImageDelete() {
     this.setState({ image: null });
   }
+  /**
+   * @description Renders component to the dom
+   * @returns {object} JSX object
+   * @memberof ImagePreview
+   */
   render() {
     const { handleChooseImageClick, onImageAdd, onImageDelete } = this;
     const { image } = this.state;
@@ -75,4 +107,7 @@ class ImagePreview extends Component {
   }
 }
 
+ImagePreview.PropTypes = {
+  imageFromPreview: PropTypes.func
+};
 export default ImagePreview;

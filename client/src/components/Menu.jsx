@@ -12,11 +12,11 @@ import { signOut } from '../actions/userActions';
    * @description Renders Menu component to the dom
    * @returns {object} JSX object
    * @param {object} props
-   * @memberof Query
    */
 const Menu = ({ doSignOut, user }) => {
+  let instance;
   return (
-    <Dropdown ref={() => 'dropdown'}>
+    <Dropdown ref={(ref) => { instance = ref; } }>
       <DropdownTrigger>
         <i className="material-icons">menu</i>
       </DropdownTrigger>
@@ -25,10 +25,10 @@ const Menu = ({ doSignOut, user }) => {
           <strong>{user ? user.email : null}</strong>
         </div>
         <ul>
-          <li >
+          <li onClick={() => { instance.hide(); }}>
             <Link to={'/users/profile'}>Profile</Link>
           </li>
-          <li>
+          <li onClick={() => { instance.hide(); }}>
             <a onClick={doSignOut}>Log out</a>
           </li>
         </ul>

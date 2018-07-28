@@ -11,7 +11,10 @@ import {
   CLEAR_USER_ERROR,
   FETCHING_USER_BUSINESSES,
   FETCHING_USER_BUSINESSES_SUCCESS,
-  FETCHING_USER_BUSINESSES_ERROR
+  FETCHING_USER_BUSINESSES_ERROR,
+  DELETE_BUSINESS,
+  DELETE_BUSINESS_SUCCESS,
+  DELETE_BUSINESS_ERROR
 } from './actionTypes';
 
 import API from '../axiosInstance/api';
@@ -134,7 +137,34 @@ export function fetchingUserBusinessesError(error) {
     error
   };
 }
-
+/**
+ * @returns {Object}
+ */
+export function deletingBusiness() {
+  return {
+    type: DELETE_BUSINESS
+  };
+}
+/**
+ * @param {String} message
+ * @returns {Object}
+ */
+export function deletingBusinessSuccess(message) {
+  return {
+    type: DELETE_BUSINESS_SUCCESS,
+    message
+  };
+}
+/**
+ * @param {String} error
+ * @returns {Object}
+ */
+export function deletingBusinessError(error) {
+  return {
+    type: DELETE_BUSINESS_ERROR,
+    error
+  };
+}
 // /api/v1/businesses/:userId/businesses
 /**
  * Action creators
@@ -195,6 +225,33 @@ export function doLogin(userData) {
         }
         dispatch(userLoginError('network error, please try later'));
       });
+  };
+}
+/**
+ * @param {String} token
+ * @param {String} businessId
+ * @return {Function} dispatch function
+ */
+export function deleteOwnBusiness(token, businessId) {
+  return (dispatch) => {
+    dispatch(deletingBusiness());
+    return API.delete(
+      `/api/v1/businesses/${businessId}`,
+      {
+        headers: {
+          authorization: token
+        }
+      }
+    ).then((deleted) => {
+      if (deleted.data &&
+        deleted.data.message === 'business sucessfully deleted') {
+        dispatch(deletingBusinessSuccess(deleted.data.message));
+      }
+    }).catch((error) => {
+      if (error.response && error.response.data.message) {
+        return dispatch(deletingBusinessError(error.response.data.message));
+      }
+    });
   };
 }
 /**

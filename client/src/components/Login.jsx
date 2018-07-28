@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Error from '../components/Error.jsx';
-// import Success from './Success.jsx';
+import Spinner from './Spinner.jsx';
 
 import { doLogin, loginError, wipeUserError } from '../actions/userActions';
 import Helper from '../helper/Helper';
@@ -137,11 +137,12 @@ class Login extends Component {
    * @memberof Login
    */
   render() {
-    const { error } = this.props;
+    const { error, isFetching } = this.props;
     // const { loginSuccessMsg } = this.state;
     const { onLoginClick, onSignUpClick } = this;
     return (
       <section id="login" className="auth flex">
+        {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
         <Error error={error} />
         {/* <Success message={loginSuccessMsg} /> */}
         <div id="landing-login-wrapper" className="max480 auth-raise white-bg">
