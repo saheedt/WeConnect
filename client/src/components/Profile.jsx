@@ -12,6 +12,7 @@ import {
   wipeUserError,
   loginError
 } from '../actions/userActions';
+import { businessUpdatePrep } from '../actions/businessesActions';
 
 /**
  * @description Displays user profile page
@@ -33,6 +34,7 @@ class Profile extends Component {
     };
     this.doOwnBusinesses = this.doOwnBusinesses.bind(this);
     this.doDeleteBusiness = this.doDeleteBusiness.bind(this);
+    this.goDoEditBusiness = this.goDoEditBusiness.bind(this);
   }
   componentWillMount() {
     const { cachedEventForProfile } = Helper;
@@ -51,9 +53,27 @@ class Profile extends Component {
    */
   doOwnBusinesses(businesses) {
     const ownBusinesses = businesses.map((business, index) => {
-      const { name, createdAt, image_url, id } = business; /* eslint-disable-line */
+      const {
+        name,
+        address,
+        createdAt,
+        location,
+        phonenumber,
+        employees,
+        category,
+        id,
+        image_url } = business; /* eslint-disable-line */
       const unique = `${name}-${index}`;
-      const { doDeleteBusiness } = this;
+      const { doDeleteBusiness, goDoEditBusiness } = this;
+      const relevant = {
+        image_url,
+        name,
+        address,
+        location,
+        phonenumber,
+        employees,
+        category
+      };
       return (
         <OwnBusiness
           key={unique}
@@ -62,6 +82,8 @@ class Profile extends Component {
           image_url={image_url} /* eslint-disable-line */
           businessId={id}
           deleteBusiness={doDeleteBusiness}
+          editBusiness={goDoEditBusiness}
+          all={relevant}
         />
       );
     });
@@ -85,6 +107,20 @@ class Profile extends Component {
       .then((willDelete) => {
         if (willDelete) {
           return deleteBusiness(token, businessId);
+        }
+      });
+  }
+  goDoEditBusiness(event) {
+    const { businessId, all } = event.currentTarget.dataset;
+    const { prepForUpdate, history } = this.props;
+    swal({
+      text: 'Are you sure you want to edit this business details?',
+      buttons: true
+    })
+      .then((willEdit) => {
+        if (willEdit) {
+          prepForUpdate(JSON.parse(all));
+          return history.push(`/businesses/update/${businessId}`);
         }
       });
   }
@@ -185,7 +221,8 @@ const mapDispatchedToProps = (dispatch) => {
     deleteBusiness: (token, businessId) =>
       dispatch(deleteOwnBusiness(token, businessId)),
     clearUserError: userDetails => dispatch(wipeUserError(userDetails)),
-    doLoginError: errorMessage => dispatch(loginError(errorMessage))
+    doLoginError: errorMessage => dispatch(loginError(errorMessage)),
+    prepForUpdate: businessData => dispatch(businessUpdatePrep(businessData))
   };
 };
 
@@ -197,7 +234,8 @@ Profile.propTypes = {
   message: PropTypes.string,
   error: PropTypes.string,
   doFetchUserBusinesses: PropTypes.func,
-  deleteBusiness: PropTypes.func
+  deleteBusiness: PropTypes.func,
+  prepForUpdate: PropTypes.func
 };
 export default connect(
   mapStateToProps,

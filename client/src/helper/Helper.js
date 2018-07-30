@@ -3,6 +3,7 @@
  * @export
  * @class Helper
 */
+import decode from 'jwt-decode';
 
 require('dotenv').config();
 
@@ -83,7 +84,7 @@ export default class Helper {
     return 'https://www.gumtree.com/static/1/resources/assets/rwd/images/orphans/a37b37d99e7cef805f354d47.noimage_thumbnail.png';
   }
   /**
-   * @description Fires Materialize toatser
+   * @description Fires Materialize toaster
    * @param {Object} options
    * @param {Number} duration
    * @memberof Helper
@@ -120,5 +121,23 @@ export default class Helper {
       return window.$$cachedEventForProfile$$
     }
     return null;
+  }
+  /**
+   * @description checks if token is expired
+   * @returns {String}
+   * @memberof Helper
+   */
+  static isTokenExpired(token) {
+    const decoded = decode(token);
+    // if (!decoded) {
+    //   return true;
+    // }
+    console.log(decoded);
+    const { exp } = decoded;
+    const currentDate = Date.now().valueOf() / 1000;
+    if (currentDate > exp) {
+      return true;
+    }
+    return false;
   }
 }

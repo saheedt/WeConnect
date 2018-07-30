@@ -2,6 +2,7 @@ import {
   ADDING_BUSINESS,
   ADDING_BUSINESS_SUCCESS,
   ADDING_BUSINESS_ERROR,
+  UPDATE_BUSINESS_PREP,
   UPDATE_BUSINESS,
   UPDATE_BUSINESS_SUCCESS,
   UPDATE_BUSINESS_ERROR,
@@ -57,19 +58,31 @@ export default function businessesReducer(state = {}, action) {
         error: action.error
       }
     };
+  case UPDATE_BUSINESS_PREP:
+    return {
+      ...state,
+      update: {
+        isFetching: false,
+        business: null,
+        error: null,
+        existing: (action.businessData || null)
+      }
+    };
   case UPDATE_BUSINESS:
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: true,
         business: null,
-        error: null
+        error: null,
       }
     };
   case UPDATE_BUSINESS_SUCCESS:
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: false,
         business: action.business,
         error: null
@@ -79,6 +92,7 @@ export default function businessesReducer(state = {}, action) {
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: false,
         business: null,
         error: action.error
@@ -129,7 +143,7 @@ export default function businessesReducer(state = {}, action) {
     };
   case CLEAR_BUSINESSES_ERROR:
     if (action.details) {
-      if (action.details.toCLear === 'listings') {
+      if (action.details.toClear === 'listings') {
         return {
           ...state,
           ...action.details.payload
@@ -137,7 +151,7 @@ export default function businessesReducer(state = {}, action) {
       }
       return {
         ...state,
-        [action.details.toCLear]: {
+        [action.details.toClear]: {
           ...action.details.payload
         }
       };

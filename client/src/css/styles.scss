@@ -19,28 +19,31 @@ a {
   color: $primary-green;
 }
 .notify-container {
-  width: '40%';
-  padding: '10px';
-  margin-top: '0.5rem';
+  width: 40%;
+  padding: 10px;
+  margin-top: 0.5rem;
 }
 .error-support {
-  background-color: 'rgb(254, 241, 241)';
-  border-color: 'rgb(226, 168, 167)'
+  background-color: rgb(254, 241, 241);
+  border-color: rgb(226, 168, 167)
 }
 .success-style {
-  font-size: '1rem';
-  font-weight: 'bold';
-  color: '#FFF';
-  text-Align: 'center';
+  font-size: 1rem;
+  font-weight: bold;
+  color: #FFF;
+  text-Align: center;
 }
 .error-style {
-  font-size: '1rem';
-  font-weight: 'bold';
-  color: 'rgb(213, 109, 109)';
-  text-align: 'center'
+  font-size: 1rem;
+  font-weight: bold;
+  color: rgb(213, 109, 109);
+  text-align: center
 }
 .white {
   background-color: $soft-white;
+}
+.hidden {
+  display: none;
 }
 .profile-delete-modify {
   background: transparent;
@@ -361,6 +364,12 @@ select {
   align-items: center;
   margin-top: 1rem;
 }
+.vertical-after-header-update{
+  flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 7rem;
+}
 #business-profile{
   justify-content: center;
   align-items: center;
@@ -635,7 +644,12 @@ select {
   width: 30%;
   float: right;
   height: 4rem;
-  background-color: red !important
+  background-color: red !important;
+  color: $soft-white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 

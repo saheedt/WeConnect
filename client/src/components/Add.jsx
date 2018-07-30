@@ -51,7 +51,7 @@ class Add extends Component {
     const { cloudinaryConfig } = Helper;
     if (error) {
       clearBusinessErrors({
-        toCLear: 'add',
+        toClear: 'add',
         payload: {
           isFetching,
           business,
@@ -99,7 +99,7 @@ class Add extends Component {
         Helper.clearInputs({ isAuth: false });
         if (error) {
           clearBusinessErrors({
-            toCLear: 'add',
+            toClear: 'add',
             payload: {
               isFetching: nextProps.isFetching,
               business: nextProps.business,
@@ -166,7 +166,7 @@ class Add extends Component {
       return;
     }
     doAddBusiness(businessDetails, token);
-  } 
+  }
   /**
    * @description Handles register business button click event
    * @param {Object} event
@@ -190,7 +190,7 @@ class Add extends Component {
       clearUserError({ token, user });
     }
     clearBusinessErrors({
-      toCLear: 'add',
+      toClear: 'add',
       payload: {
         isFetching: (!isFetching ? false : isFetching),
         business: (!business ? null : business),

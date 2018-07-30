@@ -4,6 +4,7 @@ import {
   ADDING_BUSINESS,
   ADDING_BUSINESS_SUCCESS,
   ADDING_BUSINESS_ERROR,
+  UPDATE_BUSINESS_PREP,
   UPDATE_BUSINESS,
   UPDATE_BUSINESS_SUCCESS,
   UPDATE_BUSINESS_ERROR,
@@ -57,6 +58,17 @@ export function addingBusinessError(error) {
   return {
     type: ADDING_BUSINESS_ERROR,
     error
+  };
+}
+/**
+ * update business preparation
+ * @param {Object} businessData
+ * @returns {Object} UPDATE_BUSINESS
+ */
+export function businessUpdatePrep(businessData) {
+  return {
+    type: UPDATE_BUSINESS_PREP,
+    businessData
   };
 }
 /**
@@ -307,7 +319,7 @@ export function addBusinessError(businessError) {
  */
 export function businessUpdate(businessId, updateDetails, token) {
   return (dispatch) => {
-    dispatch(clearBusinessesError());
+    // dispatch(clearBusinessesError({}));
     dispatch(updateBusiness());
     return API.put(
       `/api/v1/businesses/${businessId}`,
@@ -321,7 +333,7 @@ export function businessUpdate(businessId, updateDetails, token) {
       .then((business) => {
         if (business.data &&
         business.data.message === 'business successfully updated') {
-          const updated = business.business;
+          const updated = business.data.business;
           return dispatch(updateBusinessSuccess(updated));
         }
       })

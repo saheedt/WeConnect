@@ -10,7 +10,7 @@ import Helper from '../helper/Helper';
    * @returns {object} JSX object
    */
 const OwnBusiness = (props) => {
-  const { name, image_url, createdAt, businessId, deleteBusiness } = props; /* eslint-disable-line */
+  const { name, image_url, createdAt, businessId, deleteBusiness, editBusiness, all } = props; /* eslint-disable-line */
   const { defaultImageUrl } = Helper;
   const defaultImage = defaultImageUrl();
   const image = image_url ? image_url : defaultImage /* eslint-disable-line */
@@ -26,8 +26,9 @@ const OwnBusiness = (props) => {
           onClick={deleteBusiness}>
           <i className="material-icons">delete</i>
         </button>
-        <button data-business-id={businessId}
-          className="secondary-content profile-delete-modify" >
+        <button data-business-id={businessId} data-all={JSON.stringify(all)}
+          className="secondary-content profile-delete-modify"
+          onClick={editBusiness}>
           <i className="material-icons">edit</i>
         </button>
       </div>
@@ -40,7 +41,8 @@ OwnBusiness.propTypes = {
   image_url: PropTypes.string,
   createdAt: PropTypes.string,
   businessId: PropTypes.number,
-  deleteBusiness: PropTypes.func
+  deleteBusiness: PropTypes.func,
+  editBusiness: PropTypes.func
 };
 
 export default OwnBusiness;

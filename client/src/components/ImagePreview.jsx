@@ -107,7 +107,7 @@ class ImagePreview extends Component {
   }
 }
 
-ImagePreview.PropTypes = {
+ImagePreview.propTypes = {
   imageFromPreview: PropTypes.func
 };
 export default ImagePreview;
