@@ -2,6 +2,7 @@ const DotEnv = require('dotenv');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 DotEnv.config({ path: `${__dirname}/.env` });
@@ -28,14 +29,15 @@ const config = {
   node: {
     fs: 'empty'
   },
-  entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
+  entry: { main: path.join(SRC_DIR, '/WeconnectRoot.js') },
   output: {
     path: path.join(DIST_DIR),
     filename: 'bundle.js',
     publicPath: '/'
   },
   module: {
-    loaders: [
+    // loaders
+    rules: [
       {
         test: /\.jsx?$/,
         include: SRC_DIR,
@@ -52,8 +54,8 @@ const config = {
       },
       {
         test: /\.css$/,
-        loader: extractPlugin.extract({
-          fallback: 'style-loader', use: 'url-loader'
+        use: extractPlugin.extract({
+          fallback: 'style-loader', use: ['url-loader']
         })
       },
       {
@@ -64,7 +66,9 @@ const config = {
       {
         test: /\.(png|jpg|gif|jpeg|eot|ttf|woff|woff2|svg)$/,
         exclude: /node_modules/,
-        loader: 'url-loader'
+        use: {
+          loader: 'url-loader'
+        }
       }
     ]
   },
