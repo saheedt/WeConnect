@@ -128,16 +128,18 @@ export default class Helper {
    * @memberof Helper
    */
   static isTokenExpired(token) {
-    const decoded = decode(token);
-    // if (!decoded) {
-    //   return true;
-    // }
-    console.log(decoded);
-    const { exp } = decoded;
-    const currentDate = Date.now().valueOf() / 1000;
-    if (currentDate > exp) {
-      return true;
+    try {
+      const decoded = decode(token);
+      const { exp } = decoded;
+      const currentDate = Date.now().valueOf() / 1000;
+      if (currentDate > exp) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      if (error) {
+        return true;
+      }
     }
-    return false;
   }
 }
