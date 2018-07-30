@@ -76,7 +76,8 @@ export default class BusinessController extends BaseHelper {
               business.dataValues.phonenumber,
             employees: parseInt(req.body.employees, 10) ||
               business.dataValues.employees,
-            category: req.body.category || business.dataValues.category
+            category: req.body.category || business.dataValues.category,
+            image_url: req.body.image_url || null
           }).then((updatedBusiness) => {
             if (!updatedBusiness) {
               return res.status(417).send({
