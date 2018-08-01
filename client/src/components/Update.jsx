@@ -151,9 +151,13 @@ class Update extends Component {
             existing: null
           },
           () => setTimeout(() => {
+            const { updateSuccessMsg } = this.state;
+            const { clearInputs, showToast } = Helper;
+            clearInputs({ isAuth: false });
+            showToast({ html: updateSuccessMsg }, 2000);
             window.$$cachedEventForProfile$$ = this.cachedEvent;
-            this.props.history.push('/users/profile');
-          }, 100)
+            setTimeout(() => this.props.history.push('/users/profile'), 2000);
+          }, 0)
         );
       }
       return nextProps.closeLogin(this.cachedEvent);
