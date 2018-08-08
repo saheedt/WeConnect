@@ -1,6 +1,6 @@
 const DotEnv = require('dotenv');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
@@ -15,14 +15,14 @@ const dotEnv = new webpack.DefinePlugin({
     CLOUDINARY_API_SECRET: JSON.stringify(process.env.CLOUDINARY_API_SECRET)
   }
 });
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-  template: 'client/src/index.html'
-});
+// const htmlWebpackPlugin = new HtmlWebpackPlugin({
+//   template: 'client/src/index.html'
+// });
 const extractPlugin = new ExtractTextPlugin({
   filename: 'secondary.css'
 });
 
-const DIST_DIR = path.resolve(__dirname, 'dist');
+// const DIST_DIR = path.resolve(__dirname, 'dist');
 const SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
@@ -31,9 +31,9 @@ const config = {
   },
   entry: { main: path.join(SRC_DIR, '/WeconnectRoot.js') },
   output: {
-    path: path.join(DIST_DIR),
+    path: '/',
     filename: 'bundle.js',
-    publicPath: '/'
+    // publicPath: '/'
   },
   module: {
     // loaders
@@ -46,6 +46,15 @@ const config = {
         query: {
           presets: ['env', 'stage-2', 'react']
         }
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: true }
+          }
+        ]
       },
       {
         test: /\.scss$/,
@@ -78,7 +87,7 @@ const config = {
   plugins: [
     extractPlugin,
     dotEnv,
-    htmlWebpackPlugin
+    // htmlWebpackPlugin
   ]
 };
 

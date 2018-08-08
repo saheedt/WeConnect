@@ -50,6 +50,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw({ verify: BaseHelper.handleRaw, type: '*/*' }));
 
+
+// expose all routes
+app.use(userRoutes);
+app.use(businessRoutes);
+
+// handle unmatched routes with of each of the http methods
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/src/index.html'));
+});
+
 // expose a static directory
 app.use(express.static(path.resolve(__dirname, './public')));
 
@@ -58,14 +68,6 @@ app.route('/api-docs').get((req, res) => {
   res.sendFile(path.resolve(__dirname, './public', 'index.html'));
 });
 
-// expose all routes
-app.use(userRoutes);
-app.use(businessRoutes);
-
-// handle unmatched routes with of each of the http methods
-// app.all('*', (req, res) => res.status(404).send({
-//   message: 'invalid route!',
-// }));
 
 // create server and listen for requests at the designated port
 const server = http.createServer(app);

@@ -192,6 +192,18 @@ export default class BaseHelper {
     return (!str || /^\s*$/.test(str));
   }
   /**
+     * @description Checks if input is an email
+     * @static
+     * @param {String} email email to check
+     * @returns {boolean} true or false
+     * @memberof Helper
+     */
+  /* eslint-disable */
+  static isEmail(email) {
+    return /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+      .test(email);
+  }
+  /**
    * @description validate request
    * @static
    * @param {Object} req req

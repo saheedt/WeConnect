@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development gulp build && gulp nodemon",
-    "start": "node ./dist/server.js",
-    "postinstall": "webpack --mode production && cp client/src/server.js dist/server.js",
-    "test": "jest --coverage"
+    "start": "node ./build/server.js",
+    "postinstall": "gulp build",
+    "test": "gulp test",
+    "client:test": "jest --coverage"
   },
   "repository": {
     "type": "git",

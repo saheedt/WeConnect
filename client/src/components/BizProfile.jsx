@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination';
 
 import Error from './Error.jsx';
-import Review from './Review.jsx';
+import Review from './Review.jsx'; //eslint-disable-line
 import AddReviews from './AddReviews.jsx'; //eslint-disable-line
 import Spinner from './Spinner.jsx';
 
