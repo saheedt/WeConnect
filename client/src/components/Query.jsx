@@ -18,7 +18,7 @@ const defaultImage = Helper.defaultImageUrl();
  * @extends {Component}
  * @export
  */
-class Query extends Component {
+export class Query extends Component {
   /**
    * @description Creates an instance of Query
    * @param {Object} props
@@ -32,7 +32,6 @@ class Query extends Component {
     };
     this.searchInput = null;
     this.selectInput = null;
-    this.loaderOptions = Helper.loaderOptions();
     this.onPageChange = this.onPageChange.bind(this);
   }
   /**

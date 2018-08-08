@@ -9,7 +9,7 @@ import Helper from '../helper/Helper';
    * @param {Object} props
    * @returns {object} JSX object
    */
-const OwnBusiness = (props) => {
+export const OwnBusiness = (props) => {
   const { name, image_url, createdAt, businessId, deleteBusiness, editBusiness, all } = props; /* eslint-disable-line */
   const { defaultImageUrl } = Helper;
   const defaultImage = defaultImageUrl();

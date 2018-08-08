@@ -1,3 +1,4 @@
+import axios from 'axios';
 import querystring from 'querystring';
 
 import {
@@ -27,7 +28,7 @@ import {
   ADDING_BUSINESS_REVIEW_ERROR
 } from './actionTypes';
 
-import API from '../axiosInstance/api';
+// import API from '../axiosInstance/api';
 
 /**
  * add business action
@@ -278,7 +279,7 @@ export function addBusiness(businessDetails, token) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(addingBusiness());
-    return API.post(
+    return axios.post(
       '/api/v1/businesses',
       querystring.stringify(businessDetails),
       {
@@ -291,7 +292,7 @@ export function addBusiness(businessDetails, token) {
         if (business.data &&
         business.data.message === 'business successfully added') {
           const addedBusinessDetails = business.data.business;
-          return dispatch(addingBusinessSuccess(addedBusinessDetails));
+          dispatch(addingBusinessSuccess(addedBusinessDetails));
         }
       })
       .catch((error) => {
@@ -321,7 +322,7 @@ export function businessUpdate(businessId, updateDetails, token) {
   return (dispatch) => {
     // dispatch(clearBusinessesError({}));
     dispatch(updateBusiness());
-    return API.put(
+    return axios.put(
       `/api/v1/businesses/${businessId}`,
       querystring.stringify(updateDetails),
       {
@@ -353,7 +354,7 @@ export function fetchBusinesses(page) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(getBusinesses());
-    return API.get(`/api/v1/businesses?page=${page}`)
+    return axios.get(`/api/v1/businesses?page=${page}`)
       .then((businesses) => {
         if (businesses.data && businesses.data.error) {
           return dispatch(getBusinessesError(businesses.data.error));
@@ -366,9 +367,9 @@ export function fetchBusinesses(page) {
       })
       .catch((error) => {
         if (error.response && error.response.data.message) {
-          return dispatch(getBusinessReviewsError(error.response.data.message));
+          return dispatch(getBusinessesError(error.response.data.message));
         }
-        return dispatch(getBusinessReviewsError('network error, try later'));
+        return dispatch(getBusinessesError('network error, try later'));
       });
   };
 }
@@ -380,7 +381,7 @@ export function fetchBusiness(businessId) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(getBusiness());
-    return API.get(`/api/v1/businesses/${businessId}`)
+    return axios.get(`/api/v1/businesses/${businessId}`)
       .then((business) => {
         if (business.data && business.data.error) {
           dispatch(getBusinessError(business.data.error));
@@ -389,10 +390,10 @@ export function fetchBusiness(businessId) {
         dispatch(getBusinessSuccess(business.data.business));
       })
       .catch((error) => {
-        if (error.response && error.response.data) {
-          return dispatch(getBusinessReviewsError(error.response.data.message));
+        if (error.response && error.response.data.message) {
+          return dispatch(getBusinessError(error.response.data.message));
         }
-        return dispatch(getBusinessReviewsError('network error, try later'));
+        return dispatch(getBusinessError('network error, try later'));
       });
   };
 }
@@ -405,7 +406,7 @@ export function fetchReviews(businessId, page) {
   return (dispatch) => {
     dispatch(clearBusinessesError());
     dispatch(getBusinessReviews());
-    return API.get(`/api/v1/businesses/${businessId}/reviews?page=${page}`)
+    return axios.get(`/api/v1/businesses/${businessId}/reviews?page=${page}`)
       .then((reviews) => {
         if (reviews.data && reviews.data.error) {
           dispatch(getBusinessReviewsError(reviews.data.error));
@@ -443,7 +444,7 @@ export function query(by, queryData, pageOffset) {
   return (dispatch) => {
     dispatch(clearQueryError());
     dispatch(queryBusiness());
-    return API.get(`/api/v1/businesses?${by}=${queryData}&page=${pageOffset}`)
+    return axios.get(`/api/v1/businesses?${by}=${queryData}&page=${pageOffset}`)
       .then((filtered) => {
         if (filtered.data && filtered.data.error) {
           return dispatch(queryBusinessError(filtered.data.error));
@@ -487,7 +488,7 @@ export function removeQueryError() {
 export function addBusinessReview(businessId, review) {
   return (dispatch) => {
     dispatch(addingBusinessReview());
-    return API.post(
+    return axios.post(
       `/api/v1/businesses/${businessId}/reviews`,
       querystring.stringify(review)
     )

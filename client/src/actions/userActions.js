@@ -1,3 +1,4 @@
+import axios from 'axios';
 import querystring from 'querystring';
 
 import {
@@ -17,7 +18,7 @@ import {
   DELETE_BUSINESS_ERROR
 } from './actionTypes';
 
-import API from '../axiosInstance/api';
+// import API from '../axiosInstance/api';
 
 /**
  * user login action
@@ -177,7 +178,7 @@ export function deletingBusinessError(error) {
 export function fetchUserBusinesses(userId) {
   return (dispatch) => {
     dispatch(fetchingUserBusinesses());
-    return API.get(`/api/v1/businesses/${userId}/businesses`)
+    return axios.get(`/api/v1/businesses/${userId}/businesses`)
       .then(((businesses) => {
         const { data } = businesses;
         if (data && data.error) {
@@ -205,7 +206,7 @@ export function doLogin(userData) {
   return (dispatch) => {
     dispatch(clearUserToken());
     dispatch(userLogin());
-    return API.post(
+    return axios.post(
       '/api/v1/auth/login',
       querystring.stringify(userData)
     )
@@ -235,7 +236,7 @@ export function doLogin(userData) {
 export function deleteOwnBusiness(token, businessId) {
   return (dispatch) => {
     dispatch(deletingBusiness());
-    return API.delete(
+    return axios.delete(
       `/api/v1/businesses/${businessId}`,
       {
         headers: {
@@ -262,7 +263,7 @@ export function doSignup(signupData) {
   return (dispatch) => {
     dispatch(clearUserToken());
     dispatch(userSignup());
-    return API.post(
+    return axios.post(
       '/api/v1/auth/signup',
       querystring.stringify(signupData)
     ).then((user) => {

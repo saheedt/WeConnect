@@ -27,7 +27,7 @@ import {
  * @extends {Component}
  * @export
  */
-class Update extends Component {
+export class Update extends Component {
   /**
    * @description Creates an instance of Update
    * @param {Object} props
@@ -150,14 +150,14 @@ class Update extends Component {
             updateSuccessMsg: 'business profile successfully updated',
             existing: null
           },
-          () => setTimeout(() => {
+          () => {
             const { updateSuccessMsg } = this.state;
             const { clearInputs, showToast } = Helper;
             clearInputs({ isAuth: false });
             showToast({ html: updateSuccessMsg }, 2000);
             window.$$cachedEventForProfile$$ = this.cachedEvent;
-            setTimeout(() => this.props.history.push('/users/profile'), 2000);
-          }, 0)
+            this.props.history.push('/users/profile');
+          }
         );
       }
       return nextProps.closeLogin(this.cachedEvent);
@@ -232,12 +232,12 @@ class Update extends Component {
     const { image } = this.state;
     if (!token) {
       doLoginError('sign in to update business profile');
-      setTimeout(() => openLogin(cachedEvent), 100);
+      openLogin(cachedEvent);
       return;
     }
     if (isTokenExpired(token)) {
       doLoginError('access token expired, please re-authenticate');
-      setTimeout(() => openLogin(cachedEvent), 100);
+      openLogin(cachedEvent);
       return;
     }
     if (image) {
@@ -310,10 +310,10 @@ class Update extends Component {
     if (!token) {
       doLoginError('sign in to update business profile');
       this.cachedEvent = event;
-      return setTimeout(() => openLogin(event), 100);
+      return openLogin(event);
     }
     this.cachedEvent = event;
-    return setTimeout(() => doImageUpload(updateDetails), 100);
+    return doImageUpload(updateDetails);
   }
   /**
    * @description sets raw image data from ImagePreview to state

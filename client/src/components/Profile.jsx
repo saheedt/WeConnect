@@ -21,7 +21,7 @@ import { businessUpdatePrep } from '../actions/businessesActions';
  * @export
  */
 
-class Profile extends Component {
+export class Profile extends Component {
   /**
    * @description Creates an instance of Profile
    * @param {Object} props
@@ -110,6 +110,11 @@ class Profile extends Component {
         }
       });
   }
+  /**
+   * @description Handles routing to edit business button click event
+   * @param {Object} event
+   * @memberof Profile
+   */
   goDoEditBusiness(event) {
     const { businessId, all } = event.currentTarget.dataset;
     const { prepForUpdate, history } = this.props;

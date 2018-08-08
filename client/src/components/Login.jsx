@@ -14,7 +14,7 @@ import Helper from '../helper/Helper';
  * @extends {Component}
  * @export
  */
-class Login extends Component {
+export class Login extends Component {
   /**
    * @description Creates an instance of Login
    * @param {Object} props
@@ -129,7 +129,7 @@ class Login extends Component {
     };
     this.cachedEvent = event;
     this.didLogin = true;
-    setTimeout(() => doUserLogin(userData), 100);
+    doUserLogin(userData);
   }
   /**
    * @description Renders component to the dom

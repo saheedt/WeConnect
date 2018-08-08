@@ -5,7 +5,7 @@ import Pagination from 'rc-pagination';
 
 import Error from './Error.jsx';
 import Review from './Review.jsx';
-import AddReviews from './AddReviews.jsx';
+import AddReviews from './AddReviews.jsx'; //eslint-disable-line
 import Spinner from './Spinner.jsx';
 
 import {
@@ -20,7 +20,7 @@ import {
  * @extends {Component}
  * @export
  */
-class BizProfile extends Component {
+export class BizProfile extends Component {
   /**
    * @description Creates an instance of BizProfile
    * @param {Object} props

@@ -6,6 +6,9 @@ import logger from 'morgan';
 import { log } from 'util';
 import path from 'path';
 import cors from 'cors';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webPackConfig from '../webpack.config';
 
 // import all api routes
 import routes from './routes';
@@ -19,6 +22,9 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8011;
+const compiler = webpack(webPackConfig);
+
+app.use(webpackDevMiddleware(compiler));
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -48,7 +54,7 @@ app.use(bodyParser.raw({ verify: BaseHelper.handleRaw, type: '*/*' }));
 app.use(express.static(path.resolve(__dirname, './public')));
 
 // serve api docs
-app.route('/').get((req, res) => {
+app.route('/api-docs').get((req, res) => {
   res.sendFile(path.resolve(__dirname, './public', 'index.html'));
 });
 
@@ -57,9 +63,9 @@ app.use(userRoutes);
 app.use(businessRoutes);
 
 // handle unmatched routes with of each of the http methods
-app.all('*', (req, res) => res.status(404).send({
-  message: 'invalid route!',
-}));
+// app.all('*', (req, res) => res.status(404).send({
+//   message: 'invalid route!',
+// }));
 
 // create server and listen for requests at the designated port
 const server = http.createServer(app);

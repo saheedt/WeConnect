@@ -25,7 +25,7 @@ import Helper from '../helper/Helper';
  * @extends {Component}
  * @export
  */
-class Add extends Component {
+export class Add extends Component {
   /**
    * @description Creates an instance of Add
    * @param {Object} props
@@ -112,9 +112,7 @@ class Add extends Component {
             addSuccessMsg: 'business profile successfully added',
             image: null
           },
-          () => setTimeout(() => {
-            this.props.history.push('/businesses');
-          }, 3000)
+          () => this.props.history.push('/businesses')
         );
         return;
       }
@@ -200,7 +198,7 @@ class Add extends Component {
     if (!token) {
       doLoginError('sign in to create business profile');
       this.cachedEvent = event;
-      return setTimeout(() => openLogin(event), 100);
+      return openLogin(event)
     }
     const businessDetails = {
       name: this.businessName.value,
@@ -211,7 +209,7 @@ class Add extends Component {
       category: this.businessCategory.value
     };
     this.cachedEvent = event;
-    return setTimeout(() => doImageUpload(businessDetails), 100);
+    return doImageUpload(businessDetails);
   }
   /**
    * @description sets raw image data from ImagePreview to state

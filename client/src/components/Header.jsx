@@ -17,7 +17,7 @@ import Helper from '../helper/Helper';
  * @extends {Component}
  * @export
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * @description Creates an instance of Header
    * @param {Object} props
@@ -180,7 +180,7 @@ class Header extends Component {
       <header id="listings-header" className="flex">
         <div id="listings-header-holder-left-first">
           <div style={{ display }} className="wc-header-back-btn-holder flex">
-            <a onClick={this.goBack} href="#">
+            <a id="go-back" onClick={this.goBack} href="#">
               <i className="material-icons">arrow_back</i>
             </a>
           </div>

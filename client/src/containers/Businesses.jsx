@@ -1,13 +1,12 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-// import Header from '../components/Header.jsx';
+/* eslint-disable */
 import Listings from '../components/Listings.jsx';
 import BizProfile from '../components/BizProfile.jsx';
 import Query from '../components/Query.jsx';
 import Add from '../components/Add.jsx';
 import Update from '../components/Update.jsx';
-// import Profile from '../components/Profile.jsx';
 
 const Businesses = (props) => {
   const { url } = props.match;
@@ -19,10 +18,6 @@ const Businesses = (props) => {
   } = props;
   return (
     <div className="flex flex-column">
-      {/* <Route render={props => <Header {...props}
-          openLogin={event => this.props.openLogin(event)}
-        />}
-        /> */}
       <Switch>
         <Route exact path={`${url}/filter`}
           render={properties => (<Query {...properties}/>)} />

@@ -12,7 +12,7 @@ import { fetchReviews } from '../actions/businessesActions';
  * @extends {Component}
  * @export
  */
-class AddReviews extends Component {
+export class AddReviews extends Component {
   /**
    * @description Creates an instance of AddReviews
    * @param {Object} props

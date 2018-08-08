@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
    * @returns {object} JSX object
    * @param {object} props
    */
-const Review = ({ createdAt, name, review }) => {
+export const Review = ({ createdAt, name, review }) => {
   return (
     <div className="profile-review flex padding-20">
       <div className="review-date-time">

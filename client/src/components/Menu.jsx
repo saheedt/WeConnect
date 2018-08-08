@@ -13,31 +13,33 @@ import { signOut } from '../actions/userActions';
    * @returns {object} JSX object
    * @param {object} props
    */
-const Menu = ({ doSignOut, user }) => {
+export const Menu = ({ doSignOut, user }) => {
   let instance;
   return (
-    <Dropdown ref={(ref) => { instance = ref; } }>
-      <DropdownTrigger>
-        <i className="material-icons">menu</i>
-      </DropdownTrigger>
-      <DropdownContent>
-        <div className="segment">
-          <strong>{user ? user.email : null}</strong>
-        </div>
-        <ul>
-          <li onClick={(event) => {
-            event.persist();
-            window.$$cachedEventForProfile$$ = event;
-            instance.hide();
-          }}>
-            <Link to={'/users/profile'}>Profile</Link>
-          </li>
-          <li onClick={() => { instance.hide(); }}>
-            <a onClick={doSignOut}>Log out</a>
-          </li>
-        </ul>
-      </DropdownContent>
-    </Dropdown>
+    <div>
+      <Dropdown ref={(ref) => { instance = ref; } }>
+        <DropdownTrigger>
+          <i className="material-icons">menu</i>
+        </DropdownTrigger>
+        <DropdownContent>
+          <div className="segment">
+            <strong>{user ? user.email : null}</strong>
+          </div>
+          <ul>
+            <li onClick={(event) => {
+              event.persist();
+              window.$$cachedEventForProfile$$ = event;
+              instance.hide();
+            }}>
+              <Link to={'/users/profile'}>Profile</Link>
+            </li>
+            <li onClick={() => { instance.hide(); }}>
+              <a onClick={doSignOut}>Log out</a>
+            </li>
+          </ul>
+        </DropdownContent>
+      </Dropdown>
+    </div>
   );
 };
 

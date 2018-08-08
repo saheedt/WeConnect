@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pagination from 'rc-pagination';
-// import Loader from 'react-loader';
 import PropTypes from 'prop-types';
 
 import Helper from '../helper/Helper';
@@ -17,7 +16,7 @@ const defaultImage = Helper.defaultImageUrl();
  * @extends {Component}
  * @export
  */
-class Listings extends Component {
+export class Listings extends Component {
   /**
    * @description Creates an instance of Listings
    * @param {Object} props
@@ -102,8 +101,6 @@ class Listings extends Component {
     const { businesses, current } = this.state;
     const { onPageChange, onAddBtnClick } = this;
     return (
-      // <Loader loaded={!isFetching} options={Helper.loaderOptions()} >
-
       <section id="listings" className="header-margin">
         {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
         <div id="listings-list"
@@ -124,7 +121,6 @@ class Listings extends Component {
           </a>
         </div>
       </section>
-      // </Loader>
     );
   }
 }

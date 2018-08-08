@@ -13,7 +13,7 @@ import { signupError, wipeUserError, doSignup } from '../actions/userActions';
  * @extends {Component}
  * @export
  */
-class SignUp extends Component {
+export class SignUp extends Component {
   /**
    * @description Creates an instance of SignUp
    * @param {Object} props
@@ -80,7 +80,7 @@ class SignUp extends Component {
     };
     this.cachedEvent = event;
     this.didSignUp = true;
-    setTimeout(() => signUp(userData), 100);
+    signUp(userData);
   }
   /**
    * @description Handles keyup event for password match validation
@@ -109,7 +109,7 @@ class SignUp extends Component {
    * @memberof SignUp
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isFetching) {
+    if (nextProps.isFetching === true) {
       this.emailInput.disabled = true;
       this.passwordInput1.disabled = true;
       this.passwordInput2.disabled = true;
@@ -118,7 +118,7 @@ class SignUp extends Component {
         this.signUpBtn.classList.add('light-grey');
       }
     }
-    if (!nextProps.isFetching) {
+    if (nextProps.isFetching === false) {
       this.emailInput.disabled = false;
       this.passwordInput1.disabled = false;
       this.passwordInput2.disabled = false;
@@ -149,15 +149,15 @@ class SignUp extends Component {
     this.passwordInput1 = document.getElementById('signup-password-1');
     this.passwordInput2 = document.getElementById('signup-password-2');
     this.signUpBtn = document.getElementById('signup-btn');
-    this.passwordInput2.addEventListener('keyup', this.checkPasswordMatch);
+    // this.passwordInput2.addEventListener('keyup', this.checkPasswordMatch);
   }
   /**
    * @description Fires when component is unmounted from the dom
    * @memberof SignUp
    */
-  componentWillUnmount() {
-    this.passwordInput2.removeEventListener('keyup', this.checkPasswordMatch);
-  }
+  // componentWillUnmount() {
+  // this.passwordInput2.removeEventListener('keyup', this.checkPasswordMatch);
+  // }
   /**
    * @description Renders component to the dom
    * @returns {object} JSX object
@@ -165,6 +165,7 @@ class SignUp extends Component {
    */
   render() {
     const { error, isFetching } = this.props;
+    const { checkPasswordMatch } = this;
     return (
       <section id="sign-up" className="auth flex">
         {isFetching && <Spinner spinnerColor={'#7fc6c8'} />}
@@ -184,7 +185,8 @@ class SignUp extends Component {
                   <label htmlFor="signup-password-1">Password</label>
                 </div>
                 <div className="input-field col s12 m12">
-                  <input id="signup-password-2" type="password"
+                  <input id="signup-password-2"
+                    onKeyUp={checkPasswordMatch} type="password"
                     className="validate"/>
                   <label htmlFor="signup-password-2">Re-type Password</label>
                 </div>
