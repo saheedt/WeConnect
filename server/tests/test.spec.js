@@ -12,72 +12,72 @@ const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0Ij';
 const imageUrl = 'https://images.pexels.com/1002638/pexels-photo-1002638.jpeg';
 let userId1, testToken1, testToken2, businessId;
 
-describe('un-matched endpoints', () => {
-  describe('Invalid Post request', () => {
-    it(
-      'should display the right message for an invalid POST request',
-      (done) => {
-        request(server)
-          .post('/api/auth/signup')
-          .send({
-            email: ' ',
-            password: 1234567
-          })
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Get request', () => {
-    it(
-      'should display the right message for an invalid GET request',
-      (done) => {
-        request(server)
-          .get('/api/businesses')
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Put request', () => {
-    it(
-      'should display the right message for an invalid PUT request',
-      (done) => {
-        request(server)
-          .put('/api/businesses/1')
-          .send({
-            name: 'specimen b',
-            employees: 16
-          })
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Delete request', () => {
-    it(
-      'should display the right message for an invalid DELETE request',
-      (done) => {
-        request(server)
-          .delete('/api/businesses/1')
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-});
+// describe('un-matched endpoints', () => {
+//   describe('Invalid Post request', () => {
+//     it(
+//       'should display the right message for an invalid POST request',
+//       (done) => {
+//         request(server)
+//           .post('/api/auth/signup')
+//           .send({
+//             email: ' ',
+//             password: 1234567
+//           })
+//           .end((err, resp) => {
+//             assert.deepEqual(resp.status, 404);
+//             assert.deepEqual(resp.body.message, 'invalid route!');
+//             done();
+//           });
+//       }
+//     );
+//   });
+//   describe('Invalid Get request', () => {
+//     it(
+//       'should display the right message for an invalid GET request',
+//       (done) => {
+//         request(server)
+//           .get('/api/businesses')
+//           .end((err, resp) => {
+//             assert.deepEqual(resp.status, 404);
+//             assert.deepEqual(resp.body.message, 'invalid route!');
+//             done();
+//           });
+//       }
+//     );
+//   });
+//   describe('Invalid Put request', () => {
+//     it(
+//       'should display the right message for an invalid PUT request',
+//       (done) => {
+//         request(server)
+//           .put('/api/businesses/1')
+//           .send({
+//             name: 'specimen b',
+//             employees: 16
+//           })
+//           .end((err, resp) => {
+//             assert.deepEqual(resp.status, 404);
+//             assert.deepEqual(resp.body.message, 'invalid route!');
+//             done();
+//           });
+//       }
+//     );
+//   });
+//   describe('Invalid Delete request', () => {
+//     it(
+//       'should display the right message for an invalid DELETE request',
+//       (done) => {
+//         request(server)
+//           .delete('/api/businesses/1')
+//           .end((err, resp) => {
+//             assert.deepEqual(resp.status, 404);
+//             assert.deepEqual(resp.body.message, 'invalid route!');
+//             done();
+//           });
+//       }
+//     );
+//   });
+// });
 /** ============== ======================= =================== ============== */
 
 describe('user endpoints', () => {
@@ -131,7 +131,7 @@ describe('user endpoints', () => {
         request(server)
           .post('/api/v1/auth/signup')
           .send({
-            email: 't@testing.com',
+            email: 'test@testing.com',
             password: '12345'
           })
           .expect('Content-Type', /json/)

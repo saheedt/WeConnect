@@ -30,7 +30,7 @@ export default class UserController extends BaseHelper {
         message: 'email cannot be empty or null'
       });
     }
-    if (UserController.isEmail(req.body.email)) {
+    if (!UserController.isEmail(req.body.email)) {
       return res.status(400).send({
         message: 'invalid email address supplied'
       });
@@ -91,7 +91,7 @@ export default class UserController extends BaseHelper {
       });
     }
     // check email validity
-    if (UserController.isEmail(req.body.email)) {
+    if (!UserController.isEmail(req.body.email)) {
       return res.status(400).send({
         message: 'invalid email address supplied'
       });
@@ -153,7 +153,7 @@ export default class UserController extends BaseHelper {
         message: 'invalid identity supplied'
       });
     }
-    if (UserController.isEmail(req.body.email)) {
+    if (!UserController.isEmail(req.body.email)) {
       return res.status(400).send({
         message: 'invalid email address supplied'
       });
