@@ -1,3 +1,4 @@
+import axios from 'axios';
 import querystring from 'querystring';
 
 import {
@@ -8,10 +9,16 @@ import {
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_ERROR,
   CLEAR_USER_TOKEN,
-  CLEAR_USER_ERROR
+  CLEAR_USER_ERROR,
+  FETCHING_USER_BUSINESSES,
+  FETCHING_USER_BUSINESSES_SUCCESS,
+  FETCHING_USER_BUSINESSES_ERROR,
+  DELETE_BUSINESS,
+  DELETE_BUSINESS_SUCCESS,
+  DELETE_BUSINESS_ERROR
 } from './actionTypes';
 
-import API from '../axiosInstance/api';
+// import API from '../axiosInstance/api';
 
 /**
  * user login action
@@ -101,10 +108,95 @@ export function clearUserError(userDetails) {
     user: userDetails.user
   };
 }
+/**
+ * @returns {Object}
+ */
+export function fetchingUserBusinesses() {
+  return {
+    type: FETCHING_USER_BUSINESSES
+  };
+}
 
+/**
+ * @param {Array} businesses
+ * @returns {Object}
+ */
+export function fetchingUserBusinessesSuccess(businesses) {
+  return {
+    type: FETCHING_USER_BUSINESSES_SUCCESS,
+    businesses
+  };
+}
+
+/**
+ * @param {String} error
+ * @returns {Object}
+ */
+export function fetchingUserBusinessesError(error) {
+  return {
+    type: FETCHING_USER_BUSINESSES_ERROR,
+    error
+  };
+}
+/**
+ * @returns {Object}
+ */
+export function deletingBusiness() {
+  return {
+    type: DELETE_BUSINESS
+  };
+}
+/**
+ * @param {String} message
+ * @returns {Object}
+ */
+export function deletingBusinessSuccess(message) {
+  return {
+    type: DELETE_BUSINESS_SUCCESS,
+    message
+  };
+}
+/**
+ * @param {String} error
+ * @returns {Object}
+ */
+export function deletingBusinessError(error) {
+  return {
+    type: DELETE_BUSINESS_ERROR,
+    error
+  };
+}
+// /api/v1/businesses/:userId/businesses
 /**
  * Action creators
  */
+
+/**
+  * @param {Number} userId
+  * @returns {Function} dispatch function
+  */
+export function fetchUserBusinesses(userId) {
+  return (dispatch) => {
+    dispatch(fetchingUserBusinesses());
+    return axios.get(`/api/v1/businesses/${userId}/businesses`)
+      .then(((businesses) => {
+        const { data } = businesses;
+        if (data && data.error) {
+          return dispatch(fetchingUserBusinessesError(data.error));
+        }
+        if (data && data.message === 'user businesses successfully retrieved') {
+          return dispatch(fetchingUserBusinessesSuccess(data.businesses));
+        }
+      })).catch(((error) => {
+        const { response } = error;
+        if (response && response.data.message) {
+          dispatch(fetchingUserBusinessesError(response.data.message));
+          return;
+        }
+        dispatch(fetchingUserBusinessesError('network error, try later'));
+      }));
+  };
+}
 
 /**
  * @param {Object} userData
@@ -114,7 +206,7 @@ export function doLogin(userData) {
   return (dispatch) => {
     dispatch(clearUserToken());
     dispatch(userLogin());
-    return API.post(
+    return axios.post(
       '/api/v1/auth/login',
       querystring.stringify(userData)
     )
@@ -137,6 +229,33 @@ export function doLogin(userData) {
   };
 }
 /**
+ * @param {String} token
+ * @param {String} businessId
+ * @return {Function} dispatch function
+ */
+export function deleteOwnBusiness(token, businessId) {
+  return (dispatch) => {
+    dispatch(deletingBusiness());
+    return axios.delete(
+      `/api/v1/businesses/${businessId}`,
+      {
+        headers: {
+          authorization: token
+        }
+      }
+    ).then((deleted) => {
+      if (deleted.data &&
+        deleted.data.message === 'business sucessfully deleted') {
+        dispatch(deletingBusinessSuccess(deleted.data.message));
+      }
+    }).catch((error) => {
+      if (error.response && error.response.data.message) {
+        return dispatch(deletingBusinessError(error.response.data.message));
+      }
+    });
+  };
+}
+/**
  * @param {Object} signupData
  * @return {Function} dispatch function
  */
@@ -144,7 +263,7 @@ export function doSignup(signupData) {
   return (dispatch) => {
     dispatch(clearUserToken());
     dispatch(userSignup());
-    return API.post(
+    return axios.post(
       '/api/v1/auth/signup',
       querystring.stringify(signupData)
     ).then((user) => {

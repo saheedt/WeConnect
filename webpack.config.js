@@ -1,6 +1,8 @@
 const DotEnv = require('dotenv');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 DotEnv.config({ path: `${__dirname}/.env` });
@@ -8,25 +10,34 @@ DotEnv.config({ path: `${__dirname}/.env` });
 const dotEnv = new webpack.DefinePlugin({
   'process.env': {
     BASE_URL: JSON.stringify(process.env.BASE_URL),
+    CLOUDINARY_CLOUD_NAME: JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
+    CLOUDINARY_API_KEY: JSON.stringify(process.env.CLOUDINARY_API_KEY),
+    CLOUDINARY_API_SECRET: JSON.stringify(process.env.CLOUDINARY_API_SECRET)
   }
 });
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-  template: 'client/src/index.html'
+// const htmlWebpackPlugin = new HtmlWebpackPlugin({
+//   template: 'client/src/index.html'
+// });
+const extractPlugin = new ExtractTextPlugin({
+  filename: 'secondary.css'
 });
 
-
-const DIST_DIR = path.resolve(__dirname, 'dist'),
-  SRC_DIR = path.resolve(__dirname, 'client/src');
+// const DIST_DIR = path.resolve(__dirname, 'dist');
+const SRC_DIR = path.resolve(__dirname, 'client/src');
 
 const config = {
-  entry: path.join(SRC_DIR, '/WeconnectRoot.js'),
+  node: {
+    fs: 'empty'
+  },
+  entry: { main: path.join(SRC_DIR, '/WeconnectRoot.js') },
   output: {
-    path: path.join(DIST_DIR),
+    path: '/',
     filename: 'bundle.js',
-    publicPath: '/'
+    // publicPath: '/'
   },
   module: {
-    loaders: [
+    // loaders
+    rules: [
       {
         test: /\.jsx?$/,
         include: SRC_DIR,
@@ -37,14 +48,36 @@ const config = {
         }
       },
       {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: { minimize: true }
+          }
+        ]
+      },
+      {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /\.(png|jpg|gif|svg|jpeg)$/,
+        test: /\.css$/,
+        use: extractPlugin.extract({
+          fallback: 'style-loader', use: ['url-loader']
+        })
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-url-loader',
+        options: { noquotes: true }
+      },
+      {
+        test: /\.(png|jpg|gif|jpeg|eot|ttf|woff|woff2|svg)$/,
         exclude: /node_modules/,
-        loader: 'url-loader'
+        use: {
+          loader: 'url-loader'
+        }
       }
     ]
   },
@@ -52,8 +85,9 @@ const config = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    extractPlugin,
     dotEnv,
-    htmlWebpackPlugin
+    // htmlWebpackPlugin
   ]
 };
 

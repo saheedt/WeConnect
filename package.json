@@ -4,9 +4,11 @@
   "description": "WeConnect provides a platform that brings businesses and individuals together. This platform creates awareness for businesses and gives the users the ability to write reviews about the businesses they have interacted with",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp nodemon",
-    "start": "gulp build && node ./build/server.js",
-    "test": "gulp test"
+    "dev": "NODE_ENV=development gulp build && gulp nodemon",
+    "start": "node ./build/server.js",
+    "postinstall": "gulp build",
+    "test": "gulp test",
+    "client:test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -22,9 +24,21 @@
   "bugs": {
     "url": "https://github.com/saheedt/WeConnect/issues"
   },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/client/tests/unit/mocks/browserMocks.js",
+      "<rootDir>/client/tests/unit/setup.js"
+    ],
+    "roots": [
+      "<rootDir>/client/tests/unit/"
+    ]
+  },
   "homepage": "https://github.com/saheedt/WeConnect#readme",
   "devDependencies": {
     "chai": "4.1.2",
+    "chai-enzyme": "^1.0.0-beta.1",
     "eslint": "4.18.2",
     "eslint-config-airbnb": "16.1.0",
     "eslint-config-airbnb-base": "12.1.0",
@@ -32,8 +46,13 @@
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-react": "7.7.0",
     "gulp-nodemon": "2.2.1",
+    "jest": "23.4.2",
+    "moxios": "0.4.0",
+    "redux-mock-store": "1.5.3",
+    "sinon": "6.1.4",
     "supertest": "3.0.0",
-    "webpack-dev-server": "2.9.3"
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "3.1.5"
   },
   "dependencies": {
     "@sendgrid/mail": "6.2.1",
@@ -45,11 +64,16 @@
     "babel-preset-stage-2": "6.24.1",
     "bcrypt": "1.0.3",
     "body-parser": "1.18.2",
+    "classnames": "2.2.6",
+    "cloudinary": "1.11.0",
     "cors": "2.8.4",
     "css-loader": "0.28.11",
     "dotenv": "5.0.1",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
     "express": "4.16.2",
-    "extract-text-webpack-plugin": "3.0.2",
+    "extract-text-webpack-plugin": "4.0.0-beta.0",
+    "fs": "0.0.1-security",
     "gulp": "3.9.1",
     "gulp-babel": "7.0.1",
     "gulp-exit": "0.0.2",
@@ -59,16 +83,19 @@
     "gulp-sequence": "1.0.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.1.0",
+    "jsdom": "11.12.0",
     "jsonwebtoken": "8.2.0",
     "jw-react-modal": "1.0.3",
+    "jwt-decode": "2.2.0",
     "morgan": "1.9.0",
     "node-sass": "4.8.3",
     "pg": "7.4.1",
     "pg-hstore": "2.3.2",
+    "prop-types": "^15.6.2",
     "querystring": "0.2.0",
+    "rc-pagination": "1.16.3",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-loader": "2.4.4",
     "react-redux": "5.0.7",
     "react-router-dom": "4.2.2",
     "react-simple-dropdown": "3.2.0",
@@ -77,7 +104,10 @@
     "sass-loader": "6.0.7",
     "sequelize": "4.36.0",
     "style-loader": "0.20.3",
+    "svg-url-loader": "2.3.2",
+    "sweetalert": "2.1.0",
     "url-loader": "1.0.1",
-    "webpack": "3.8.1"
+    "webpack": "4.16.3",
+    "webpack-dev-middleware": "3.1.3"
   }
 }

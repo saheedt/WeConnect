@@ -6,7 +6,13 @@ import {
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_ERROR,
   CLEAR_USER_TOKEN,
-  CLEAR_USER_ERROR
+  CLEAR_USER_ERROR,
+  FETCHING_USER_BUSINESSES,
+  FETCHING_USER_BUSINESSES_SUCCESS,
+  FETCHING_USER_BUSINESSES_ERROR,
+  DELETE_BUSINESS,
+  DELETE_BUSINESS_SUCCESS,
+  DELETE_BUSINESS_ERROR
 } from '../actions/actionTypes';
 
   /**
@@ -63,6 +69,66 @@ export default function userReducer(state = {}, action) {
       error: action.error,
       user: null,
       token: null
+    };
+  case FETCHING_USER_BUSINESSES:
+    return {
+      ...state,
+      profile: {
+        isFetching: true,
+        error: null,
+        businesses: null,
+        message: null,
+      }
+    };
+  case FETCHING_USER_BUSINESSES_SUCCESS:
+    return {
+      ...state,
+      profile: {
+        isFetching: false,
+        error: null,
+        businesses: action.businesses,
+        message: null,
+      }
+    };
+  case FETCHING_USER_BUSINESSES_ERROR:
+    return {
+      ...state,
+      profile: {
+        isFetching: false,
+        error: action.error,
+        businesses: null,
+        message: null,
+      }
+    };
+  case DELETE_BUSINESS:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: true,
+        message: null,
+        error: null
+      }
+    };
+  case DELETE_BUSINESS_ERROR:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: false,
+        message: null,
+        error: action.error
+      }
+    };
+  case DELETE_BUSINESS_SUCCESS:
+    return {
+      ...state,
+      profile: {
+        ...state.profile,
+        isFetching: false,
+        message: action.message,
+        error: null
+      }
     };
   case CLEAR_USER_ERROR:
     return {

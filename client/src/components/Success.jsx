@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-export default class Success extends Component {
-  render() {
-    if (this.props.message === null ||
-      this.props.message === undefined) {
-      return null;
-    }
-    const containerStyles = {
-      width: '40%',
-      padding: '10px',
-      marginTop: '0.5rem',
-      backgroundColor: (this.props.background ? this.props.background : 'teal'),
-      borderColor: (this.props.border ? this.props.border : null),
-    };
-    const successStyles = {
-      fontSize: '1rem',
-      fontWeight: 'bold',
-      color: (this.props.color ? this.props.color : '#FFF'),
-      textAlign: 'center'
-    };
-    return (
-      <div id="success-container" style={containerStyles}>
-        <div style={successStyles}>{this.props.message}</div>
-      </div>
-    );
+/**
+   * @description Renders Success component to the dom
+   * @returns {object} JSX object
+   * @param {object} props
+   */
+const Success = ({
+  message
+}) => {
+  if (message === null ||
+    message === undefined) {
+    return null;
   }
-}
+  const containerStyles = classnames({ 'notify-container': 1 });
+  const successStyles = classnames({ 'success-style': 1 });
+  return (
+    <div id="success-container" className={containerStyles}>
+      <div className={successStyles}>{message}</div>
+    </div>
+  );
+};
+Success.propTypes = {
+  message: PropTypes.string,
+};
+export default Success;

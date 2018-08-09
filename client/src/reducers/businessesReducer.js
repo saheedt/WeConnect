@@ -2,6 +2,7 @@ import {
   ADDING_BUSINESS,
   ADDING_BUSINESS_SUCCESS,
   ADDING_BUSINESS_ERROR,
+  UPDATE_BUSINESS_PREP,
   UPDATE_BUSINESS,
   UPDATE_BUSINESS_SUCCESS,
   UPDATE_BUSINESS_ERROR,
@@ -17,7 +18,10 @@ import {
   FETCHING_BUSINESS_REVIEWS_ERROR,
   QUERY_BUSINESS,
   QUERY_BUSINESS_SUCCESS,
-  QUERY_BUSINESS_ERROR
+  QUERY_BUSINESS_ERROR,
+  ADDING_BUSINESS_REVIEW,
+  ADDING_BUSINESS_REVIEW_SUCCESS,
+  ADDING_BUSINESS_REVIEW_ERROR
 } from '../actions/actionTypes';
 
 /**
@@ -54,19 +58,31 @@ export default function businessesReducer(state = {}, action) {
         error: action.error
       }
     };
+  case UPDATE_BUSINESS_PREP:
+    return {
+      ...state,
+      update: {
+        isFetching: false,
+        business: null,
+        error: null,
+        existing: (action.businessData || null)
+      }
+    };
   case UPDATE_BUSINESS:
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: true,
         business: null,
-        error: null
+        error: null,
       }
     };
   case UPDATE_BUSINESS_SUCCESS:
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: false,
         business: action.business,
         error: null
@@ -76,6 +92,7 @@ export default function businessesReducer(state = {}, action) {
     return {
       ...state,
       update: {
+        ...state.update,
         isFetching: false,
         business: null,
         error: action.error
@@ -100,6 +117,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       isFetching: false,
       businesses: action.businesses,
+      count: action.count,
       error: null
     };
   case FETCHING_BUSINESS_SUCCESS:
@@ -125,7 +143,7 @@ export default function businessesReducer(state = {}, action) {
     };
   case CLEAR_BUSINESSES_ERROR:
     if (action.details) {
-      if (action.details.toCLear === 'listings') {
+      if (action.details.toClear === 'listings') {
         return {
           ...state,
           ...action.details.payload
@@ -133,19 +151,47 @@ export default function businessesReducer(state = {}, action) {
       }
       return {
         ...state,
-        [action.details.toCLear]: {
+        [action.details.toClear]: {
           ...action.details.payload
         }
       };
     }
     return { ...state };
+  case ADDING_BUSINESS_REVIEW:
+    return {
+      ...state,
+      addReview: {
+        isFetching: true,
+        review: null,
+        error: null
+      }
+    };
+  case ADDING_BUSINESS_REVIEW_SUCCESS:
+    return {
+      ...state,
+      addReview: {
+        isFetching: false,
+        review: action.review,
+        error: null
+      }
+    };
+  case ADDING_BUSINESS_REVIEW_ERROR:
+    return {
+      ...state,
+      addReview: {
+        isFetching: false,
+        review: null,
+        error: action.error
+      }
+    };
   case FETCHING_BUSINESS_REVIEWS:
     return {
       ...state,
       reviews: {
         isFetching: true,
         reviews: null,
-        error: null
+        error: null,
+        count: null
       }
     };
   case FETCHING_BUSINESS_REVIEWS_SUCCESS:
@@ -153,6 +199,7 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       reviews: {
         isFetching: false,
+        count: action.count,
         reviews: action.reviews,
         error: null
       }
@@ -163,6 +210,7 @@ export default function businessesReducer(state = {}, action) {
       reviews: {
         isFetching: false,
         reviews: null,
+        count: null,
         error: action.error
       }
     };
@@ -172,7 +220,8 @@ export default function businessesReducer(state = {}, action) {
       queries: {
         isFetching: true,
         businesses: null,
-        error: null
+        error: null,
+        count: null
       }
     };
   case QUERY_BUSINESS_SUCCESS:
@@ -180,7 +229,8 @@ export default function businessesReducer(state = {}, action) {
       ...state,
       queries: {
         isFetching: false,
-        businesses: action.businesses,
+        businesses: action.businesses.business,
+        count: action.businesses.count,
         error: null
       }
     };
@@ -190,6 +240,7 @@ export default function businessesReducer(state = {}, action) {
       queries: {
         isFetching: false,
         businesses: null,
+        count: null,
         error: action.error
       }
     };

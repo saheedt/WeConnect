@@ -8,77 +8,12 @@ import { User } from '../models';
 dotenv.config();
 process.env.NODE_ENV = 'test';
 
+const randValue = () =>
+  Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 const invalidToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0Ij';
 const imageUrl = 'https://images.pexels.com/1002638/pexels-photo-1002638.jpeg';
-let userId1, testToken1, testToken2, businessId;
 
-describe('un-matched endpoints', () => {
-  describe('Invalid Post request', () => {
-    it(
-      'should display the right message for an invalid POST request',
-      (done) => {
-        request(server)
-          .post('/api/auth/signup')
-          .send({
-            email: ' ',
-            password: 1234567
-          })
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Get request', () => {
-    it(
-      'should display the right message for an invalid GET request',
-      (done) => {
-        request(server)
-          .get('/api/businesses')
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Put request', () => {
-    it(
-      'should display the right message for an invalid PUT request',
-      (done) => {
-        request(server)
-          .put('/api/businesses/1')
-          .send({
-            name: 'specimen b',
-            employees: 16
-          })
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-  describe('Invalid Delete request', () => {
-    it(
-      'should display the right message for an invalid DELETE request',
-      (done) => {
-        request(server)
-          .delete('/api/businesses/1')
-          .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
-            assert.deepEqual(resp.body.message, 'invalid route!');
-            done();
-          });
-      }
-    );
-  });
-});
-/** ============== ======================= =================== ============== */
+let userId1, testToken1, testToken2, businessId, regedBusinessName;
 
 describe('user endpoints', () => {
   describe('manually drop DB data', () => {
@@ -120,7 +55,7 @@ describe('user endpoints', () => {
           assert.deepEqual(resp.status, 400);
           assert.deepEqual(
             resp.body.message,
-            'invalid credentials, verify credentials and try again'
+            'invalid email address supplied'
           );
           done();
         });
@@ -131,7 +66,7 @@ describe('user endpoints', () => {
         request(server)
           .post('/api/v1/auth/signup')
           .send({
-            email: 't@testing.com',
+            email: 'test@testing.com',
             password: '12345'
           })
           .expect('Content-Type', /json/)
@@ -359,10 +294,10 @@ describe('user endpoints', () => {
           })
           .expect('Content-Type', /json/)
           .end((err, resp) => {
-            assert.deepEqual(resp.status, 404);
+            assert.deepEqual(resp.status, 400);
             assert.deepEqual(
               resp.body.message,
-              'no user found with this identity'
+              'invalid email address supplied'
             );
             done();
           });
@@ -726,12 +661,18 @@ describe('businesses endpoint', () => {
         });
     });
     it('should update business successfully', (done) => {
+      regedBusinessName = randValue();
       request(server)
         .put(`/api/v1/businesses/${businessId}`)
         .set('authorization', testToken1)
         .send({
-          name: 'specimen b',
+          name: regedBusinessName,
+          address: '123, gaga',
+          location: 'ogun',
+          phonenumber: 122424552,
           employees: 16,
+          category: 'ride sharing services',
+          image_url: imageUrl
         })
         .end((err, resp) => {
           assert.deepEqual(resp.status, 200);
@@ -741,7 +682,7 @@ describe('businesses endpoint', () => {
           );
           assert.deepEqual(
             resp.body.business.name,
-            'specimen b'
+            regedBusinessName
           );
           assert.deepEqual(
             resp.body.business.employees,
@@ -820,7 +761,7 @@ describe('businesses endpoint', () => {
           );
           assert.deepEqual(
             resp.body.business.name,
-            'specimen b'
+            regedBusinessName
           );
           done();
         });
@@ -854,7 +795,7 @@ describe('businesses endpoint', () => {
             );
             assert.deepEqual(
               resp.body.businesses[0].name,
-              'specimen b',
+              regedBusinessName,
             );
             assert.deepEqual(
               resp.body.businesses[0].id,
