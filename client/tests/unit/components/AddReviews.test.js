@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { AddReviews } from '../../../src/components/AddReviews.jsx';
 import Spinner from '../../../src/components/Spinner.jsx';
 
-describe('<AddReviews />', () => {
+describe('AddReviews component', () => {
   const props = {
     fetchReviews: jest.fn(jest.fn()),
     addReview: jest.fn(),
@@ -49,7 +49,7 @@ describe('<AddReviews />', () => {
     expect(comp.state().review.review).toEqual('rev');
   });
 
-  it('should render <Spinner />', () => {
+  it('should render Spinner component', () => {
     const comp = shallow(<AddReviews {...props} />);
     expect(comp.exists(<Spinner />)).toBe(true);
   });

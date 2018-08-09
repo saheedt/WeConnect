@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Header } from '../../../src/components/Header.jsx';
 import { Menu } from '../../../src/components/Menu.jsx';
 
-describe('<Header />', () => {
+describe('Header component', () => {
   const props = {
     queryBusinesses: jest.fn(),
     queryErrored: jest.fn(),

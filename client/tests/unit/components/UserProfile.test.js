@@ -9,7 +9,7 @@ jest.mock('sweetalert', () => { return { swal: jest.fn() }; });
 
 // const swal = new s();
 
-describe('<Profile />', () => {
+describe('Profile component', () => {
   let props;
   beforeEach(() => {
     props = {
@@ -122,7 +122,7 @@ describe('<Profile />', () => {
     comp.instance().doOwnBusinesses(businesses);
     expect(comp.state().ownBusinesses).toBeDefined();
   });
-  it('renders <OwnBuisnesses />', () => {
+  it('renders OwnBuisnesses component', () => {
     const comp = shallow(<Profile {...props} />);
     const businesses = [{
       name: 't',
@@ -135,7 +135,7 @@ describe('<Profile />', () => {
     expect(comp.state().ownBusinesses).toBeDefined();
     expect(comp.find(<OwnBusiness />)).toBeTruthy();
   });
-  it('renders <Spinner />', () => {
+  it('renders Spinner component', () => {
     const comp = shallow(<Profile {...props} />);
     const isFetching = true;
     comp.setProps({ isFetching });

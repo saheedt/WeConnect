@@ -7,7 +7,7 @@ import { Listings } from '../../../src/components/Listings.jsx';
 import Business from '../../../src/components/Business.jsx';
 import Spinner from '../../../src/components/Spinner.jsx';
 
-describe('<Listings />', () => {
+describe('Listings component', () => {
   const props = {
     fetchBusinesses: jest.fn(),
     businesses: [
@@ -76,7 +76,7 @@ describe('<Listings />', () => {
     expect(comp.state().current).toEqual(newCurrent);
   });
 
-  it('should have <Business />', () => {
+  it('should have Business component', () => {
     const comp = shallow(<Listings {...props} />);
     const businesses = [
       {
@@ -97,12 +97,12 @@ describe('<Listings />', () => {
     expect(props.fetchBusinesses).toHaveBeenCalled();
   });
 
-  it('should render <Spinner />', () => {
+  it('should render Spinner component', () => {
     const comp = shallow(<Listings {...props} />);
     expect(comp.exists(<Spinner />)).toBe(true);
   });
 
-  it('should render <Pagination />', () => {
+  it('should render Pagination component', () => {
     const comp = shallow(<Listings {...props} />);
     expect(comp.exists(<Pagination />)).toBe(true);
   });

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import { OwnBusiness } from '../../../src/components/OwnBusiness.jsx';
 
-describe('<OwnBusiness />', () => {
+describe('OwnBusiness component', () => {
   let props;
   beforeEach(() => {
     props = {

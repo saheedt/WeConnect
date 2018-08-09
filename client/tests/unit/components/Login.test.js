@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Login } from '../../../src/components/Login.jsx';
 import Spinner from '../../../src/components/Spinner.jsx';
 
-describe('<Login />', () => {
+describe('Login componrnt', () => {
   let props;
   beforeEach(() => {
     props = {
@@ -110,7 +110,7 @@ describe('<Login />', () => {
     comp.instance().onLoginClick({ persist() {}, preventDefault() {} });
     expect(props.doUserLogin).toHaveBeenCalled();
   });
-  it('should render <Spinner />', () => {
+  it('should render Spinner component', () => {
     const comp = shallow(<Login {...props} />);
     expect(comp.exists(<Spinner />)).toBe(true);
   });

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import ImagePreview from '../../../src/components/ImagePreview.jsx';
 
-describe('<ImagePreview />', () => {
+describe('ImagePreview component', () => {
   const props = {
     imageFromPreview: jest.fn()
   };

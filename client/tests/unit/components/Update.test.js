@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { Update } from '../../../src/components/Update.jsx';
 
 
-describe('<Update />', () => {
+describe('Update component', () => {
   let props;
   beforeEach(() => {
     props = {

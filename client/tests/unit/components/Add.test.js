@@ -8,7 +8,7 @@ import ImagePreview from '../../../src/components/ImagePreview.jsx';
 
 // const xpect = expect;
 
-describe('<Add />', () => {
+describe('Add component', () => {
   let props;
   beforeEach(() => {
     props = {
@@ -136,15 +136,15 @@ describe('<Add />', () => {
     comp.instance().registerBusiness({ preventDefault() {}, persist() {} });
     expect(props.doLoginError).toHaveBeenCalled();
   });
-  it('should render <Error />', () => {
+  it('should render Error component', () => {
     const comp = shallow(<Add {...props} />);
     expect(comp.exists(<Error />)).toBe(true);
   });
-  it('should render <Success />', () => {
+  it('should render Success component', () => {
     const comp = shallow(<Add {...props} />);
     expect(comp.exists(<Success />)).toBe(true);
   });
-  it('should render <ImagePreview />', () => {
+  it('should render ImagePreview component', () => {
     const comp = shallow(<Add {...props} />);
     expect(comp.exists(<ImagePreview />)).toBe(true);
   });

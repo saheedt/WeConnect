@@ -16,7 +16,7 @@ const valGen = () => {
     },
   };
 };
-describe('<SignUp />', () => {
+describe('SignUp component', () => {
   let props;
   beforeEach(() => {
     props = {

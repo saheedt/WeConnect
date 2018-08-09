@@ -6,7 +6,7 @@ import { BizProfile } from '../../../src/components/BizProfile.jsx';
 import Spinner from '../../../src/components/Spinner.jsx';
 import Error from '../../../src/components/Error.jsx';
 
-describe('<BizProfile />', () => {
+describe('BizProfile component', () => {
   const props = {
     fetchReviews: jest.fn(jest.fn()),
     fetchBusiness: jest.fn(jest.fn()),
@@ -63,7 +63,7 @@ describe('<BizProfile />', () => {
     comp.setProps({ reviews });
     expect(genReviews).toHaveBeenCalled();
   });
-  it('should render <Spinner />', () => {
+  it('should render Spinner component', () => {
     const comp = shallow(<BizProfile {...props} />);
     expect(comp.exists(<Spinner />)).toBe(true);
   });
@@ -71,7 +71,7 @@ describe('<BizProfile />', () => {
     const comp = shallow(<BizProfile {...props} />);
     expect(comp.exists(<Error />)).toBe(true);
   });
-  it('should render <Pagination />', () => {
+  it('should render Pagination component', () => {
     const comp = shallow(<BizProfile {...props} />);
     expect(comp.exists(<Pagination />)).toBe(true);
   });

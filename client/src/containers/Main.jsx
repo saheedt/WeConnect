@@ -1,10 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-// import JwModal from 'jw-react-modal';
 
 import Users from '../containers/Users.jsx';
 import Businesses from './Businesses.jsx';
-import Header from '../components/Header.jsx';
+import Header from '../components/Header.jsx'; // eslint-disable-line
 
 const Main = (props) => {
   const {

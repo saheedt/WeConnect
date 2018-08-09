@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import Success from '../../../src/components/Success.jsx';
 
-describe('<Success />', () => {
+describe('Success component', () => {
   const props = {
     message: 'testing...'
   };

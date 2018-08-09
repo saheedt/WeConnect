@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Query } from '../../../src/components/Query.jsx';
 import Spinner from '../../../src/components/Spinner.jsx';
 
-describe('<Query />', () => {
+describe('Query component', () => {
   let props;
   beforeEach(() => {
     props = {
@@ -85,7 +85,7 @@ describe('<Query />', () => {
     expect(onPageChange).toHaveBeenCalled();
     expect(props.doQuery).toHaveBeenCalled();
   });
-  it('renders <Spinner />', () => {
+  it('renders Spinner component', () => {
     const comp = shallow(<Query {...props} />);
     const isFetching = true;
     comp.setProps({ isFetching });

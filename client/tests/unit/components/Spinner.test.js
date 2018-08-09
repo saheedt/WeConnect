@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import Spinner from '../../../src/components/Spinner.jsx';
 
-describe('<Spinner />', () => {
+describe('Spinner component', () => {
   const comp = shallow(<Spinner />);
   it('should contain .spinner-overlay', () => {
     expect(comp.hasClass('spinner-overlay')).toBeTruthy();

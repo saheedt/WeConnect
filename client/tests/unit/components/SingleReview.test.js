@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Review } from '../../../src/components/Review.jsx';
 
-describe('<Review />', () => {
+describe('Review component', () => {
   let props;
   beforeEach(() => {
     props = {
