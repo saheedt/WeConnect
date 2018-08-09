@@ -4,6 +4,7 @@
 
 # WeConnect
 WeConnect provides a platform that brings businesses and individuals (customers) together.
+- [Application link](https://weconnect-saheed-updated.herokuapp.com/)
 
 ---
 
@@ -87,6 +88,7 @@ This project is divided into three parts:
 * To run tests, navigate to the project's root directory
 * After installation, run the following command
     - `npm run test`
+    - `npm run client:test`
 
 ## Built With
 
@@ -95,6 +97,7 @@ This project is divided into three parts:
 * [Materialize Css](http://materializecss.com/)
 * [Express Js](https://expressjs.com/)
 * [Node js](https://nodejs.org/en/)
+* [React Js](https://reactjs.org/)
 
 ## Authors
 
